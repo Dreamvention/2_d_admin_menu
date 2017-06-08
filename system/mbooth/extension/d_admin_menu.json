@@ -50,6 +50,7 @@
         "admin/view/template/extension/module/d_admin_menu.tpl",
 
         "admin/controller/extension/module/d_admin_menu.php",
+        "admin/controller/event/d_admin_menu.php",
 
         "admin/model/extension/module/d_admin_menu.php"
     ],
