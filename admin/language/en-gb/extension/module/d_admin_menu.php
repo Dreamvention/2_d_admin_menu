@@ -9,3 +9,4 @@ $_['text_menu']             		= 'Menu';
 $_['text_settings']         		= 'Settings';
 $_['text_design']         			= 'Design';
 $_['text_menu_structure']     		= 'Menu Structure';
+$_['text_something']                = 'Will be something';
