@@ -57,7 +57,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['footer'] = $this->load->controller('common/footer');
 
 
-        $this->response->setOutput($this->load->view('extension/module/d_admin_menu.tpl', $data));
+        $this->response->setOutput($this->load->view('extension/module/d_admin_menu_editor.tpl', $data));
     }
 
     public function install()
