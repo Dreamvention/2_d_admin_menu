@@ -236,6 +236,34 @@ class ControllerModuleDAdminMenu extends Controller
         $data['order'] = $order;
 
 
+        //////////////////////////////////////////////////////////////////////
+        //////                       CATEGORIES                         //////
+        //////////////////////////////////////////////////////////////////////
+
+        $data['text_type'] = $this->language->get('text_type');
+        $data['text_filter'] = $this->language->get('text_filter');
+
+        $data['categories'] = array();
+
+        $cat_files = glob(DIR_APPLICATION . 'controller/extension/extension/*.php', GLOB_BRACE);
+
+        foreach ($cat_files as $c_file) {
+            $extension = basename($c_file, '.php');
+
+            $this->load->language('extension/extension/' . $extension);
+
+            if ($this->user->hasPermission('access', 'extension/extension/' . $extension)) {
+                $cat_files = glob(DIR_APPLICATION . 'controller/{extension/' . $extension . ',' . $extension . '}/*.php', GLOB_BRACE);
+
+                $data['categories'][] = array(
+                    'code' => $extension,
+                    'text' => $this->language->get('heading_title'),
+                    'extra'=> $this->getExtensionList($extension)
+                );
+            }
+        }
+
+
         // Breadcrumbs
         $data['breadcrumbs'] = array();
         $data['breadcrumbs'][] = array(
@@ -303,6 +331,42 @@ class ControllerModuleDAdminMenu extends Controller
         $this->model_module_d_event_manager->deleteEvent('d_admin_menu');
     }
 
+    public function getExtensionList($category_shortname)
+    {
+        $this->load->model('extension/extension');
+        $extensions = $this->model_extension_extension->getInstalled($category_shortname);
+
+        $extra_data = array();
+
+        // Compatibility code for old extension folders
+        $files = glob(DIR_APPLICATION . 'controller/{extension/' . $category_shortname . ',' . $category_shortname . '}/*.php', GLOB_BRACE);
+
+        if ($files) {
+            foreach ($files as $file) {
+                $extension = basename($file, '.php');
+
+                $this->load->language('extension/' . $category_shortname . '/' . $extension);
+
+                $extra_data[] = array(
+                    'name'          => $this->language->get('heading_title'),
+                    'shortname'     => $extension,
+                    'installed'     => in_array($extension, $extensions),
+                    'edit'          => 'extension/'. $category_shortname .'/' . $extension
+                );
+            }
+        }
+
+        $sort_order = array();
+
+        foreach ($extra_data as $key => $value) {
+            $sort_order[$key] = $value['name'];
+        }
+
+        array_multisort($sort_order, SORT_ASC, $extra_data);
+
+        return $extra_data;
+    }
+
     public function view_column_left_after(&$route, &$data, &$output)
     {
         $html_dom = new d_simple_html_dom();
@@ -319,4 +383,5 @@ class ControllerModuleDAdminMenu extends Controller
 
         $output = (string)$html_dom;
     }
+
 }

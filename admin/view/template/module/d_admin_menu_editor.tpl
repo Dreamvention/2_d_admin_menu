@@ -159,6 +159,9 @@
                 <div class="col-sm-6 text-right"><?php echo $results; ?></div>
               </div>
 
+              <!-- PRINT SOME STUFF -->
+              <?php echo '<pre>',print_r(''),'</pre>'; ?>
+
             </div>
           </div>
 
@@ -183,12 +186,25 @@
         </div>
         <div class="modal-body">
           <form id="event_form" class="form-horizontal">
+
             <div class="form-group">
               <label class="col-sm-2 control-label" for="input_text"><?php echo $entry_name; ?></label>
               <div class="col-sm-10">
-                <input type="text" name="name" value="{{name}}" placeholder="<?php echo $entry_name; ?>" id="input-width" class="form-control" />
+                  <select name="layout_module[<?php echo $module_row; ?>][code]" class="form-control input-sm">
+                    <?php foreach ($categories as $category) { ?>
+                    <optgroup label="<?php echo $category['text']; ?>">
+                    <?php if (!$category['extra']) { ?>
+                    <?php } else { ?>
+                    <?php foreach ($category['extra'] as $ex_cat) { ?>
+                    <option value="<?php echo $ex_cat['shortname']; ?>"><?php echo $ex_cat['name']; ?></option>
+                    <?php } ?>
+                    <?php } ?>
+                    </optgroup>
+                    <?php } ?>
+                  </select>
               </div>
             </div>
+
             <div class="form-group">
               <label class="col-sm-2 control-label" for="input_text"><?php echo $entry_parent; ?></label>
               <div class="col-sm-10">
@@ -290,6 +306,28 @@
       }
     });
     return false;
+  });
+
+  // category load
+  $('select[name="type"]').on('change', function() {
+    $.ajax({
+      url: $('select[name="type"]').val(),
+      dataType: 'html',
+      beforeSend: function() {
+        $('.fa-filter').addClass('fa-circle-o-notch fa-spin');
+        $('.fa-filter').removeClass('fa-filter');
+      },
+      complete: function() {
+        $('.fa-circle-o-notch').addClass('fa-filter');
+        $('.fa-circle-o-notch').removeClass('fa-circle-o-notch fa-spin');
+      },
+      success: function(html) {
+        $('#extension').html(html);
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+      }
+    });
   });
 
 
