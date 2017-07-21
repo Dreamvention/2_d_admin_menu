@@ -102,6 +102,11 @@ class ControllerModuleDAdminMenu extends Controller
 
     public function install()
     {
+        if($this->d_shopunity){
+            $this->load->model('d_shopunity/mbooth');
+            $this->model_d_shopunity_mbooth->installDependencies($this->codename);
+        }
+
         $this->installEvents();
 
     }

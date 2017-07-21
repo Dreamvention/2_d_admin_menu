@@ -3,6 +3,7 @@
     "version": "0.0.1",
     "name": "Changing Admin Menu",
     "description": "Module for changing Admin menu",
+    "index": "module/d_admin_menu",
     "author": {
         "name": "Dreamvention",
         "email": "info@dreamvention.com",
@@ -50,7 +51,7 @@
         "admin/view/template/module/d_admin_menu.tpl",
         "admin/view/template/module/d_admin_menu_editor.tpl",
 
-        "system/config/d_admin_menu_230.php",
+        "system/config/d_admin_menu_230.php"
     ],
     "dirs": [
         "admin/view/javascript/d_admin_menu",
