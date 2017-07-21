@@ -41,18 +41,16 @@
         "d_simple_html_dom": ">= 1.0.4"
     },
     "files": [
-        "admin/language/en-gb/extension/module/d_admin_menu.php",
         "system/mbooth/extension/d_admin_menu.json",
+
+        "admin/controller/module/d_admin_menu.php",
+        "admin/model/module/d_admin_menu.php",
+
+        "admin/language/en-gb/module/d_admin_menu.php",
+        "admin/view/template/module/d_admin_menu.tpl",
+        "admin/view/template/module/d_admin_menu_editor.tpl",
+
         "system/config/d_admin_menu_230.php",
-
-        "admin/view/javascript/d_admin_menu/d_admin_menu.js",
-        "admin/view/stylesheet/d_admin_menu/d_admin_menu.css",
-        "admin/view/template/extension/module/d_admin_menu.tpl",
-
-        "admin/controller/extension/module/d_admin_menu.php",
-        "admin/controller/event/d_admin_menu.php",
-
-        "admin/model/extension/module/d_admin_menu.php"
     ],
     "dirs": [
         "admin/view/javascript/d_admin_menu",
@@ -60,7 +58,7 @@
     ],
     "changelog": [
         {
-            "varsion": "0.0.1",
+            "version": "0.0.1",
             "change": "Initial Commit"
         }
     ]

@@ -1,6 +1,6 @@
 <?php
 
-class ModelExtensionModuleDAdminMenu extends Model
+class ModelModuleDAdminMenu extends Model
 {
     private $codename = 'd_admin_menu';
  //   private $config_file = 'd_admin_menu.tpl';
