@@ -4,7 +4,6 @@
   <div class="page-header">
     <div class="container-fluid">
       <div class="form-inline pull-right">
-
         <a data-toggle="tooltip" title="<?php echo $button_create; ?>" class="btn btn-primary create"><i class="fa fa-plus"></i></a>
         <a data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger delete"><i class="fa fa-trash-o"></i></a>
         <a href="<?php echo $cancel; ?>" data-toggle="tooltip" title="<?php echo $button_cancel; ?>" class="btn btn-default"><i class="fa fa-reply"></i></a>
@@ -43,25 +42,31 @@
         </ul>
 
         <div class="tab-content">
-          <div class="tab-pane active" id="tab_event" >
+          <div class="tab-pane active" id="tab_module" >
             <div class="tab-body">
 
               <div id="filter" class="well">
                 <div class="row">
                   <!-- FILTER -->
-                  <div class="col-sm-4">
+                  <div class="col-sm-3">
                     <div class="form-group">
                       <label class="control-label" for="input-name"><?php echo $entry_name; ?></label>
                       <input type="text" name="filter_name" value="<?php echo $filter_name; ?>" placeholder="<?php echo $entry_name; ?>" id="input-name" class="form-control" data-item="name"/>
                     </div>
                   </div>
-                  <div class="col-sm-4">
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label class="control-label" for="input-parent"><?php echo $entry_category; ?></label>
+                      <input type="text" name="filter_category" value="<?php echo $filter_category; ?>" placeholder="<?php echo $entry_category; ?>" id="input-category" class="form-control" data-item="category"/>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
                     <div class="form-group">
                       <label class="control-label" for="input-parent"><?php echo $entry_parent; ?></label>
                       <input type="text" name="filter_parent" value="<?php echo $filter_parent; ?>" placeholder="<?php echo $entry_parent; ?>" id="input-parent" class="form-control" data-item="parent"/>
                     </div>
                   </div>
-                  <div class="col-sm-4">
+                  <div class="col-sm-3">
                     <div class="form-group">
                       <label class="control-label" for="input-status"><?php echo $entry_status; ?></label>
                       <select name="filter_status" id="input-status" class="form-control">
@@ -83,17 +88,31 @@
                 </div>
               </div>
 
-              <form action="<?php echo $delete; ?>" method="post" enctype="multipart/form-data" id="form-event">
+              <form action="<?php echo $delete; ?>" method="post" enctype="multipart/form-data" id="form-menu-item">
                 <div class="table-responsive">
                   <table class="table table-bordered table-hover">
                     <thead>
                       <tr>
                         <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'menu_item_id\']').prop('checked', this.checked);" /></td>
                         <td class="text-left">
+                          <?php if ($sort == 'menu_item_id') { ?>
+                            <a href="<?php echo $sort_menu_item_id; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_menu_item_id; ?></a>
+                          <?php } else { ?>
+                            <a href="<?php echo $sort_menu_item_id; ?>"><?php echo $column_menu_item_id; ?></a>
+                          <?php } ?>
+                        </td>
+                        <td class="text-left">
                           <?php if ($sort == 'name') { ?>
                             <a href="<?php echo $sort_name; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_name; ?></a>
                           <?php } else { ?>
                             <a href="<?php echo $sort_name; ?>"><?php echo $column_name; ?></a>
+                          <?php } ?>
+                        </td>
+                        <td class="text-left">
+                          <?php if ($sort == 'category') { ?>
+                            <a href="<?php echo $sort_category; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_category; ?></a>
+                          <?php } else { ?>
+                            <a href="<?php echo $sort_category; ?>"><?php echo $column_category; ?></a>
                           <?php } ?>
                         </td>
                         <td class="text-left">
@@ -103,21 +122,14 @@
                             <a href="<?php echo $sort_parent; ?>"><?php echo $column_parent; ?></a>
                           <?php } ?>
                         </td>
-                        <td class="text-left">
+                        <td class="text-center">
                           <?php if ($sort == 'icon') { ?>
                             <a href="<?php echo $sort_icon; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_icon; ?></a>
                           <?php } else { ?>
                             <a href="<?php echo $sort_icon; ?>"><?php echo $column_icon; ?></a>
                           <?php } ?>
                         </td>
-                        <td class="text-left">
-                          <?php if ($sort == 'status') { ?>
-                            <a href="<?php echo $sort_status; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_status; ?></a>
-                          <?php } else { ?>
-                            <a href="<?php echo $sort_status; ?>"><?php echo $column_status; ?></a>
-                          <?php } ?>
-                        </td>
-                        <td class="text-right"><?php echo $column_action; ?></td>
+                        <td class="text-center" style="width: 120px;"><?php echo $column_action; ?></td>
                       </tr>
                     </thead>
                     <tbody>
@@ -131,16 +143,19 @@
                               <input type="checkbox" name="menu_item_id[]" value="<?php echo $m_item['menu_item_id']; ?>" />
                             <?php } ?>
                           </td>
+                          <td class="text-left"><?php echo $m_item['menu_item_id']; ?></td>
                           <td class="text-left"><?php echo $m_item['name']; ?></td>
+                          <td class="text-left"><?php echo $m_item['category']; ?></td>
                           <td class="text-left"><?php echo $m_item['parent']; ?></td>
-                          <td class="text-left"><?php echo $m_item['icon']; ?></td>
-                          <td class="text-left">
-                            <span class="label label-success disable" ><?php echo $text_enabled; ?></span>
-                            <span class="label label-danger enable" ><?php echo $text_disabled; ?></span>
+                          <td class="text-center">
+                            <?php if ($m_item['parent'] > 0) { ?>
+                            <?php echo $m_item['icon']; ?>
+                            <?php } else { ?>
+                            <i class="fa fa-<?php echo $m_item['icon']; ?> fa-2x"></i>
+                            <?php } ?>
                           </td>
-                          <td class="text-right">
-                            <a href="<?php echo $m_item['enable']; ?>" data-toggle="tooltip" title="<?php echo $button_enable; ?>" data-menu_item_id="<?php echo $m_item['menu_item_id']; ?>" class="btn btn-success action enable"><i class="fa fa-thumbs-o-up"></i></a>
-                            <a href="<?php echo $m_item['disable']; ?>" data-toggle="tooltip" title="<?php echo $button_disable; ?>" data-menu_item_id="<?php echo $m_item['menu_item_id']; ?>" class="btn btn-danger action disable"><i class="fa fa-thumbs-o-down"></i></a>
+                          <td class="text-center">
+                            <a href="<?php echo $m_item['delete']; ?>" data-toggle="tooltip" title="<?php echo $button_delete; ?>" data-menu_item_id="<?php echo $m_item['menu_item_id']; ?>" class="btn btn-danger action delete"><i class="fa fa-trash-o"></i></a>
                             <a href="<?php echo $m_item['edit']; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary edit"><i class="fa fa-pencil"></i></a></td>
                         </tr>
                       <?php } ?>
@@ -160,7 +175,7 @@
               </div>
 
               <!-- PRINT SOME STUFF -->
-              <?php echo '<pre>',print_r(''),'</pre>'; ?>
+              <?php echo '<pre>',print_r($menu_items),'</pre>'; ?>
 
             </div>
           </div>
@@ -176,6 +191,25 @@
   </div>
 </div>
 
+<template id="additional_menu_item">
+  <tr id="menu_item_id_<?php echo $m_item['menu_item_id']; ?>" class="{{text_status}}">
+    <td class="text-center flash"><input type="checkbox" name="menu_item_id[]" value="{{menu_item_id}}" /></td>
+    <td class="text-left flash">{{menu_item_id}}</td>
+    <td class="text-left flash">{{name}}</td>
+    <td class="text-left flash">{{category}}</td>
+    <td class="text-left flash">{{parent}}</td>
+    <td class="text-center flash">{{icon}}</td>
+    <td class="text-center flash">
+      <a href="{{delete}}" data-toggle="tooltip" title="<?php echo $button_delete; ?>" data-menu_item_id="{{menu_item_id}}" class="btn btn-danger action delete"><i class="fa fa-trash-o"></i></a>
+      <a href="{{edit}}" data-toggle="tooltip" title="<?php echo $button_edit; ?>" data-menu_item_id="{{menu_item_id}}" class="btn btn-primary edit"><i class="fa fa-pencil"></i></a>
+    </td>
+  </tr>
+</template>
+
+<template id="additional_parent_item">
+  <option value="{{menu_item_id}}">(id {{menu_item_id}}) {{name}}</option>
+</template>
+
 <template id="modal">
   <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -185,18 +219,19 @@
           <h4 class="modal-title">Edit menu item <b>{{name}}</b> </h4>
         </div>
         <div class="modal-body">
-          <form id="event_form" class="form-horizontal">
+          <form id="menu_item_form" class="form-horizontal">
 
             <div class="form-group">
               <label class="col-sm-2 control-label" for="input_text"><?php echo $entry_name; ?></label>
               <div class="col-sm-10">
-                  <select name="layout_module[<?php echo $module_row; ?>][code]" class="form-control input-sm">
+                  <select name="item_extra" class="form-control input-sm">
                     <?php foreach ($categories as $category) { ?>
                     <optgroup label="<?php echo $category['text']; ?>">
                     <?php if (!$category['extra']) { ?>
+                    <!-- ? -->
                     <?php } else { ?>
                     <?php foreach ($category['extra'] as $ex_cat) { ?>
-                    <option value="<?php echo $ex_cat['shortname']; ?>"><?php echo $ex_cat['name']; ?></option>
+                    <option value="<?php echo $ex_cat['edit']; ?>"><?php echo $ex_cat['name']; ?></option>
                     <?php } ?>
                     <?php } ?>
                     </optgroup>
@@ -208,13 +243,21 @@
             <div class="form-group">
               <label class="col-sm-2 control-label" for="input_text"><?php echo $entry_parent; ?></label>
               <div class="col-sm-10">
-                <input type="text" name="parent" value="{{parent}}" placeholder="<?php echo $entry_parent; ?>" id="input-width" class="form-control" />
+                  <select name="item_parent" class="form-control input-sm">
+                    <option value="0"></option>
+                    <?php if ($menu_items) { ?>
+                    <?php foreach ($menu_items as $p_item) { ?>
+                    <option value="<?php echo $p_item['menu_item_id']; ?>"><?php echo "(id " . $p_item['menu_item_id'] . ") "; ?><?php echo $p_item['name']; ?></option>
+                    <?php } ?>
+                    <?php } ?>
+                  </select>
               </div>
             </div>
+
             <div class="form-group">
               <label class="col-sm-2 control-label" for="input_action"><?php echo $entry_icon; ?></label>
               <div class="col-sm-10">
-                <input type="text" name="icon" value="{{icon}}" placeholder="<?php echo $entry_icon; ?>" id="input-width" class="form-control" />
+                <input type="text" name="item_icon" value="{{item_icon}}" placeholder="<?php echo $entry_icon; ?>" id="input-width" class="form-control" />
               </div>
             </div>
           </form>
@@ -264,72 +307,111 @@
 
 <script type="text/javascript">
 
+  function handlebar_templating(some_html, some_json){
+    var re = /{{([^}}]+)?}}/g, match;
+    while(match = re.exec(some_html)) {
+        some_html = some_html.replace(match[0], some_json[match[1]]);
+    };
+    return some_html;
+  }
+
   $(document).on('click', '.create', function(){
     var that = this;
     $('#myModal').remove();
     var html = $('#modal').html();
     var json = {
       menu_item_id: 0,
-      name: '',
-      parent: '',
-      icon: '',
+      item_parent: '',
+      item_icon: '',
       save: '<?php echo $create; ?>'
     };
 
-    //templating like handlebars
-      var re = /{{([^}}]+)?}}/g, match;
-      while(match = re.exec(html)) {
-          html = html.replace(match[0], json[match[1]]);
-      };
+    html = handlebar_templating(html, json);
 
     $('body').append(html);
     $('#myModal').modal('show');
-
     return false;
-
   });
 
-  $(document).on('click', '.action', function() {
+  $(document).on('click', '.edit', function() {
     var that = this;
     var $menu_item_id = $(that).data('menu_item_id');
+    $('#myModal').remove();
+
     $.ajax({
       url: $(that).attr('href'),
+      type: 'get',
+      data: '',
       dataType: 'json',
       success: function(json) {
-        if(json['enabled']){
-          $('#menu_item_id_'+$menu_item_id).find('.enable').hide();
-          $('#menu_item_id_'+$menu_item_id).find('.disable').show();
+        var html = $('#modal').html();
+
+        html = handlebar_templating(html, json);
+
+        $('body').append(html);
+        $('#myModal').modal('show')
+      }
+    });
+    return false;
+  });
+
+  $(document).on('click', '.save', function() {
+    var that = this;
+    var $menu_item_id = $(that).data('menu_item_id');
+    var $data = $('#menu_item_form').serialize();
+
+    $.ajax({
+      url: $(that).attr('href'),
+      type: 'post',
+      data: $data,
+      dataType: 'json',
+      fail: function() {
+          alert( "error" );
+      },
+      success: function(json) {
+        console.log(json);
+        $('#myModal').modal('hide');
+        if(json['status'] == 1) {
+          json['text_status'] = 'enabled';
         }else{
-          $('#menu_item_id_'+$menu_item_id).find('.enable').show();
-          $('#menu_item_id_'+$menu_item_id).find('.disable').hide();
+          json['text_status'] = '';
+        }
+        // var main_html = $('#additional_menu_item').html();
+
+        // main_html = handlebar_templating(main_html, json);
+
+        // if($menu_item_id == 0){
+        //   $('#form-menu-item tbody').prepend(main_html);
+        // }else{
+        //   $('#menu_item_id_'+$menu_item_id).html($(main_html).html());
+        // }
+        location.reload();
+      }
+    });
+    return false;
+  });
+
+  $(document).on('click', '.delete', function(){
+
+    var data = $('#form-menu-item').serialize();
+    var url_ = '<?php echo $delete; ?>';
+    if ($(this).attr('href')) { url_ = $(this).attr('href');};
+
+    $.ajax({
+      url: url_,
+      type: 'post',
+      data: data,
+      dataType: 'json',
+      success: function(json) {
+        if(json['deleted']){
+          location.reload();
+        }else{
+          console.log('error!');
         }
       }
     });
     return false;
   });
-
-  // category load
-  $('select[name="type"]').on('change', function() {
-    $.ajax({
-      url: $('select[name="type"]').val(),
-      dataType: 'html',
-      beforeSend: function() {
-        $('.fa-filter').addClass('fa-circle-o-notch fa-spin');
-        $('.fa-filter').removeClass('fa-filter');
-      },
-      complete: function() {
-        $('.fa-circle-o-notch').addClass('fa-filter');
-        $('.fa-circle-o-notch').removeClass('fa-circle-o-notch fa-spin');
-      },
-      success: function(html) {
-        $('#extension').html(html);
-      },
-      error: function(xhr, ajaxOptions, thrownError) {
-        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-      }
-    });
-  });
-
 
 </script>
 <?php echo $footer; ?>

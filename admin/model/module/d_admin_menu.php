@@ -13,6 +13,10 @@ class ModelModuleDAdminMenu extends Model
             $implode[] = "`name` LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
         }
 
+        if (!empty($data['filter_category'])) {
+            $implode[] = "`category` LIKE '%" . $this->db->escape($data['filter_category']) . "%'";
+        }
+
         if (!empty($data['filter_parent'])) {
             $implode[] = "`parent` LIKE '%" . $this->db->escape($data['filter_parent']) . "%'";
         }
@@ -27,6 +31,7 @@ class ModelModuleDAdminMenu extends Model
 
         $sort_data = array(
             'name',
+            'category',
             'parent',
             'status'
         );
@@ -70,6 +75,10 @@ class ModelModuleDAdminMenu extends Model
             $implode[] = "`name` LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
         }
 
+        if (!empty($data['filter_category'])) {
+            $implode[] = "`category` LIKE '%" . $this->db->escape($data['filter_category']) . "%'";
+        }
+
         if (!empty($data['filter_parent'])) {
             $implode[] = "`parent` LIKE '%" . $this->db->escape($data['filter_parent']) . "%'";
         }
@@ -87,8 +96,22 @@ class ModelModuleDAdminMenu extends Model
         return $query->row['total'];
     }
 
-    public function addMenuItem($name, $link, $parent, $icon, $status = 1) {
-        $this->db->query("INSERT INTO `" . DB_PREFIX . "admin_menu` SET `name` = '" . $this->db->escape($name) . "', `link` = '" . $this->db->escape($link) . "', `parent` = '" . $this->db->escape($action) . "', `icon` = '" . $this->db->escape($icon) . "', `status` = '" . (int)$status);
+    public function updateMenuItem($menu_item_id, $data){
+
+        $this->db->query("UPDATE " . DB_PREFIX . "admin_menu SET
+            `name` = '" . $this->db->escape($data['name'])."',
+            `category` = '" . $this->db->escape($data['category'])."',
+            `parent` = '" . $this->db->escape($data['parent'])."',
+            `link` = '" . $this->db->escape($data['link'])."',
+            `icon` = '" . $this->db->escape($data['icon'])."',
+            `status` = '". (int)$data['status']."'
+            WHERE menu_item_id = '" . (int)$menu_item_id . "'");
+
+        return $this->getMenuItemById($menu_item_id);
+    }
+
+    public function addMenuItem($name, $category, $parent, $link, $icon, $status = 1) {
+        $this->db->query("INSERT INTO `" . DB_PREFIX . "admin_menu` SET `name` = '" . $this->db->escape($name) . "', `category` = '" . $this->db->escape($category) . "', `parent` = '" . $this->db->escape($parent) . "', `link` = '" . $this->db->escape($link) . "', `icon` = '" . $this->db->escape($icon) . "', `status` = '" . (int)$status. "'");
 
         return $this->db->getLastId();
     }
@@ -116,8 +139,9 @@ class ModelModuleDAdminMenu extends Model
       $this->db->query("CREATE TABLE IF NOT EXISTS `oc_admin_menu` (
         `menu_item_id` int(11) NOT NULL AUTO_INCREMENT,
         `name` text NOT NULL,
-        `link` text NOT NULL,
+        `category` text NOT NULL,
         `parent` int(11) NOT NULL,
+        `link` text NOT NULL,
         `icon` varchar(32) NOT NULL,
         `status` tinyint(1) NOT NULL,
         PRIMARY KEY (`menu_item_id`)

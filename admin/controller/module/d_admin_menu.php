@@ -56,6 +56,7 @@ class ControllerModuleDAdminMenu extends Controller
         $this->document->addStyle('view/stylesheet/shopunity/bootstrap.css');
         $this->document->addScript('view/javascript/shopunity/bootstrap-switch/bootstrap-switch.min.js');
         $this->document->addStyle('view/stylesheet/shopunity/bootstrap-switch/bootstrap-switch.css');
+        $this->document->addScript('https://use.fontawesome.com/0b3dfb29a7.js');
 
         // Add more styles, links or scripts to the project is necessary
         $url_params = array();
@@ -72,6 +73,10 @@ class ControllerModuleDAdminMenu extends Controller
         // Custom stuff
         if (isset($this->request->get['filter_name'])) {
             $url_params['filter_name'] = urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
+        }
+
+        if (isset($this->request->get['filter_category'])) {
+            $url_params['filter_category'] = urlencode(html_entity_decode($this->request->get['filter_category'], ENT_QUOTES, 'UTF-8'));
         }
 
         if (isset($this->request->get['filter_parent'])) {
@@ -117,12 +122,25 @@ class ControllerModuleDAdminMenu extends Controller
 
         $data['entry_name'] = $this->language->get('entry_name');
         $data['entry_link'] = $this->language->get('entry_link');
+        $data['entry_category'] = $this->language->get('entry_category');
         $data['entry_parent'] = $this->language->get('entry_parent');
         $data['entry_icon'] = $this->language->get('entry_icon');
         $data['entry_status'] = $this->language->get('entry_status');
 
+        // Action
+        $data['create'] = $this->model_module_d_admin_menu->ajax($this->route.'/create', 'token=' . $this->session->data['token'] . $url, 'SSL');
+        $data['delete'] = $this->model_module_d_admin_menu->ajax($this->route.'/delete', 'token=' . $this->session->data['token'] . $url, 'SSL');
+
+        if(VERSION >= '2.3.0.0'){
+            $data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', true);
+        }else{
+            $data['cancel'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL');
+        }
+
         // Custom stuff
+        $data['column_menu_item_id'] = $this->language->get('column_menu_item_id');
         $data['column_name'] = $this->language->get('column_name');
+        $data['column_category'] = $this->language->get('column_category');
         $data['column_parent'] = $this->language->get('column_parent');
         $data['column_icon'] = $this->language->get('column_icon');
         $data['column_status'] = $this->language->get('column_status');
@@ -148,6 +166,7 @@ class ControllerModuleDAdminMenu extends Controller
         }
 
         $filter_name = (isset($this->request->get['filter_name'])) ? $this->request->get['filter_name'] : null;
+        $filter_category = (isset($this->request->get['filter_category'])) ? $this->request->get['filter_category'] : null;
         $filter_parent = (isset($this->request->get['filter_parent'])) ? $this->request->get['filter_parent'] : null;
         $filter_status = (isset($this->request->get['filter_status'])) ? $this->request->get['filter_status'] : null;
 
@@ -159,6 +178,7 @@ class ControllerModuleDAdminMenu extends Controller
 
         $filter_data = array(
             'filter_name'               => $filter_name,
+            'filter_category'           => $filter_category,
             'filter_parent'             => $filter_parent,
             'filter_status'             => $filter_status,
             'sort'                      => $sort,
@@ -173,18 +193,17 @@ class ControllerModuleDAdminMenu extends Controller
 
         foreach ($results as $result) {
 
-            $enable = $this->model_module_d_admin_menu->ajax($this->route.'/enable', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $result['menu_item_id'] . $url, 'SSL');
-            $disable = $this->model_module_d_admin_menu->ajax($this->route.'/disable', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $result['menu_item_id'] . $url, 'SSL');
+            $delete = $this->model_module_d_admin_menu->ajax($this->route.'/delete', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $result['menu_item_id'] . $url, 'SSL');
 
             $data['menu_items'][] = array(
                 'menu_item_id'   => $result['menu_item_id'],
                 'name'           => $result['name'],
+                'category'       => $result['category'],
                 'link'           => $result['link'],
                 'parent'         => $result['parent'],
                 'icon'           => $result['icon'],
                 'status'         => (isset($result['status'])) ? $result['status'] : 1,
-                'enable'         => $enable,
-                'disable'        => $disable,
+                'delete'         => $delete,
                 'edit'           => $this->url->link($this->route.'/edit', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $result['menu_item_id'] . $url, 'SSL')
             );
         }
@@ -197,9 +216,11 @@ class ControllerModuleDAdminMenu extends Controller
         }
         unset($url_params['sort']);
         $url = ((!empty($url_params)) ? '&' : '' ) . http_build_query($url_params);
+        $data['sort_menu_item_id'] = $this->url->link($this->route, 'token=' . $this->session->data['token'] . '&sort=sort_menu_item_id' . $url, 'SSL');
         $data['sort_name'] = $this->url->link($this->route, 'token=' . $this->session->data['token'] . '&sort=name' . $url, 'SSL');
+        $data['sort_category'] = $this->url->link($this->route, 'token=' . $this->session->data['token'] . '&sort=category' . $url, 'SSL');
         $data['sort_parent'] = $this->url->link($this->route, 'token=' . $this->session->data['token'] . '&sort=parent' . $url, 'SSL');
-        $data['sort_icon'] = $this->url->link($this->route, 'token=' . $this->session->data['token'] . '&sort=name' . $url, 'SSL');
+        $data['sort_icon'] = $this->url->link($this->route, 'token=' . $this->session->data['token'] . '&sort=icon' . $url, 'SSL');
         $data['sort_status'] = $this->url->link($this->route, 'token=' . $this->session->data['token'] . '&sort=status' . $url, 'SSL');
 
         //pagination
@@ -226,22 +247,41 @@ class ControllerModuleDAdminMenu extends Controller
         );
 
         $data['filter_name'] = $filter_name;
+        $data['filter_category'] = $filter_category;
         $data['filter_parent'] = $filter_parent;
         $data['filter_status'] = $filter_status;
 
         $this->load->model('setting/store');
 
-
         $data['sort'] = $sort;
         $data['order'] = $order;
+
+
+        // Breadcrumbs
+        $data['breadcrumbs'] = array();
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('text_home'),
+            'href' => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL')
+        );
+
+        $data['breadcrumbs'][] = array(
+            'text'      => $this->language->get('text_module'),
+            'href'      => $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL')
+        );
+
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('heading_title_main'), // why?
+            'href' => $this->url->link($this->route, 'token=' . $this->session->data['token'] . $url, 'SSL')
+        );
+
+        $data['header'] = $this->load->controller('common/header');
+        $data['column_left'] = $this->load->controller('common/column_left');
+        $data['footer'] = $this->load->controller('common/footer');
 
 
         //////////////////////////////////////////////////////////////////////
         //////                       CATEGORIES                         //////
         //////////////////////////////////////////////////////////////////////
-
-        $data['text_type'] = $this->language->get('text_type');
-        $data['text_filter'] = $this->language->get('text_filter');
 
         $data['categories'] = array();
 
@@ -262,28 +302,6 @@ class ControllerModuleDAdminMenu extends Controller
                 );
             }
         }
-
-
-        // Breadcrumbs
-        $data['breadcrumbs'] = array();
-        $data['breadcrumbs'][] = array(
-            'text' => $this->language->get('text_home'),
-            'href' => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL')
-        );
-
-        $data['breadcrumbs'][] = array(
-            'text' => $this->language->get('text_modules'),
-            'href' => $this->url->link('module', 'token=' . $this->session->data['token'], 'SSL')
-        );
-
-        $data['breadcrumbs'][] = array(
-            'text' => $this->language->get('heading_title_main'),
-            'href' => $this->url->link($this->route, 'token=' . $this->session->data['token'], 'SSL')
-        );
-
-        $data['header'] = $this->load->controller('common/header');
-        $data['column_left'] = $this->load->controller('common/column_left');
-        $data['footer'] = $this->load->controller('common/footer');
 
 
         $this->response->setOutput($this->load->view('module/d_admin_menu_editor.tpl', $data));
@@ -351,7 +369,7 @@ class ControllerModuleDAdminMenu extends Controller
                     'name'          => $this->language->get('heading_title'),
                     'shortname'     => $extension,
                     'installed'     => in_array($extension, $extensions),
-                    'edit'          => 'extension/'. $category_shortname .'/' . $extension
+                    'edit'          => 'extension.'. $category_shortname .'.' . $extension
                 );
             }
         }
@@ -365,6 +383,195 @@ class ControllerModuleDAdminMenu extends Controller
         array_multisort($sort_order, SORT_ASC, $extra_data);
 
         return $extra_data;
+    }
+
+    public function edit()
+    {
+        $menu_item_id = false;
+        $result = array();
+
+        $this->load->model('module/d_admin_menu');
+
+        if(isset($this->request->get['menu_item_id'])){
+            $menu_item_id = $this->request->get['menu_item_id'];
+            $result = $this->model_module_d_admin_menu->getMenuItemById($menu_item_id);
+        }
+
+        if($result){
+            $delete = $this->model_module_d_admin_menu->ajax($this->route.'/delete', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $result['menu_item_id'] , 'SSL');
+
+            $json = array(
+                'menu_item_id'  => $result['menu_item_id'],
+                'name'          => $result['name'],
+                'category'      => $result['category'],
+                'parent'        => $result['parent'],
+                'link'          => $this->url->link($result['link'], 'token=' . $this->session->data['token'], 'SSL'),
+                'icon'          => $result['icon'],
+                'status'        => $result['status'],
+                'delete'        => $delete,
+                'edit'          => $this->url->link($this->route.'/edit', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $result['menu_item_id'] , 'SSL'),
+                'save'          => $this->url->link($this->route.'/save', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $result['menu_item_id'] , 'SSL')
+            );
+        }else{
+            $json = false;
+        }
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function create()
+    {
+        $menu_item_id = false;
+        $menu_item = array();
+
+        $this->load->model('module/d_admin_menu');
+
+        if (isset($this->request->post['item_extra'])) {
+
+            $extra_item_stuff = explode(".", $this->request->post['item_extra']);
+            $edit_path = $extra_item_stuff[0] .'/' . $extra_item_stuff[1] . '/' . $extra_item_stuff[2];
+
+            $this->load->language($edit_path);
+            $menu_item['name'] = $this->language->get('heading_title');
+
+            $this->load->language('extension/extension/' . $extra_item_stuff[1]);
+            $menu_item['category'] = $this->language->get('heading_title');
+
+            if (isset($this->request->post['item_parent'])) {
+                $menu_item['parent'] = $this->request->post['item_parent'];
+            } else { $menu_item['parent'] = 0; }
+
+            $menu_item['link'] = $edit_path;
+
+            if (isset($this->request->post['item_icon'])) {
+                if ($menu_item['parent'] > 0) {
+                    $menu_item['icon'] = '>>';
+                } else {
+                    $menu_item['icon'] = $this->request->post['item_icon'];
+                }
+
+            } else { $menu_item['icon'] = ""; }
+
+            $menu_item['status'] = 1;
+            $menu_item['menu_item_id'] = $this->model_module_d_admin_menu->addMenuItem($menu_item['name'], $menu_item['category'], $menu_item['parent'], $menu_item['link'], $menu_item['icon'], $menu_item['status']);
+        }
+
+        if($menu_item){
+            $delete = $this->model_module_d_admin_menu->ajax($this->route.'/delete', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $menu_item['menu_item_id'] , 'SSL');
+
+            $json = array(
+                'menu_item_id'  => $menu_item['menu_item_id'],
+                'name'          => $menu_item['name'],
+                'category'      => $menu_item['category'],
+                'parent'        => $menu_item['parent'],
+                'link'          => $this->url->link($edit_path, 'token=' . $this->session->data['token'], 'SSL'),
+                'icon'          => $menu_item['icon'],
+                'status'        => $menu_item['status'],
+                'delete'        => $delete,
+                'edit'          => $this->url->link($this->route.'/edit', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $menu_item['menu_item_id'] , 'SSL'),
+                'save'          => $this->url->link($this->route.'/save', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $menu_item['menu_item_id'] , 'SSL')
+            );
+
+            $json['saved'] = true;
+        } else {
+            $json['saved'] = false;
+        }
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function save()
+    {
+        $menu_item_id = false;
+        $menu_item = array();
+
+        $this->load->model('module/d_admin_menu');
+
+        if (isset($this->request->get['menu_item_id'])
+        && isset($this->request->post['item_extra'])) {
+
+            $extra_item_stuff = explode(".", $this->request->post['item_extra']);
+            $edit_path = $extra_item_stuff[0] .'/' . $extra_item_stuff[1] . '/' . $extra_item_stuff[2];
+
+            $this->load->language($edit_path);
+            $menu_item['name'] = $this->language->get('heading_title');
+
+            $this->load->language('extension/extension/' . $extra_item_stuff[1]);
+            $menu_item['category'] = $this->language->get('heading_title');
+
+            $menu_item_id = $this->request->get['menu_item_id'];
+            $menu_item = $this->model_module_d_admin_menu->getMenuItemById($menu_item_id);
+
+            if (isset($this->request->post['item_parent'])) {
+                $menu_item['parent'] = $this->request->post['item_parent'];
+            }
+
+            if (isset($this->request->post['item_icon'])) {
+                if ($menu_item['parent'] > 0) {
+                    $menu_item['icon'] = '>>';
+                } else {
+                    $menu_item['icon'] = $this->request->post['item_icon'];
+                }
+            }
+        }
+
+        if($menu_item){
+
+            $menu_item = $this->model_module_d_admin_menu->updateMenuItem($menu_item_id, $menu_item);
+
+            if ($menu_item) {
+                $delete = $this->model_module_d_admin_menu->ajax($this->route.'/delete', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $menu_item['menu_item_id'] , 'SSL');
+
+                $json = array(
+                    'menu_item_id'  => $menu_item['menu_item_id'],
+                    'name'          => $menu_item['name'],
+                    'category'      => $menu_item['category'],
+                    'parent'        => $menu_item['parent'],
+                    'link'          => $this->url->link($edit_path, 'token=' . $this->session->data['token'], 'SSL'),
+                    'icon'          => $menu_item['icon'],
+                    'status'        => $menu_item['status'],
+                    'delete'        => $delete,
+                    'edit'          => $this->url->link($this->route.'/edit', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $menu_item['menu_item_id'] , 'SSL'),
+                    'save'          => $this->url->link($this->route.'/save', 'token=' . $this->session->data['token'] . '&menu_item_id=' . $menu_item['menu_item_id'] , 'SSL')
+                );
+
+                $json['saved'] = true;
+            }else{
+                $json['saved'] = false;
+            }
+        } else {
+            $json['saved'] = false;
+        }
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function delete()
+    {
+        $json = array();
+
+        $this->load->model('module/d_admin_menu');
+
+        $get_del_id = array();
+
+        if (isset($this->request->post['menu_item_id'])) {
+            $get_del_id = $this->request->post['menu_item_id'];
+        } elseif (isset($this->request->get['menu_item_id'])) {
+            $get_del_id[] = $this->request->get['menu_item_id'];
+        }
+
+        if($get_del_id){
+            foreach($get_del_id as $menu_item_id){
+                $this->model_module_d_admin_menu->deleteMenuItemById($menu_item_id);
+            }
+            $json['deleted'] = true;
+        }else{
+            $json['deleted'] = false;
+        }
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
     }
 
     public function view_column_left_after(&$route, &$data, &$output)
