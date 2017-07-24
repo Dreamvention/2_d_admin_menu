@@ -1,36 +1,36 @@
 <link href="view/stylesheet/d_admin_menu/d_admin_menu.css" type="text/css" rel="stylesheet">
 <ul id="menu2">
-        <?php foreach ($config['menu'] as $k=>$menu) { ?>
+        <?php foreach ($config['menus'] as $k=>$menu) { ?>
         <li id="" data-sort="<?php echo $k?>">
-            <?php if ($menu['link']) { ?>
-            <a href="<?php echo $menu['link'].$token; ?>"><i class="fa <?php echo $menu['icon']; ?> fw"></i>
-                <span><?php echo $menu['text']; ?></span></a>
+            <?php if ($menu['href']) { ?>
+            <a href="<?php echo $menu['href'].$token; ?>"><i class="fa <?php echo $menu['icon']; ?> fw"></i>
+                <span><?php echo $menu['name']; ?></span></a>
             <?php } else { ?>
             <a class="parent"><i class="fa <?php echo $menu['icon']; ?> fw"></i>
-                <span><?php echo $menu['text']; ?></span></a>
+                <span><?php echo $menu['name']; ?></span></a>
             <?php } ?>
             <?php if ($menu['children']) { ?>
             <ul>
                 <?php foreach ($menu['children'] as $children_1) { ?>
                 <li>
-                    <?php if ($children_1['link']) { ?>
-                    <a href="<?php echo $children_1['link'].$token; ?>"><?php echo $children_1['text']; ?></a>
+                    <?php if ($children_1['href']) { ?>
+                    <a href="<?php echo $children_1['href'].$token; ?>"><?php echo $children_1['name']; ?></a>
                     <?php } else { ?>
-                    <a class="parent"><?php echo $children_1['text']; ?></a>
+                    <a class="parent"><?php echo $children_1['name']; ?></a>
                     <?php } ?>
                     <?php if ($children_1['children']) { ?>
                     <ul>
                         <?php foreach ($children_1['children'] as $children_2) { ?>
                         <li>
-                            <?php if ($children_2['link']) { ?>
-                            <a href="<?php echo $children_2['link'].$token; ?>"><?php echo $children_2['text']; ?></a>
+                            <?php if ($children_2['href']) { ?>
+                            <a href="<?php echo $children_2['href'].$token; ?>"><?php echo $children_2['name']; ?></a>
                             <?php } else { ?>
-                            <a class="parent"><?php echo $children_2['text']; ?></a>
+                            <a class="parent"><?php echo $children_2['name']; ?></a>
                             <?php } ?>
                             <?php if ($children_2['children']) { ?>
                             <ul>
                                 <?php foreach ($children_2['children'] as $children_3) { ?>
-                                <li><a href="<?php echo $children_3['link'].$token; ?>"><?php echo $children_3['text']; ?></a>
+                                <li><a href="<?php echo $children_3['href'].$token; ?>"><?php echo $children_3['name']; ?></a>
                                 </li>
                                 <?php } ?>
                             </ul>

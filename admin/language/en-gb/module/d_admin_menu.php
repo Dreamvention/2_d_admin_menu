@@ -17,18 +17,22 @@ $_['button_create']             = 'Create new menu element';
 
 //custom stuff
 $_['column_menu_item_id']       = 'Item ID';
-$_['column_name']               = 'Name of the Module';
+$_['column_name']               = 'Name';
+$_['column_link']               = 'Link';
 $_['column_category']           = 'Category';
 $_['column_parent']             = 'Parent';
+$_['column_position']           = 'Sort Order';
 $_['column_icon']               = 'Icon';
 $_['column_status']             = 'Status';
 $_['column_action']             = 'Action';
 
 //entry
+$_['entry_item_id']             = 'Item ID';
 $_['entry_name']                = 'Name';
 $_['entry_link']                = 'Link';
 $_['entry_category']            = 'Category';
 $_['entry_parent']              = 'Parent';
+$_['entry_position']            = 'Sort Order';
 $_['entry_icon']                = 'Icon';
 $_['entry_status']              = 'Status';
 

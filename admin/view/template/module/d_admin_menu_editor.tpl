@@ -50,6 +50,12 @@
                   <!-- FILTER -->
                   <div class="col-sm-3">
                     <div class="form-group">
+                      <label class="control-label" for="input-menu_iten_id"><?php echo $entry_item_id; ?></label>
+                      <input type="text" name="filter_item_id" value="<?php echo $filter_item_id; ?>" placeholder="<?php echo $entry_item_id; ?>" id="input-menu_iten_id" class="form-control" data-item="menu_item_id"/>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group">
                       <label class="control-label" for="input-name"><?php echo $entry_name; ?></label>
                       <input type="text" name="filter_name" value="<?php echo $filter_name; ?>" placeholder="<?php echo $entry_name; ?>" id="input-name" class="form-control" data-item="name"/>
                     </div>
@@ -64,24 +70,6 @@
                     <div class="form-group">
                       <label class="control-label" for="input-parent"><?php echo $entry_parent; ?></label>
                       <input type="text" name="filter_parent" value="<?php echo $filter_parent; ?>" placeholder="<?php echo $entry_parent; ?>" id="input-parent" class="form-control" data-item="parent"/>
-                    </div>
-                  </div>
-                  <div class="col-sm-3">
-                    <div class="form-group">
-                      <label class="control-label" for="input-status"><?php echo $entry_status; ?></label>
-                      <select name="filter_status" id="input-status" class="form-control">
-                        <option value="*"></option>
-                        <?php if ($filter_status) { ?>
-                        <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
-                        <?php } else { ?>
-                        <option value="1"><?php echo $text_enabled; ?></option>
-                        <?php } ?>
-                        <?php if (!$filter_status && !is_null($filter_status)) { ?>
-                        <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
-                        <?php } else { ?>
-                        <option value="0"><?php echo $text_disabled; ?></option>
-                        <?php } ?>
-                      </select>
                     </div>
                     <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> <?php echo $button_filter; ?></button>
                   </div>
@@ -122,6 +110,13 @@
                             <a href="<?php echo $sort_parent; ?>"><?php echo $column_parent; ?></a>
                           <?php } ?>
                         </td>
+                        <td class="text-left">
+                          <?php if ($sort == 'position') { ?>
+                            <a href="<?php echo $sort_position; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_position; ?></a>
+                          <?php } else { ?>
+                            <a href="<?php echo $sort_position; ?>"><?php echo $column_position; ?></a>
+                          <?php } ?>
+                        </td>
                         <td class="text-center">
                           <?php if ($sort == 'icon') { ?>
                             <a href="<?php echo $sort_icon; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_icon; ?></a>
@@ -147,6 +142,7 @@
                           <td class="text-left"><?php echo $m_item['name']; ?></td>
                           <td class="text-left"><?php echo $m_item['category']; ?></td>
                           <td class="text-left"><?php echo $m_item['parent']; ?></td>
+                          <td class="text-left"><?php echo $m_item['position']; ?></td>
                           <td class="text-center">
                             <?php if ($m_item['parent'] > 0) { ?>
                             <?php echo $m_item['icon']; ?>
@@ -174,15 +170,80 @@
                 <div class="col-sm-6 text-right"><?php echo $results; ?></div>
               </div>
 
-              <!-- PRINT SOME STUFF -->
-              <?php echo '<pre>',print_r($menu_items),'</pre>'; ?>
-
             </div>
           </div>
 
           <div class="tab-pane" id="tab_setting">
             <div class="tab-body">
               <!-- SETTING TAB -->
+
+                <div id="d_test" class="tab-pane">
+
+                  <h3 class="page-header">
+                      <span class="fa fa-book fa-fw"></span> <span><?php echo $text_edit; ?></span>
+                  </h3>
+
+                  <div class="table-responsive">
+                  <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th><?php echo $column_name; ?></th>
+                        <th><?php echo $column_link; ?></th>
+                        <th class="text-center"><?php echo $column_icon; ?></th>
+                        <th class="text-center"><?php echo $column_action; ?></th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="sortable table-sortable">
+                    <?php foreach($sortable_menu_items as $sortable_mi) { ?>
+                    <tr id="test_<?php echo $sortable_mi['menu_item_id'] ?>_input" class="sort-item" sort-data="<?php echo $sortable_mi['sort_order']; ?>">
+
+                      <td><label class=""><span class="btn btn-link"><i class="fa fa-bars"></i></span></label></td>
+                      <td><?php echo $sortable_mi['name']; ?></td>
+
+                      <td>
+                        <select name="item_extra" class="form-control input-sm">
+                          <?php foreach ($categories as $category) { ?>
+                          <optgroup label="<?php echo $category['text']; ?>">
+                          <?php if (!$category['extra']) { ?>
+                          <!-- ? -->
+                          <?php } else { ?>
+                          <?php foreach ($category['extra'] as $ex_cat) { ?>
+                          <option <?php echo ($ex_cat['edit'] == str_replace("/", ".", $sortable_mi['link'])) ? 'selected' : ''; ?> value="<?php echo $ex_cat['edit']; ?>"><?php echo $ex_cat['name']; ?></option>
+                          <?php } ?>
+                          <?php } ?>
+                          </optgroup>
+                          <?php } ?>
+                        </select>
+                      </td>
+
+                      <td class="text-center">
+                        <?php if ($sortable_mi['parent'] > 0) { ?>
+                        <?php echo $sortable_mi['icon']; ?>
+                        <?php } else { ?>
+                        <i class="fa fa-<?php echo $sortable_mi['icon']; ?> fa-2x"></i>
+                        <?php } ?>
+                      </td>
+
+                      <td class="text-center">
+                        <a href="<?php echo $sortable_mi['delete']; ?>" data-toggle="tooltip" title="<?php echo $button_delete; ?>" data-menu_item_id="<?php echo $sortable_mi['menu_item_id']; ?>" class="btn btn-danger action delete"><i class="fa fa-trash-o"></i></a>
+                      </td>
+
+                    </tr>
+                    <?php } ?>
+                    </tbody>
+
+                  </table>
+
+
+                  </div>
+
+                </div>
+
+                <!-- PRINT SOME STUFF -->
+                <?php echo '<pre>',print_r($sortable_menu_items),'</pre>'; ?>
+
             </div>
           </div>
 
@@ -198,6 +259,7 @@
     <td class="text-left flash">{{name}}</td>
     <td class="text-left flash">{{category}}</td>
     <td class="text-left flash">{{parent}}</td>
+    <td class="text-left flash">{{position}}</td>
     <td class="text-center flash">{{icon}}</td>
     <td class="text-center flash">
       <a href="{{delete}}" data-toggle="tooltip" title="<?php echo $button_delete; ?>" data-menu_item_id="{{menu_item_id}}" class="btn btn-danger action delete"><i class="fa fa-trash-o"></i></a>
@@ -251,6 +313,13 @@
                     <?php } ?>
                     <?php } ?>
                   </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input_action"><?php echo $entry_position; ?></label>
+              <div class="col-sm-10">
+                <input type="text" name="item_position" value="{{item_position}}" placeholder="<?php echo $entry_position; ?>" id="input-width" class="form-control" />
               </div>
             </div>
 
@@ -322,6 +391,7 @@
     var json = {
       menu_item_id: 0,
       item_parent: '',
+      item_position: '',
       item_icon: '',
       save: '<?php echo $create; ?>'
     };
@@ -411,6 +481,45 @@
       }
     });
     return false;
+  });
+
+  $('.sortable > tr').tsort({attr:'sort-data'});
+  $(function () {
+
+    $(".table-sortable").sortable({
+        containerSelector: 'table',
+        itemPath: '',
+        itemSelector: 'tr',
+        distance: '10',
+        pullPlaceholder: false,
+        placeholder: '<tr class="placeholder"><td colspan="5" /></tr>',
+        onDragStart: function (item, container, _super) {
+            var offset = item.offset(),
+                    pointer = container.rootGroup.pointer
+
+            adjustment = {
+                left: pointer.left - offset.left,
+                top: pointer.top - offset.top
+            }
+
+            _super(item, container)
+        },
+        onDrag: function (item, position) {
+            item.css({
+                left: position.left - adjustment.left,
+                top: position.top - adjustment.top
+            })
+        },
+        onDrop: function  (item, container, _super) {
+            item.closest('tbody').find('tr').each(function (i, row) {
+                console.log(i)
+                $(row).find('.sort').val(i)
+
+            })
+
+            _super(item)
+        }
+    });
   });
 
 </script>
