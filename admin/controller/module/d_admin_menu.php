@@ -57,8 +57,20 @@ class ControllerModuleDAdminMenu extends Controller
         $this->document->addScript('view/javascript/shopunity/bootstrap-switch/bootstrap-switch.min.js');
         $this->document->addStyle('view/stylesheet/shopunity/bootstrap-switch/bootstrap-switch.css');
 
-        $this->document->addScript('https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.6.0/Sortable.min.js');
-        $this->document->addScript('https://cdnjs.cloudflare.com/ajax/libs/tinysort/1.5.6/jquery.tinysort.min.js');
+        // $this->document->addScript('view/javascript/d_admin_menu/libs/jquery/jquery-2.1.1.min.js');
+        // $this->document->addScript('view/javascript/d_admin_menu/libs/jquery/jquery-ui/jquery-ui.min.js');
+        // $this->document->addStyle('view/javascript/d_admin_menu/libs/jquery/jquery-ui/jquery-ui.min.css');
+
+        // $this->document->addStyle('view/stylesheet/d_admin_menu/libs/bootstrap/bootstrap.css');
+        // $this->document->addScript('view/javascript/d_admin_menu/libs/bootstrap/bootstrap-switch/bootstrap-switch.min.js');
+        // $this->document->addStyle('view/stylesheet/d_admin_menu/libs/bootstrap/bootstrap-switch/bootstrap-switch.css');
+        // $this->document->addScript('view/javascript/d_admin_menu/libs/bootstrap/bootstrap-sortable.js');
+
+        // $this->document->addScript('view/javascript/d_admin_menu/libs/rubaxa-sortable/sortable.js');
+        // $this->document->addStyle('view/stylesheet/d_admin_menu/libs/rubaxa-sortable/sortable.css');
+        // $this->document->addScript('view/javascript/d_admin_menu/libs/tinysort/jquery.tinysort.min.js');
+
+
 
         // Add more styles, links or scripts to the project is necessary
         $url_params = array();

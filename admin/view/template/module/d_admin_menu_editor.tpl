@@ -30,19 +30,19 @@
       <div class="panel-body">
 
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#tab_module" data-toggle="tab">
+          <li ><a href="#tab_module" data-toggle="tab">
             <span class="fa fa-plug"></span>
             <?php echo $tab_module; ?>
           </a></li>
 
-          <li><a href="#tab_setting" data-toggle="tab">
+          <li class="active"><a href="#tab_setting" data-toggle="tab">
             <span class="fa fa-cog"></span>
             <?php echo $tab_setting; ?>
           </a></li>
         </ul>
 
         <div class="tab-content">
-          <div class="tab-pane active" id="tab_module" >
+          <div class="tab-pane" id="tab_module" >
             <div class="tab-body">
 
               <div id="filter" class="well">
@@ -173,9 +173,14 @@
             </div>
           </div>
 
-          <div class="tab-pane" id="tab_setting">
+          <div class="tab-pane active" id="tab_setting">
             <div class="tab-body">
               <!-- SETTING TAB -->
+
+              <div class="container-fluid">
+
+              <div id="left-pane" style="float: left; width: 320px; height: 100%; margin-right: 10px;">
+              </div>
 
                 <div id="d_test" class="tab-pane">
 
@@ -190,16 +195,27 @@
                         <th></th>
                         <th><?php echo $column_name; ?></th>
                         <th><?php echo $column_link; ?></th>
-                        <th class="text-center"><?php echo $column_icon; ?></th>
                         <th class="text-center"><?php echo $column_action; ?></th>
                       </tr>
                     </thead>
 
                     <tbody class="sortable table-sortable">
-                    <?php foreach($sortable_menu_items as $sortable_mi) { ?>
+                    <?php $custom_item_row = 0; ?>
+                    <?php foreach($menu_items as $sortable_mi) { ?>
                     <tr id="test_<?php echo $sortable_mi['menu_item_id'] ?>_input" class="sort-item" sort-data="<?php echo $sortable_mi['sort_order']; ?>">
 
-                      <td><label class=""><span class="btn btn-link"><i class="fa fa-bars"></i></span></label></td>
+                      <td>
+                        <label class="" style="margin-bottom: 0px;">
+                          <span class="btn btn-link"><i class="fa fa-bars"></i></span>
+                          <span>
+                            <?php if ($sortable_mi['parent'] > 0) { ?>
+                            <?php echo $sortable_mi['icon']; ?>
+                            <?php } else { ?>
+                            <i class="fa fa-<?php echo $sortable_mi['icon']; ?> fa-lg"></i>
+                            <?php } ?>
+                          </span>
+                        </label>
+                      </td>
                       <td><?php echo $sortable_mi['name']; ?></td>
 
                       <td>
@@ -219,27 +235,26 @@
                       </td>
 
                       <td class="text-center">
-                        <?php if ($sortable_mi['parent'] > 0) { ?>
-                        <?php echo $sortable_mi['icon']; ?>
-                        <?php } else { ?>
-                        <i class="fa fa-<?php echo $sortable_mi['icon']; ?> fa-2x"></i>
-                        <?php } ?>
-                      </td>
-
-                      <td class="text-center">
                         <a href="<?php echo $sortable_mi['delete']; ?>" data-toggle="tooltip" title="<?php echo $button_delete; ?>" data-menu_item_id="<?php echo $sortable_mi['menu_item_id']; ?>" class="btn btn-danger action delete"><i class="fa fa-trash-o"></i></a>
                       </td>
 
                     </tr>
+                    <?php $custom_item_row++; ?>
                     <?php } ?>
                     </tbody>
 
+                    <tfoot>
+                      <tr>
+                        <td colspan="3"></td>
+                        <td class="text-center"><button type="button" onclick="addNewMItem();" data-toggle="tooltip" title="<?php echo $button_create; ?>" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                      </tr>
+                    </tfoot>
+
                   </table>
 
-
                   </div>
-
                 </div>
+              </div>
 
                 <!-- PRINT SOME STUFF -->
                 <?php echo '<pre>',print_r($sortable_menu_items),'</pre>'; ?>
