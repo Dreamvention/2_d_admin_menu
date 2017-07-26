@@ -12,7 +12,7 @@
             <?php if ($menu['children']) { ?>
             <ul>
                 <?php foreach ($menu['children'] as $children_1) { ?>
-                <li>
+                <li style="<?php echo ($children_1['is_visible'] == 0) ? 'display: none;' : ''; ?>">
                     <?php if ($children_1['href']) { ?>
                     <a href="<?php echo $children_1['href'].$token; ?>"><?php echo $children_1['name']; ?></a>
                     <?php } else { ?>
@@ -21,7 +21,7 @@
                     <?php if ($children_1['children']) { ?>
                     <ul>
                         <?php foreach ($children_1['children'] as $children_2) { ?>
-                        <li>
+                        <li style="<?php echo ($children_2['is_visible'] == 0) ? 'display: none;' : ''; ?>">
                             <?php if ($children_2['href']) { ?>
                             <a href="<?php echo $children_2['href'].$token; ?>"><?php echo $children_2['name']; ?></a>
                             <?php } else { ?>

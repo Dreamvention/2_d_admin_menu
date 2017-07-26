@@ -62,3 +62,68 @@ $('#menu2').find('li').has('ul').children('a').on('click', function() {
         $(this).parent('li').siblings().removeClass('open').children('ul.in').collapse('hide');
     }
 });
+
+//////////////////////////////////
+///        TEST PUPROSE        ///
+//////////////////////////////////
+
+$('#menu3 a[href]').on('click', function() {
+    sessionStorage.setItem('menu3', $(this).attr('href'));
+});
+
+if (!sessionStorage.getItem('menu3')) {
+    $('#menu3 #dashboard').addClass('active');
+} else {
+    // Sets active and open to selected page in the left column menu.
+    $('#menu3 a[href=\'' + sessionStorage.getItem('menu3') + '\']').parents('li').addClass('active open');
+}
+
+if (localStorage.getItem('column-left') == 'active') {
+    $('#button-menu i').replaceWith('<i class="fa fa-dedent fa-lg"></i>');
+
+    $('#menu_supertest').addClass('active');
+
+    // Slide Down Menu
+    $('#menu3 li.active').has('ul').children('ul').addClass('collapse in');
+    $('#menu3 li').not('.active').has('ul').children('ul').addClass('collapse');
+} else {
+    $('#button-menu i').replaceWith('<i class="fa fa-indent fa-lg"></i>');
+
+    $('#menu3 li li.active').has('ul').children('ul').addClass('collapse in');
+    $('#menu3 li li').not('.active').has('ul').children('ul').addClass('collapse');
+}
+
+
+$('#button-menu').on('click', function() {
+    // Checks if the left column is active or not.
+    if ($('#menu_supertest').hasClass('active')) {
+        // localStorage.setItem('column-left', '');
+
+        //   $('#button-menu i').replaceWith('<i class="fa fa-indent fa-lg"></i>');
+
+        //   $('#menu_supertest').removeClass('active');
+
+        $('#menu3 > li > ul').removeClass('in collapse');
+        $('#menu3 > li > ul').removeAttr('style');
+    } else {
+        //  localStorage.setItem('column-left', 'active');
+
+        //   $('#button-menu i').replaceWith('<i class="fa fa-dedent fa-lg"></i>');
+
+        //  $('#menu_supertest').addClass('active');
+
+        // Add the slide down to open menu items
+        $('#menu3 li.open').has('ul').children('ul').addClass('collapse in');
+        $('#menu3 li').not('.open').has('ul').children('ul').addClass('collapse');
+    }
+});
+// Menu
+$('#menu3').find('li').has('ul').children('a').on('click', function() {
+    if ($('#menu_supertest').hasClass('active')) {
+        $(this).parent('li').toggleClass('open').children('ul').collapse('toggle');
+        $(this).parent('li').siblings().removeClass('open').children('ul.in').collapse('hide');
+    } else if (!$(this).parent().parent().is('#menu')) {
+        $(this).parent('li').toggleClass('open').children('ul').collapse('toggle');
+        $(this).parent('li').siblings().removeClass('open').children('ul.in').collapse('hide');
+    }
+});
