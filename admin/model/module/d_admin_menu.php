@@ -2,618 +2,557 @@
 
 class ModelModuleDAdminMenu extends Model
 {
-    private $codename = 'd_admin_menu';
-
-    public function getMenuItems($data = array()) {
-        $sql = "SELECT * FROM `" . DB_PREFIX . "admin_menu` ";
-
-        $implode = array();
-
-        if (!empty($data['filter_item_id'])) {
-            $implode[] = "`menu_item_id` LIKE '%" . $this->db->escape($data['filter_item_id']) . "%'";
-        }
-
-        if (!empty($data['filter_name'])) {
-            $implode[] = "`name` LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
-        }
-
-        if (!empty($data['filter_category'])) {
-            $implode[] = "`category` LIKE '%" . $this->db->escape($data['filter_category']) . "%'";
-        }
-
-        if (!empty($data['filter_parent'])) {
-            $implode[] = "`parent` LIKE '%" . $this->db->escape($data['filter_parent']) . "%'";
-        }
-
-        if (isset($data['filter_status']) && !is_null($data['filter_status'])) {
-            $implode[] = "`status` = '" . (int)$data['filter_status'] . "'";
-        }
-
-        if ($implode) {
-            $sql .= " WHERE " . implode(" AND ", $implode);
-        }
-
-        $sort_data = array(
-            'menu_item_id',
-            'name',
-            'category',
-            'parent',
-            'status'
-        );
-
-        if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-            $sql .= " ORDER BY `" . $data['sort'] . "`";
-        } else {
-            $sql .= " ORDER BY `menu_item_id`";
-        }
-
-        if (isset($data['order']) && ($data['order'] == 'DESC')) {
-            $sql .= " DESC";
-        } else {
-            $sql .= " ASC";
-        }
-
-        if (isset($data['start']) || isset($data['limit'])) {
-            if ($data['start'] < 0) {
-                $data['start'] = 0;
-            }
-
-            if ($data['limit'] < 1) {
-                $data['limit'] = 20;
-            }
-
-            $sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-        }
-
-        $query = $this->db->query($sql);
-
-        return $query->rows;
-    }
-
-    public function getTotalMenuItems($data = array())
+    public function __construct($registry)
     {
-        $sql = "SELECT COUNT(*) AS total FROM " . DB_PREFIX . "admin_menu";
-
-        $implode = array();
-
-        if (!empty($data['filter_item_id'])) {
-            $implode[] = "`menu_item_id` LIKE '%" . $this->db->escape($data['filter_item_id']) . "%'";
+        parent::__construct($registry);
+        if(!defined('DIR_ROOT')){
+            define('DIR_ROOT', substr_replace(DIR_SYSTEM, '/', -8));
         }
-
-        if (!empty($data['filter_name'])) {
-            $implode[] = "`name` LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
-        }
-
-        if (!empty($data['filter_category'])) {
-            $implode[] = "`category` LIKE '%" . $this->db->escape($data['filter_category']) . "%'";
-        }
-
-        if (!empty($data['filter_parent'])) {
-            $implode[] = "`parent` LIKE '%" . $this->db->escape($data['filter_parent']) . "%'";
-        }
-
-        if (isset($data['filter_status']) && !is_null($data['filter_status'])) {
-            $implode[] = "`status` = '" . (int)$data['filter_status'] . "'";
-        }
-
-        if ($implode) {
-            $sql .= " WHERE " . implode(" AND ", $implode);
-        }
-
-        $query = $this->db->query($sql);
-
-        return $query->row['total'];
-    }
-
-    public function updateMenuItem($menu_item_id, $data){
-
-        $this->db->query("UPDATE " . DB_PREFIX . "admin_menu SET
-            `name` = '" . $this->db->escape($data['name'])."',
-            `category` = '" . $this->db->escape($data['category'])."',
-            `parent` = '" . $this->db->escape($data['parent'])."',
-            `position` = '" . $this->db->escape($data['position'])."',
-            `link` = '" . $this->db->escape($data['link'])."',
-            `icon` = '" . $this->db->escape($data['icon'])."',
-            `status` = '". (int)$data['status']."'
-            WHERE menu_item_id = '" . (int)$menu_item_id . "'");
-
-        return $this->getMenuItemById($menu_item_id);
-    }
-
-    public function addMenuItem($name, $category, $parent, $position, $link, $icon, $status = 1) {
-        $this->db->query("INSERT INTO `" . DB_PREFIX . "admin_menu` SET `name` = '" . $this->db->escape($name) . "', `category` = '" . $this->db->escape($category) . "', `parent` = '" . $this->db->escape($parent) . "', `position` = '" . $this->db->escape($position) . "', `link` = '" . $this->db->escape($link) . "', `icon` = '" . $this->db->escape($icon) . "', `status` = '" . (int)$status. "'");
-
-        return $this->db->getLastId();
-    }
-
-    public function deleteMenuItemById($menu_item_id) {
-        $this->db->query("DELETE FROM `" . DB_PREFIX . "admin_menu` WHERE `menu_item_id` = '" . (int)$menu_item_id . "'");
-    }
-
-    public function getMenuItemById($menu_item_id) {
-        $event = $this->db->query("SELECT * FROM `" . DB_PREFIX . "admin_menu` WHERE `menu_item_id` = '" . $this->db->escape($menu_item_id) ."'");
-
-        return $event->row;
-    }
-
-    public function enableEvent($menu_item_id) {
-        $this->db->query("UPDATE " . DB_PREFIX . "admin_menu SET `status` = '1' WHERE menu_item_id = '" . (int)$menu_item_id . "'");
-    }
-
-    public function disableEvent($menu_item_id) {
-        $this->db->query("UPDATE " . DB_PREFIX . "admin_menu SET `status` = '0' WHERE menu_item_id = '" . (int)$menu_item_id . "'");
     }
 
     public function installDatabase()
     {
-      $this->db->query("CREATE TABLE IF NOT EXISTS `oc_admin_menu` (
-        `menu_item_id` int(11) NOT NULL AUTO_INCREMENT,
-        `name` text NOT NULL,
-        `category` text NOT NULL,
-        `parent` int(11) NOT NULL,
-        `position` int(11) NOT NULL,
-        `link` text NOT NULL,
-        `icon` varchar(32) NOT NULL,
-        `status` tinyint(1) NOT NULL,
-        PRIMARY KEY (`menu_item_id`)
+        // install oc_dam_setting ('dam' for 'Dreamvention Admin Menu')
+        $query = $this->db->query("CREATE TABLE IF NOT EXISTS `".DB_PREFIX."dam_setting` (
+        `setting_id` int(11) NOT NULL AUTO_INCREMENT,
+        `store_id` int(11) NOT NULL,
+        `name` varchar(32) NOT NULL,
+        `value` text NOT NULL,
+        PRIMARY KEY (`setting_id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
-
-      $result = $this->db->query("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_DATABASE."' AND TABLE_NAME = '" . DB_PREFIX . "admin_menu' ORDER BY ORDINAL_POSITION")->rows;
-      $columns = array();
-      foreach($result as $column){
-        $columns[] = $column['COLUMN_NAME'];
-      }
-
-      if(!in_array('status', $columns)){
-         $this->db->query("ALTER TABLE `" . DB_PREFIX . "event` ADD status int( 1 ) NOT NULL default '1'");
-      }
     }
 
-/**
-
- Helper functions
-
- **/
-
-/*
-*   Format the link to work with ajax requests
-*/
-public function ajax($route, $url = '', $ssl = true){
-    return str_replace('&amp;', '&', $this->url->link($route, $url, $ssl));
-}
-
-/*
-*   Get file contents, usualy for debug log files.
-*/
-
-public function getFileContents($file){
-
-    if (file_exists($file)) {
-        $size = filesize($file);
-
-        if ($size >= 5242880) {
-            $suffix = array(
-                'B',
-                'KB',
-                'MB',
-                'GB',
-                'TB',
-                'PB',
-                'EB',
-                'ZB',
-                'YB'
-                );
-
-            $i = 0;
-
-            while (($size / 1024) > 1) {
-                $size = $size / 1024;
-                $i++;
-            }
-
-            return sprintf($this->language->get('error_get_file_contents'), basename($file), round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i]);
-        } else {
-            return file_get_contents($file, FILE_USE_INCLUDE_PATH, null);
-        }
-    }
-}
-
-/*
-*   Return name of config file.
-*/
-public function getConfigFile($id, $sub_versions){
-
-    if(isset($this->request->post['config'])){
-        return $this->request->post['config'];
+    public function uninstallDatabase()
+    {
+        $query = $this->db->query("DROP TABLE IF EXISTS `".DB_PREFIX."dam_setting`");
     }
 
-    $setting = $this->config->get($id.'_setting');
-
-    if(isset($setting['config'])){
-        return $setting['config'];
-    }
-
-    $full = DIR_SYSTEM . 'config/'. $id . '.php';
-    if (file_exists($full)) {
-        return $id;
-    }
-
-    foreach ($sub_versions as $lite){
-        if (file_exists(DIR_SYSTEM . 'config/'. $id . '_' . $lite . '.php')) {
-            return $id . '_' . $lite;
-        }
-    }
-
-    return false;
-}
-
-/*
-*   Return list of config files that contain the id of the module.
-*/
-public function getConfigFiles($id){
-    $files = array();
-    $results = glob(DIR_SYSTEM . 'config/'. $id .'*');
-    foreach($results as $result){
-        $files[] = str_replace('.php', '', str_replace(DIR_SYSTEM . 'config/', '', $result));
-    }
-    return $files;
-}
-
-/*
-*   Get config file values and merge with config database values
-*/
-public function getConfigData($id, $config_key, $store_id, $config_file = false){
-    if(!$config_file){
-        $config_file = $this->config_file;
-    }
-    if($config_file){
-        $this->config->load($config_file);
-    }
-
-    $result = ($this->config->get($config_key)) ? $this->config->get($config_key) : array();
-
-    if(!isset($this->request->post['config'])){
+    public function getCurrentSettingId($id, $store_id = 0)
+    {
         $this->load->model('setting/setting');
-        if (isset($this->request->post[$config_key])) {
-            $setting = $this->request->post;
-        } elseif ($this->model_setting_setting->getSetting($id, $store_id)) {
-            $setting = $this->model_setting_setting->getSetting($id, $store_id);
+        $setting = $this->model_setting_setting->getSetting($id, $store_id);
+
+        if(isset($this->request->get['setting_id'])){
+            $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
+                WHERE store_id = '" . (int)$store_id . "'
+                AND setting_id = '" . (int)$this->request->get['setting_id'] . "'" );
+                if($query->row){
+                    return $query->row['setting_id'];
+                }
         }
-        if(isset($setting[$config_key])){
-            foreach($setting[$config_key] as $key => $value){
-                $result[$key] = $value;
+
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
+            WHERE store_id = '" . (int)$store_id . "'" );
+        if($query->row){
+            return $query->row['setting_id'];
+        }
+
+        return false;
+    }
+
+    public function getSettingName($setting_id)
+    {
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
+            WHERE setting_id = '" . (int)$setting_id . "'" );
+        if(isset($query->row['name'])){
+            return $query->row['name'];
+        }else{
+            return false;
+        }
+    }
+
+    public function getSetting($setting_id)
+    {
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
+            WHERE setting_id = '" . (int)$setting_id . "'" );
+
+        $result = $query->row;
+        if(isset($result['value'])){
+            $result['value'] = json_decode($result['value'], true);
+        }
+
+        return $result;
+    }
+
+    public function getSettings($store_id)
+    {
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
+            WHERE store_id = '" . (int)$store_id . "'"  );
+
+        $results = $query->rows;
+
+        foreach ($results as $key => $result) {
+            $results[$key]['value'] = json_decode($result['value'], true);
+        }
+
+        return $results;
+    }
+
+    public function setSetting($setting_name, $setting_value, $store_id = 0)
+    {
+        $this->db->query("INSERT INTO `" . DB_PREFIX . "dam_setting`
+            SET store_id = '" . (int)$store_id . "',
+                `name` = '" . $this->db->escape($setting_name) . "',
+                `value` = '" . $this->db->escape(json_encode($setting_value)) . "'");
+        return $this->db->getLastId();
+    }
+
+    public function editSetting($setting_id, $data)
+    {
+        $this->db->query("UPDATE `" . DB_PREFIX . "dam_setting`
+                SET `name` = '" . $this->db->escape($data['name']) . "',
+                    `value` = '" . $this->db->escape(json_encode($data)) . "'
+                WHERE setting_id = '" . (int)$setting_id . "'");
+    }
+
+    public function deleteSetting($setting_id)
+    {
+        $this->db->query("DELETE FROM `" . DB_PREFIX . "dam_setting` WHERE setting_id = '" . (int)$setting_id . "'");
+    }
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////                         HELPER FUNCTIONS                          /////////
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+    *   Format the link to work with ajax requests
+    */
+    public function ajax($route, $url = '', $ssl = true){
+        return str_replace('&amp;', '&', $this->url->link($route, $url, $ssl));
+    }
+
+    /*
+    *   Get file contents, usualy for debug log files.
+    */
+    public function getFileContents($file){
+
+        if (file_exists($file)) {
+            $size = filesize($file);
+
+            if ($size >= 5242880) {
+                $suffix = array(
+                    'B',
+                    'KB',
+                    'MB',
+                    'GB',
+                    'TB',
+                    'PB',
+                    'EB',
+                    'ZB',
+                    'YB'
+                    );
+
+                $i = 0;
+
+                while (($size / 1024) > 1) {
+                    $size = $size / 1024;
+                    $i++;
+                }
+
+                return sprintf($this->language->get('error_get_file_contents'), basename($file), round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i]);
+            } else {
+                return file_get_contents($file, FILE_USE_INCLUDE_PATH, null);
             }
         }
-
     }
-    return $result;
-}
 
+    /*
+    *   Return name of config file.
+    */
+    public function getConfigFile($id, $sub_versions){
 
-/**
+        if(isset($this->request->post['config'])){
+            return $this->request->post['config'];
+        }
 
- MBooth functions
+        $setting = $this->config->get($id.'_setting');
 
-**/
+        if(isset($setting['config'])){
+            return $setting['config'];
+        }
 
-/*
-*   Return mbooth file.
-*/
-public function getMboothFile($id, $sub_versions){
-    $full = DIR_SYSTEM . 'mbooth/xml/mbooth_'. $id .'.xml';
-    if (file_exists($full)) {
-        return 'mbooth_'. $id . '.xml';
-    } else{
+        $full = DIR_SYSTEM . 'config/'. $id . '.php';
+        if (file_exists($full)) {
+            return $id;
+        }
+
         foreach ($sub_versions as $lite){
-            if (file_exists(DIR_SYSTEM . 'mbooth/xml/mbooth_'. $id . '_' . $lite . '.php')) {
-                $this->prefix = '_' . $lite;
-                return $this->id . '_' . $lite . '.xml';
+            if (file_exists(DIR_SYSTEM . 'config/'. $id . '_' . $lite . '.php')) {
+                return $id . '_' . $lite;
             }
         }
-    }
-    return false;
-}
 
-/*
-*   Return mbooth file.
-*/
-public function getMboothInfo($mbooth_file){
-    if(file_exists(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_file)){
-        $xml = new SimpleXMLElement(file_get_contents(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_file));
-        return $xml;
-    }else{
         return false;
     }
-}
 
-/*
-*   Get the version of this module
-*/
-public function getVersion($mbooth_file){
-    if(file_exists(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_file)){
-        $xml = new SimpleXMLElement(file_get_contents(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_file));
-        return $xml->version;
-    }else{
-        return false;
+    /*
+    *   Return list of config files that contain the id of the module.
+    */
+    public function getConfigFiles($id){
+        $files = array();
+        $results = glob(DIR_SYSTEM . 'config/'. $id .'*');
+        foreach($results as $result){
+            $files[] = str_replace('.php', '', str_replace(DIR_SYSTEM . 'config/', '', $result));
+        }
+        return $files;
     }
-}
 
-/*
-*   Check if another extension/module is installed.
-*/
-public function isInstalled($code) {
-    $extension_data = array();
-    $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "extension WHERE `code` = '" . $this->db->escape($code) . "'");
-    if($query->row) {
-        return true;
-    }else{
-        return false;
-    }
-}
+    /*
+    *   Get config file values and merge with config database values
+    */
+    public function getConfigData($id, $config_key, $store_id, $config_file = false){
+        if(!$config_file){
+            $config_file = $this->config_file;
+        }
+        if($config_file){
+            $this->config->load($config_file);
+        }
 
-/*
-*   Get extension info by mbooth from server (Check for update)
-*/
-public function getUpdateInfo($mbooth_file, $status = 1){
-    $result = array();
+        $result = ($this->config->get($config_key)) ? $this->config->get($config_key) : array();
 
-    $current_version = $this->getVersion($mbooth_file);
-    $customer_url = HTTP_SERVER;
-    $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "language` WHERE language_id = " . (int)$this->config->get('config_language_id') );
-    $language_code = $query->row['code'];
-    $ip = $this->request->server['REMOTE_ADDR'];
-
-    $request = 'http://opencart.dreamvention.com/api/1/index.php?route=extension/check&mbooth=' . $mbooth_file . '&store_url=' . $customer_url . '&module_version=' . $current_version . '&language_code=' . $language_code . '&opencart_version=' . VERSION . '&ip='.$ip . '&status=' .$status;
-
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $request);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    $result['data'] = curl_exec($curl);
-    $result['code'] = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
-
-    return $result;
-}
-
-/**
-
-*   Get the version of this module
-*   Use this function to install dependencies, which are set in your mbooth xml file
-*   under the tag required;
-
-*/
-public function installDependencies($mbooth_file){
-    if(!defined('DIR_ROOT')) { define('DIR_ROOT', substr_replace(DIR_SYSTEM, '/', -8)); }
-
-    foreach($this->getDependencies($mbooth_file) as $extension){
-        if(isset($extension['codename'])){
-            if(!$this->getVersion('mbooth_'.$extension['codename'].'.xml') || ($extension['version'] > $this->getVersion('mbooth_'.$extension['codename'].'.xml'))){
-                $this->downloadExtension($extension['codename'], $extension['version']);
-                $this->extractExtension();
-                if(file_exists(DIR_SYSTEM . 'mbooth/xml/'.$mbooth_file)){
-                    $result = $this->backupFilesByMbooth($mbooth_file, 'update');
+        if(!isset($this->request->post['config'])){
+            $this->load->model('setting/setting');
+            if (isset($this->request->post[$config_key])) {
+                $setting = $this->request->post;
+            } elseif ($this->model_setting_setting->getSetting($id, $store_id)) {
+                $setting = $this->model_setting_setting->getSetting($id, $store_id);
+            }
+            if(isset($setting[$config_key])){
+                foreach($setting[$config_key] as $key => $value){
+                    $result[$key] = $value;
                 }
-                $this->move_dir(DIR_DOWNLOAD . 'upload/', DIR_ROOT, $result);
+            }
+
+        }
+        return $result;
+    }
+
+
+    /**
+
+     MBooth functions
+
+    **/
+
+    /*
+    *   Return mbooth file.
+    */
+    public function getMboothFile($id, $sub_versions){
+        $full = DIR_SYSTEM . 'mbooth/xml/mbooth_'. $id .'.xml';
+        if (file_exists($full)) {
+            return 'mbooth_'. $id . '.xml';
+        } else{
+            foreach ($sub_versions as $lite){
+                if (file_exists(DIR_SYSTEM . 'mbooth/xml/mbooth_'. $id . '_' . $lite . '.php')) {
+                    $this->prefix = '_' . $lite;
+                    return $this->id . '_' . $lite . '.xml';
+                }
             }
         }
+        return false;
     }
-}
 
-public function getDependencies($mbooth_xml){
-    if(file_exists(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_xml)){
-        $xml = new SimpleXMLElement(file_get_contents(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_xml));
+    /*
+    *   Return mbooth file.
+    */
+    public function getMboothInfo($mbooth_file){
+        if(file_exists(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_file)){
+            $xml = new SimpleXMLElement(file_get_contents(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_file));
+            return $xml;
+        }else{
+            return false;
+        }
+    }
+
+    /*
+    *   Get the version of this module
+    */
+    public function getVersion($mbooth_file){
+        if(file_exists(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_file)){
+            $xml = new SimpleXMLElement(file_get_contents(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_file));
+            return $xml->version;
+        }else{
+            return false;
+        }
+    }
+
+    /*
+    *   Check if another extension/module is installed.
+    */
+    public function isInstalled($code) {
+        $extension_data = array();
+        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "extension WHERE `code` = '" . $this->db->escape($code) . "'");
+        if($query->row) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /*
+    *   Get extension info by mbooth from server (Check for update)
+    */
+    public function getUpdateInfo($mbooth_file, $status = 1){
         $result = array();
-        $version = false;
 
-        foreach($xml->required->require as $require){
+        $current_version = $this->getVersion($mbooth_file);
+        $customer_url = HTTP_SERVER;
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "language` WHERE language_id = " . (int)$this->config->get('config_language_id') );
+        $language_code = $query->row['code'];
+        $ip = $this->request->server['REMOTE_ADDR'];
 
-            foreach($require->attributes() as $key => $value){
-                $version = false;
-                if($key == 'version'){
-                    $version = $value;
+        $request = 'http://opencart.dreamvention.com/api/1/index.php?route=extension/check&mbooth=' . $mbooth_file . '&store_url=' . $customer_url . '&module_version=' . $current_version . '&language_code=' . $language_code . '&opencart_version=' . VERSION . '&ip='.$ip . '&status=' .$status;
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $request);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $result['data'] = curl_exec($curl);
+        $result['code'] = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        return $result;
+    }
+
+    /**
+
+    *   Get the version of this module
+    *   Use this function to install dependencies, which are set in your mbooth xml file
+    *   under the tag required;
+
+    */
+    public function installDependencies($mbooth_file){
+        if(!defined('DIR_ROOT')) { define('DIR_ROOT', substr_replace(DIR_SYSTEM, '/', -8)); }
+
+        foreach($this->getDependencies($mbooth_file) as $extension){
+            if(isset($extension['codename'])){
+                if(!$this->getVersion('mbooth_'.$extension['codename'].'.xml') || ($extension['version'] > $this->getVersion('mbooth_'.$extension['codename'].'.xml'))){
+                    $this->downloadExtension($extension['codename'], $extension['version']);
+                    $this->extractExtension();
+                    if(file_exists(DIR_SYSTEM . 'mbooth/xml/'.$mbooth_file)){
+                        $result = $this->backupFilesByMbooth($mbooth_file, 'update');
+                    }
+                    $this->move_dir(DIR_DOWNLOAD . 'upload/', DIR_ROOT, $result);
                 }
             }
-            $result[] = array(
-                'codename' => (string)$require,
-                'version' => (string)$version
-            );
         }
-        return $result;
-    }else{
-        return false;
-    }
-}
-
-public function downloadExtension($codename, $version, $filename  = false ) {
-
-    if(!$filename){
-        $filename = DIR_DOWNLOAD . 'archive.zip';
     }
 
-    $userAgent = 'Googlebot/2.1 (http://www.googlebot.com/bot.html)';
-    $ch = curl_init();
-    $fp = fopen($filename, "w");
-    curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-    curl_setopt($ch, CURLOPT_URL, 'http://opencart.dreamvention.com/api/1/extension/download/?codename=' . $codename.'&opencart_version='.VERSION.'&extension_version='. $version);
-    curl_setopt($ch, CURLOPT_FAILONERROR, true);
-    curl_setopt($ch, CURLOPT_HEADER,0);
-    curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-    curl_setopt($ch, CURLOPT_BINARYTRANSFER,true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 100);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt($ch, CURLOPT_FILE, $fp);
-    $page = curl_exec($ch);
-    if (!$page) {
-        exit;
-    }
-    curl_close($ch);
+    public function getDependencies($mbooth_xml){
+        if(file_exists(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_xml)){
+            $xml = new SimpleXMLElement(file_get_contents(DIR_SYSTEM . 'mbooth/xml/'. $mbooth_xml));
+            $result = array();
+            $version = false;
 
-}
+            foreach($xml->required->require as $require){
 
-
-
-public function extractExtension($filename = false, $location = false ) {
-    if(!$filename){
-        $filename = DIR_DOWNLOAD . 'archive.zip';
-    }
-    if(!$location){
-        $location = DIR_DOWNLOAD;
-    }
-
-    $result = array();
-    $zip = new ZipArchive;
-    if (!$zip) {
-        $result['error'][] = 'ZipArchive not working.';
-    }
-
-    if($zip->open($filename) != "true") {
-        $result['error'][] = $filename;
-    }
-    $zip->extractTo($location);
-    $zip->close();
-
-    unlink($filename);
-
-    return $result;
-
-}
-
-
-
-public function getMboothFiles($mbooth_url) {
-
-    $xml = new SimpleXMLElement(file_get_contents($mbooth_url));
-
-    if(isset($xml->id)){
-        $result['file_name'] =   basename($mbooth_url, '');
-        $result['id'] = isset($xml->id) ? (string)$xml->id : '';
-        $result['name'] = isset($xml->name) ? (string)$xml->name : '';
-        $result['description'] = isset($xml->description) ? (string)$xml->description : '';
-        $result['type'] = isset($xml->type) ? (string)$xml->type : '';
-        $result['version'] = isset($xml->version) ? (string)$xml->version : '';
-        $result['license'] = isset($xml->license) ? (string)$xml->license : '';
-        $result['opencart_version'] = isset($xml->opencart_version) ? (string)$xml->opencart_version : '';
-        $result['mbooth_version'] = isset($xml->mbooth_version) ? (string)$xml->mbooth_version : '';
-        $result['author'] = isset($xml->author) ? (string)$xml->author : '';
-        $result['support_email'] = isset($xml->support_email) ? (string)$xml->support_email : '';
-        $files = $xml->files;
-        $dirs = $xml->dirs;
-        $required = $xml->required;
-        $updates = $xml->update;
-
-        foreach ($files->file as $file){
-           $result['files'][] = (string)$file;
-        }
-
-        if (!empty($dirs)) {
-
-            $dir_files = array();
-
-            foreach ($dirs->dir as $dir) {
-                $this->scan_dir(DIR_ROOT . $dir, $dir_files);
+                foreach($require->attributes() as $key => $value){
+                    $version = false;
+                    if($key == 'version'){
+                        $version = $value;
+                    }
+                }
+                $result[] = array(
+                    'codename' => (string)$require,
+                    'version' => (string)$version
+                );
             }
-
-            foreach ($dir_files as $file) {
-                $file = str_replace(DIR_ROOT, "", $file);
-                $result['files'][] = (string)$file;
-            }
+            return $result;
+        }else{
+            return false;
         }
+    }
+
+    public function downloadExtension($codename, $version, $filename  = false ) {
+
+        if(!$filename){
+            $filename = DIR_DOWNLOAD . 'archive.zip';
+        }
+
+        $userAgent = 'Googlebot/2.1 (http://www.googlebot.com/bot.html)';
+        $ch = curl_init();
+        $fp = fopen($filename, "w");
+        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($ch, CURLOPT_URL, 'http://opencart.dreamvention.com/api/1/extension/download/?codename=' . $codename.'&opencart_version='.VERSION.'&extension_version='. $version);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_HEADER,0);
+        curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER,true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        $page = curl_exec($ch);
+        if (!$page) {
+            exit;
+        }
+        curl_close($ch);
+
+    }
+
+    public function extractExtension($filename = false, $location = false ) {
+        if(!$filename){
+            $filename = DIR_DOWNLOAD . 'archive.zip';
+        }
+        if(!$location){
+            $location = DIR_DOWNLOAD;
+        }
+
+        $result = array();
+        $zip = new ZipArchive;
+        if (!$zip) {
+            $result['error'][] = 'ZipArchive not working.';
+        }
+
+        if($zip->open($filename) != "true") {
+            $result['error'][] = $filename;
+        }
+        $zip->extractTo($location);
+        $zip->close();
+
+        unlink($filename);
 
         return $result;
-    }else{
-        return false;
+
     }
 
-}
+    public function getMboothFiles($mbooth_url) {
 
-public function backupFilesByMbooth($mbooth_xml, $action = 'install'){
+        $xml = new SimpleXMLElement(file_get_contents($mbooth_url));
 
-    $zip = new ZipArchive();
+        if(isset($xml->id)){
+            $result['file_name'] =   basename($mbooth_url, '');
+            $result['id'] = isset($xml->id) ? (string)$xml->id : '';
+            $result['name'] = isset($xml->name) ? (string)$xml->name : '';
+            $result['description'] = isset($xml->description) ? (string)$xml->description : '';
+            $result['type'] = isset($xml->type) ? (string)$xml->type : '';
+            $result['version'] = isset($xml->version) ? (string)$xml->version : '';
+            $result['license'] = isset($xml->license) ? (string)$xml->license : '';
+            $result['opencart_version'] = isset($xml->opencart_version) ? (string)$xml->opencart_version : '';
+            $result['mbooth_version'] = isset($xml->mbooth_version) ? (string)$xml->mbooth_version : '';
+            $result['author'] = isset($xml->author) ? (string)$xml->author : '';
+            $result['support_email'] = isset($xml->support_email) ? (string)$xml->support_email : '';
+            $files = $xml->files;
+            $dirs = $xml->dirs;
+            $required = $xml->required;
+            $updates = $xml->update;
 
-    if (!file_exists(DIR_SYSTEM . 'mbooth/backup/')) {
-        mkdir(DIR_SYSTEM . 'mbooth/backup/', 0777, true);
+            foreach ($files->file as $file){
+               $result['files'][] = (string)$file;
+            }
+
+            if (!empty($dirs)) {
+
+                $dir_files = array();
+
+                foreach ($dirs->dir as $dir) {
+                    $this->scan_dir(DIR_ROOT . $dir, $dir_files);
+                }
+
+                foreach ($dir_files as $file) {
+                    $file = str_replace(DIR_ROOT, "", $file);
+                    $result['files'][] = (string)$file;
+                }
+            }
+
+            return $result;
+        }else{
+            return false;
+        }
+
     }
 
-    $mbooth = $this->getMboothFiles(DIR_SYSTEM . 'mbooth/xml/' . $mbooth_xml);
-    $files = $mbooth['files'];
+    public function backupFilesByMbooth($mbooth_xml, $action = 'install'){
 
-    $zip->open(DIR_SYSTEM . 'mbooth/backup/' . date('Y-m-d.h-i-s'). '.'. $action .'.'.$mbooth_xml.'.v'.$mbooth['version'].'.zip', ZipArchive::CREATE);
+        $zip = new ZipArchive();
+
+        if (!file_exists(DIR_SYSTEM . 'mbooth/backup/')) {
+            mkdir(DIR_SYSTEM . 'mbooth/backup/', 0777, true);
+        }
+
+        $mbooth = $this->getMboothFiles(DIR_SYSTEM . 'mbooth/xml/' . $mbooth_xml);
+        $files = $mbooth['files'];
+
+        $zip->open(DIR_SYSTEM . 'mbooth/backup/' . date('Y-m-d.h-i-s'). '.'. $action .'.'.$mbooth_xml.'.v'.$mbooth['version'].'.zip', ZipArchive::CREATE);
 
 
-    foreach ($files as $file) {
+        foreach ($files as $file) {
 
-        if(file_exists(DIR_ROOT.$file)){
+            if(file_exists(DIR_ROOT.$file)){
 
-            if (is_file(DIR_ROOT.$file)) {
-                $zip->addFile(DIR_ROOT.$file, 'upload/'.$file);
-                $result['success'][] = $file;
+                if (is_file(DIR_ROOT.$file)) {
+                    $zip->addFile(DIR_ROOT.$file, 'upload/'.$file);
+                    $result['success'][] = $file;
+                }else{
+                    $result['error'][] = $file;
+                }
             }else{
-                $result['error'][] = $file;
-            }
-        }else{
-                $result['error'][] = $file;
-        }
-    }
-    $zip->close();
-    return $result;
-
-}
-
-/*
-*   Dir function
-*/
-public function scan_dir($dir, &$arr_files){
-
-    if (is_dir($dir)){
-        $handle = opendir($dir);
-        while ($file = readdir($handle)){
-                if ($file == '.' or $file == '..') continue;
-                if (is_file($file)) $arr_files[]="$dir/$file";
-                else $this->scan_dir("$dir/$file", $arr_files);
-        }
-        closedir($handle);
-    }else {
-        $arr_files[]=$dir;
-    }
-}
-
-public function move_dir($souce, $dest, &$result) {
-
-    $files = scandir($souce);
-
-    foreach($files as $file){
-
-        if($file == '.' || $file == '..' || $file == '.DS_Store') continue;
-
-        if(is_dir($souce.$file)){
-            if (!file_exists($dest.$file.'/')) {
-                mkdir($dest.$file.'/', 0777, true);
-            }
-            $this->move_dir($souce.$file.'/', $dest.$file.'/', $result);
-        }elseif (rename($souce.$file, $dest.$file)) {
-            $result['success'][] = str_replace(DIR_ROOT, '', $dest.$file);
-        }else{
-            $result['error'][] = str_replace(DIR_ROOT, '', $dest.$file);
-        }
-    }
-
-    $this->delete_dir($souce);
-}
-
-public function delete_dir($dir) {
-    if (is_dir($dir)) {
-        $objects = scandir($dir);
-        foreach ($objects as $object) {
-            if ($object != "." && $object != "..") {
-                if (filetype($dir."/".$object) == "dir") $this->delete_dir($dir."/".$object);
-                else unlink($dir."/".$object);
+                    $result['error'][] = $file;
             }
         }
-        reset($objects);
-        rmdir($dir);
+        $zip->close();
+        return $result;
+
     }
-}
+
+    /*
+    *   Dir function
+    */
+    public function scan_dir($dir, &$arr_files){
+
+        if (is_dir($dir)){
+            $handle = opendir($dir);
+            while ($file = readdir($handle)){
+                    if ($file == '.' or $file == '..') continue;
+                    if (is_file($file)) $arr_files[]="$dir/$file";
+                    else $this->scan_dir("$dir/$file", $arr_files);
+            }
+            closedir($handle);
+        }else {
+            $arr_files[]=$dir;
+        }
+    }
+
+    public function move_dir($souce, $dest, &$result) {
+
+        $files = scandir($souce);
+
+        foreach($files as $file){
+
+            if($file == '.' || $file == '..' || $file == '.DS_Store') continue;
+
+            if(is_dir($souce.$file)){
+                if (!file_exists($dest.$file.'/')) {
+                    mkdir($dest.$file.'/', 0777, true);
+                }
+                $this->move_dir($souce.$file.'/', $dest.$file.'/', $result);
+            }elseif (rename($souce.$file, $dest.$file)) {
+                $result['success'][] = str_replace(DIR_ROOT, '', $dest.$file);
+            }else{
+                $result['error'][] = str_replace(DIR_ROOT, '', $dest.$file);
+            }
+        }
+
+        $this->delete_dir($souce);
+    }
+
+    public function delete_dir($dir) {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (filetype($dir."/".$object) == "dir") $this->delete_dir($dir."/".$object);
+                    else unlink($dir."/".$object);
+                }
+            }
+            reset($objects);
+            rmdir($dir);
+        }
+    }
 
 }
 

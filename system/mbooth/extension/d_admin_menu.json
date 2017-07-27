@@ -1,6 +1,6 @@
 {
     "codename": "d_admin_menu",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "name": "Changing Admin Menu",
     "description": "Module for changing Admin menu",
     "index": "module/d_admin_menu",
@@ -10,8 +10,6 @@
         "url": "https://dreamvention.com/"
     },
     "opencart_version": [
-        "2.0.0.0",
-        "2.0.1.1",
         "2.0.1.1",
         "2.0.2.0",
         "2.0.3.1",
@@ -49,18 +47,21 @@
 
         "admin/language/en-gb/module/d_admin_menu.php",
         "admin/view/template/module/d_admin_menu.tpl",
-        "admin/view/template/module/d_admin_menu_editor.tpl",
-
-        "system/config/d_admin_menu.php"
+        "admin/view/template/module/d_admin_menu_editor.tpl"
     ],
     "dirs": [
+        "system/config/d_admin_menu",
         "admin/view/javascript/d_admin_menu",
         "admin/view/stylesheet/d_admin_menu"
     ],
     "changelog": [
         {
+            "version": "0.1.0",
+            "change": "Made the rockets fly."
+        },
+        {
             "version": "0.0.1",
-            "change": "Initial Commit"
+            "change": "Initial Commit."
         }
     ]
 }

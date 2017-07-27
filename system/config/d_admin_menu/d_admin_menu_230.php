@@ -1,6 +1,6 @@
 <?php
 $_['d_admin_menu'] = [
-    'menus' => [
+    'edited_menu' => [
         0 => [
             'icon' => "fa-dashboard",
             'name' => "Dashboard",
