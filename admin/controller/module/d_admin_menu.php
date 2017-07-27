@@ -51,8 +51,8 @@ class ControllerModuleDAdminMenu extends Controller
             $this->response->redirect($this->url->link($this->route.'/required', 'codename=d_shopunity&token='.$this->session->data['token'], 'SSL'));
         }
 
-        $this->load->model('d_shopunity/mbooth');
-        $this->model_d_shopunity_mbooth->validateDependencies($this->codename);
+        // $this->load->model('d_shopunity/mbooth');
+        // $this->model_d_shopunity_mbooth->validateDependencies($this->codename);
 
         $this->model_module_d_admin_menu->installDatabase();
 
@@ -62,10 +62,7 @@ class ControllerModuleDAdminMenu extends Controller
         $this->load->model('setting/setting');
 
         // get config file
-        if ((VERSION >= '2.3.0.0')  && (VERSION < '3.0.0.0')) {
-            $this->load->config('d_admin_menu/d_admin_menu_230');
-        }
-        $data['config'] = $this->config->get('d_admin_menu');
+        $data['config_file'] = $this->getAppropriateConfig();
 
         // save post
 
@@ -81,6 +78,8 @@ class ControllerModuleDAdminMenu extends Controller
         $this->document->addScript('view/javascript/shopunity/tinysort/jquery.tinysort.min.js');
         $this->document->addScript('view/javascript/shopunity/serializeObject/serializeObject.js');
 
+        $this->document->addStyle('view/stylesheet/d_admin_menu/d_admin_menu.css');
+
         $url = '';
         $data['module_link'] = HTTPS_SERVER . 'index.php?route=' . $this->route . '&token=' . $this->session->data['token'] . $url;
 
@@ -94,9 +93,9 @@ class ControllerModuleDAdminMenu extends Controller
             $url .= '&setting_id=' . $this->model_module_d_admin_menu->getCurrentSettingId($this->codename, $this->store_id);
         }
 
-        // if (isset($this->request->get['config'])) {
-        //     $url .= '&config=' . $this->request->get['config'];
-        // }
+        if (isset($this->request->get['config'])) {
+            $url .= '&config=' . $this->request->get['config'];
+        }
 
         // Breadcrumbs
         $data['breadcrumbs'] = array();
@@ -168,6 +167,8 @@ class ControllerModuleDAdminMenu extends Controller
         $data['text_select'] = $this->language->get('text_select');
         $data['text_none'] = $this->language->get('text_none');
 
+        $data['text_intro_create_setting'] = $this->language->get('text_intro_create_setting');
+
         // action
         $data['action'] = HTTPS_SERVER . 'index.php?route=' . $this->route . '&token=' . $this->session->data['token'] . $url;
 
@@ -188,15 +189,16 @@ class ControllerModuleDAdminMenu extends Controller
             unset($this->session->data['error']);
         }
 
+        $data['setting_id'] = true;
+        // $data['setting_id'] = $this->model_module_d_admin_menu->getLastSetting();
 
-
-
+        $this->createSetting();
 
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
 
-        $this->response->setOutput($this->load->view($this->route . '.tpl', $data));
+        $this->response->setOutput($this->load->view('module/d_admin_menu_editor.tpl', $data));
     }
 
 
@@ -204,6 +206,30 @@ class ControllerModuleDAdminMenu extends Controller
     /////////////////////////////////////////////////////////////////////////////////////
     /////////                             ASSISTING                             /////////
     /////////////////////////////////////////////////////////////////////////////////////
+
+    private function getAppropriateConfig()
+    {
+        if ((VERSION >= '2.3.0.0')  && (VERSION < '3.0.0.0')) {
+            $this->load->config('d_admin_menu/d_admin_menu_230');
+        }
+        return $this->config->get('d_admin_menu');
+    }
+
+    public function createSetting()
+    {
+        $json = array();
+
+        $new_setting = array(
+            "name"          => "",
+            "main_menu"     => array(
+                "version"           => VERSION,
+                "menu_data"         => $this->getAppropriateConfig()
+            ),
+            "custom_menu"   => array()
+        );
+
+        // echo '<pre>'; print_r($new_setting); echo '</pre>';
+    }
 
 
 

@@ -88,6 +88,20 @@ class ModelModuleDAdminMenu extends Model
         return $results;
     }
 
+    public function getLastSetting()
+    {
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
+            ORDER BY setting_id DESC LIMIT 1");
+
+        $result = $query->row;
+        if(isset($result['value'])){
+            $result['value'] = json_decode($result['value'], true);
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
     public function setSetting($setting_name, $setting_value, $store_id = 0)
     {
         $this->db->query("INSERT INTO `" . DB_PREFIX . "dam_setting`
