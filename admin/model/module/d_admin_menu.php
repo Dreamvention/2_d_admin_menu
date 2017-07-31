@@ -71,7 +71,7 @@ class ModelModuleDAdminMenu extends Model
             $result['value'] = json_decode($result['value'], true);
         }
 
-        return $result;
+        return $result['value'];
     }
 
     public function getSettings($store_id)
@@ -88,15 +88,14 @@ class ModelModuleDAdminMenu extends Model
         return $results;
     }
 
-    public function getLastSetting()
+    public function getLastSettingId()
     {
         $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
             ORDER BY setting_id DESC LIMIT 1");
 
         $result = $query->row;
-        if(isset($result['value'])){
-            $result['value'] = json_decode($result['value'], true);
-            return $result;
+        if(isset($result['setting_id'])){
+            return (int)$result['setting_id'];
         } else {
             return false;
         }

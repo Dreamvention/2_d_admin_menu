@@ -78,7 +78,16 @@ class ControllerModuleDAdminMenu extends Controller
         $this->document->addScript('view/javascript/shopunity/tinysort/jquery.tinysort.min.js');
         $this->document->addScript('view/javascript/shopunity/serializeObject/serializeObject.js');
 
+        $this->document->addScript('view/javascript/d_admin_menu/library/jquery.nestable.nodrag.js');
+        $this->document->addScript('view/javascript/d_admin_menu/library/jquery.nestable.js');
+        $this->document->addScript('view/javascript/d_admin_menu/library/handlebars-v4.0.5.js');
+
+        $this->document->addScript('view/javascript/d_admin_menu/library/fontawesome-iconpicker.js');
+        $this->document->addStyle('view/stylesheet/d_admin_menu/library/fontawesome-iconpicker.min.css');
+
         $this->document->addStyle('view/stylesheet/d_admin_menu/d_admin_menu.css');
+
+
 
         $url = '';
         $data['module_link'] = HTTPS_SERVER . 'index.php?route=' . $this->route . '&token=' . $this->session->data['token'] . $url;
@@ -147,6 +156,7 @@ class ControllerModuleDAdminMenu extends Controller
 
         $data['text_home'] = $this->language->get('text_home');
         $data['text_general'] = $this->language->get('text_general');
+        $data['text_menu'] = $this->language->get('text_menu');
         $data['text_standart_menu'] = $this->language->get('text_standart_menu');
         $data['text_custom_menu'] = $this->language->get('text_custom_menu');
         $data['text_instruction'] = $this->language->get('text_instruction');
@@ -189,10 +199,17 @@ class ControllerModuleDAdminMenu extends Controller
             unset($this->session->data['error']);
         }
 
-        $data['setting_id'] = true;
-        // $data['setting_id'] = $this->model_module_d_admin_menu->getLastSetting();
+        // create setting if not exist
+        $data['setting_id'] = $this->model_module_d_admin_menu->getLastSettingId();
+        if ($data['setting_id'] === false) {
+            $this->createSetting();
+            $data['setting_id'] = $this->model_module_d_admin_menu->getLastSettingId();
+        }
+        $data['setting'] = $this->model_module_d_admin_menu->getSetting($data['setting_id']);
 
-        $this->createSetting();
+        $data['standart_menu'] = $this->load->view('module/d_admin_menu_standart_section.tpl', array("standart_menu_data" => $data['setting']['main_menu']['menu_data']));
+        $data['custom_menu'] = $this->load->view('module/d_admin_menu_custom_section.tpl', array("custom_menu_data" => $data['setting']['custom_menu']));
+
 
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
@@ -207,6 +224,17 @@ class ControllerModuleDAdminMenu extends Controller
     /////////                             ASSISTING                             /////////
     /////////////////////////////////////////////////////////////////////////////////////
 
+    public function some_sort(&$some_array)
+    {
+        usort($some_array, function ($a, $b)
+        {
+            if ($a['sort_order'] == $b['sort_order']) {
+                return 0;
+            }
+            return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
+        });
+    }
+
     private function getAppropriateConfig()
     {
         if ((VERSION >= '2.3.0.0')  && (VERSION < '3.0.0.0')) {
@@ -219,16 +247,34 @@ class ControllerModuleDAdminMenu extends Controller
     {
         $json = array();
 
+        $setting_name = "default-setting";
         $new_setting = array(
-            "name"          => "",
+            "name"          => $setting_name,
             "main_menu"     => array(
                 "version"           => VERSION,
                 "menu_data"         => $this->getAppropriateConfig()
             ),
-            "custom_menu"   => array()
+            "custom_menu"   => array(
+                "0"                 => array(
+                    "icon"                  => "fa-flask",
+                    "name"                  => "Shopunity",
+                    "href"                  => "index.php?route=extension/d_shopunity/extension&token=",
+                    "children"              => array(),
+                    "sort_order"            => 0
+                )
+            )
         );
 
-        // echo '<pre>'; print_r($new_setting); echo '</pre>';
+        $setting_id = $this->model_module_d_admin_menu->setSetting($setting_name, $new_setting, $this->store_id);
+
+        $this->load->language($this->route);
+        if ($setting_id) {
+            $this->session->data['success'] = $this->language->get('success_setting_created');
+        } else {
+            $json['error'] = $this->language->get('error_setting_not_created');
+        }
+
+        $this->response->setOutput(json_encode($json));
     }
 
 
@@ -302,10 +348,22 @@ class ControllerModuleDAdminMenu extends Controller
 
     public function displayMenu()
     {
-        //// $this->load->config('d_admin_menu');
+        // create setting if not exist
+        $data['setting_id'] = $this->model_module_d_admin_menu->getLastSettingId();
+        if ($data['setting_id'] === false) {
+            $this->createSetting();
+            $data['setting_id'] = $this->model_module_d_admin_menu->getLastSettingId();
+        }
+        $display_menu_setting = $this->model_module_d_admin_menu->getSetting($data['setting_id']);
 
-        // $data['config'] = $this->generate_custom_menu();
-        //// $data['config'] = $this->config->get('d_admin_menu');
+        $standart_menu = $display_menu_setting['main_menu']['menu_data'];
+        $custom_menu = $display_menu_setting['custom_menu'];
+
+        foreach ($custom_menu as $custom_md) {
+            $standart_menu[] = $custom_md;
+        }
+
+        $data['config']['menus'] = $standart_menu;
 
         $data['token'] = $this->session->data['token'];
         return $this->load->view('module/d_admin_menu', $data);
