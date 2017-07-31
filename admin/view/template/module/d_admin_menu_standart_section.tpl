@@ -13,7 +13,7 @@
   </div>
   <button type="button" id="button-restore-standart" class="btn btn-sm btn-success" >Restore default</button>
 </div>
-<ol class="dd-list dd-nodrag">
+<ol class="dd-list">
 
       <!-- first level -->
       <?php foreach($standart_menu_data as $smd_first_item) { ?>
@@ -28,12 +28,7 @@
           <span class="heading-title"><?php echo $smd_first_item['name']; ?></span>
           <span class="item-icons dd-nodrag">
             <?php if(array_key_exists('is_visible', $smd_first_item)) { ?>
-            <?php if($smd_first_item['is_visible'] === 1) { ?>
-            <span class="fa fa-minus-square-o fa-fw" id="hide-product" data-id="<?php echo $smd_first_item['id']; ?>"></span>
-            <?php } else { ?>
-            <span class="fa fa-minus-square fa-fw" id="hide-product" data-id="<?php echo $smd_first_item['id']; ?>"></span>
-            <?php } ?>
-            <input type="hidden" name="sm_item_<?php echo $smd_first_item['id']; ?>" value="<?php echo $smd_first_item['is_visible'] ?>" class="standart-menu-visibility"/>
+            <input type="checkbox" name="standart-menu[<?php echo $smd_first_item['id']; ?>][visibility]" value="<?php echo ($smd_first_item['is_visible'] === 1) ? 1 : 0; ?>" data-size="mini" data-label-text="Display" data-bs="true" <?php echo ($smd_first_item['is_visible'] === 1) ? 'checked="checked"' : ''; ?>>
             <?php } ?>
           </span>
         </div>
@@ -41,7 +36,7 @@
 
         <!-- second level -->
         <?php if($smd_first_item['children']) { ?>
-        <ol class="dd-list dd-nodrag">
+        <ol class="dd-list">
         <?php foreach($smd_first_item['children'] as $smd_second_item) { ?>
 
         <li id="dd_<?php echo $smd_second_item['id']; ?>" class="dd-item" data-id="<?php echo $smd_second_item['id']; ?>">
@@ -55,12 +50,7 @@
             <span class="heading-title"><?php echo $smd_second_item['name']; ?></span>
             <span class="item-icons dd-nodrag">
               <?php if(array_key_exists('is_visible', $smd_second_item)) { ?>
-              <?php if($smd_second_item['is_visible'] === 1) { ?>
-              <span class="fa fa-minus-square-o fa-fw" id="hide-product" data-id="<?php echo $smd_second_item['id']; ?>"></span>
-              <?php } else { ?>
-              <span class="fa fa-minus-square fa-fw" id="hide-product" data-id="<?php echo $smd_second_item['id']; ?>"></span>
-              <?php } ?>
-              <input type="hidden" name="sm_item_<?php echo $smd_second_item['id']; ?>" value="<?php echo $smd_second_item['is_visible'] ?>" class="standart-menu-visibility"/>
+              <input type="checkbox" name="standart-menu[<?php echo $smd_second_item['id']; ?>][visibility]" value="<?php echo ($smd_second_item['is_visible'] === 1) ? 1 : 0; ?>" data-size="mini" data-label-text="Display" data-bs="true" <?php echo ($smd_second_item['is_visible'] === 1) ? 'checked="checked"' : ''; ?>>
               <?php } ?>
             </span>
           </div>
@@ -68,7 +58,7 @@
 
           <!-- third level -->
           <?php if($smd_second_item['children']) { ?>
-          <ol class="dd-list dd-nodrag">
+          <ol class="dd-list">
           <?php foreach($smd_second_item['children'] as $smd_third_item) { ?>
           <li id="dd_<?php echo $smd_third_item['id']; ?>" class="dd-item" data-id="<?php echo $smd_third_item['id']; ?>">
 
@@ -81,12 +71,7 @@
               <span class="heading-title"><?php echo $smd_third_item['name']; ?></span>
               <span class="item-icons dd-nodrag">
                 <?php if(array_key_exists('is_visible', $smd_third_item)) { ?>
-                <?php if($smd_third_item['is_visible'] === 1) { ?>
-                <span class="fa fa-minus-square-o fa-fw" id="hide-product" data-id="<?php echo $smd_third_item['id']; ?>"></span>
-                <?php } else { ?>
-                <span class="fa fa-minus-square fa-fw" id="hide-product" data-id="<?php echo $smd_third_item['id']; ?>"></span>
-                <?php } ?>
-                <input type="hidden" name="sm_item_<?php echo $smd_third_item['id']; ?>" value="<?php echo $smd_third_item['is_visible'] ?>" class="standart-menu-visibility"/>
+                <input type="checkbox" name="standart-menu[<?php echo $smd_third_item['id']; ?>][visibility]" value="<?php echo ($smd_third_item['is_visible'] === 1) ? 1 : 0; ?>" data-size="mini" data-label-text="Display" data-bs="true" <?php echo ($smd_third_item['is_visible'] === 1) ? 'checked="checked"' : ''; ?>>
                 <?php } ?>
               </span>
             </div>

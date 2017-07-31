@@ -101,14 +101,13 @@
 
                                   <div class="form-group">
                                       <div class="btn-group">
-                                          <button type="button" class="btn btn-default btn-sm iconpicker-component"><i class="fa fa-fw fa-heart"></i></button>
-                                          <button type="button" class="icp btn-sm icp-dd btn dropdown-toggle supericon" data-selected="fa-car" data-toggle="dropdown">
+                                          <button type="button" class="btn btn-default iconpicker-component"><i class="fa fa-fw fa-heart"></i></button>
+                                          <button type="button" class="icp icp-dd btn dropdown-toggle supericon" data-selected="fa-car" data-toggle="dropdown">
                                               <span class="caret"></span>
                                               <span class="sr-only">Toggle Dropdown</span>
                                           </button>
                                           <div class="dropdown-menu"></div>
                                       </div>
-                                      <input class="form-control superinput" value="333" type="text">
                                   </div>
 
 
@@ -119,7 +118,7 @@
                                     <h3 class="page-header">
                                         <span class="fa fa-bookmark-o fa-fw"></span> <span><?php echo $text_standart_menu; ?></span>
                                     </h3>
-                                    <div id="unallocated">
+                                    <div id="standart-menu">
                                       <div class="dd nestable" id="nestable-standart">
                                         <?php echo $standart_menu; ?>
                                       </div>
@@ -133,12 +132,10 @@
                                     <h3 class="page-header">
                                         <span class="fa fa-bookmark fa-fw"></span> <span><?php echo $text_custom_menu; ?></span>
                                     </h3>
-                                    <div id="unallocated">
+                                    <div id="custom-menu">
                                       <div class="dd nestable" id="nestable-custom">
                                         <?php echo $custom_menu; ?>
                                       </div>
-                                      <br/><br/><br/><br/>
-                                      <textarea id="nestable-output-custom"></textarea>
                                     </div>
                                     </div>
 
@@ -154,6 +151,7 @@
 
                       <div class="tab-pane" id="instruction" >
                           <div class="tab-body">
+                          <button id="serializeForm" class="btn btn-success" type="button">CLICK TO SERIALIZE</button>
                               <?php echo $text_instruction; ?>
                           </div>
                       </div>
@@ -172,101 +170,54 @@
 
 </div>
 
-<template id="add-item-modal">
-  <div id="addModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Edit menu item <b>{{name}}</b> </h4>
-        </div>
-        <div class="modal-body">
-          <form id="menu_item_form" class="form-horizontal">
 
-            <div class="form-group">
-              <label class="col-sm-2 control-label" for="input_text"><?php echo $entry_name; ?></label>
-              <div class="col-sm-10">
-                  <select name="item_extra" class="form-control input-sm">
-                    <?php foreach ($categories as $category) { ?>
-                    <optgroup label="<?php echo $category['text']; ?>">
-                    <?php if (!$category['extra']) { ?>
-                    <!-- ? -->
-                    <?php } else { ?>
-                    <?php foreach ($category['extra'] as $ex_cat) { ?>
-                    <option value="<?php echo $ex_cat['edit']; ?>"><?php echo $ex_cat['name']; ?></option>
-                    <?php } ?>
-                    <?php } ?>
-                    </optgroup>
-                    <?php } ?>
-                  </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-2 control-label" for="input_text"><?php echo $entry_parent; ?></label>
-              <div class="col-sm-10">
-                  <select name="item_parent" class="form-control input-sm">
-                    <option value="0"></option>
-                    <?php if ($menu_items) { ?>
-                    <?php foreach ($menu_items as $p_item) { ?>
-                    <option value="<?php echo $p_item['menu_item_id']; ?>"><?php echo "(id " . $p_item['menu_item_id'] . ") "; ?><?php echo $p_item['name']; ?></option>
-                    <?php } ?>
-                    <?php } ?>
-                  </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-2 control-label" for="input_action"><?php echo $entry_position; ?></label>
-              <div class="col-sm-10">
-                <input type="text" name="item_position" value="{{item_position}}" placeholder="<?php echo $entry_position; ?>" id="input-width" class="form-control" />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-2 control-label" for="input_action"><?php echo $entry_icon; ?></label>
-              <div class="col-sm-10">
-                <input type="text" name="item_icon" value="{{item_icon}}" placeholder="<?php echo $entry_icon; ?>" id="input-width" class="form-control" />
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <a type="button" class="btn btn-primary save" href="{{save}}" data-menu_item_id="{{menu_item_id}}">Save changes</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
+<script>
+  $.fn.serializeObject = function() {
+       var o = {};
+       var a = this.serializeArray();
+       $.each(a, function() {
+           if (o[this.name] !== undefined) {
+               if (!o[this.name].push) {
+                   o[this.name] = [o[this.name]];
+               }
+               o[this.name].push(this.value || '');
+           } else {
+               o[this.name] = this.value || '';
+           }
+       });
+       return o;
+     };
+</script>
 
 <script>
 
   $(document).ready(function()
   {
-      var updateOutput = function(e)
-      {
-          var list   = e.length ? e : $(e.target),
-              output = list.data('output');
-          if (window.JSON) {
-              output.val(window.JSON.stringify(list.nestable_nodrag('serialize')));//, null, 2));
-          } else {
-              output.val('JSON browser support required for this demo.');
-          }
-      };
 
-      $('#nestable-standart').nestable_nodrag({maxDepth: '3', group: "standart"})
-      .on('change', updateOutput);
+      $('#nestable-standart').nestable_nodrag({maxDepth: '3', group: "standart"});
 
-      $('#nestable-custom').nestable({maxDepth: '3', group: "custom"})
-      .on('change', updateOutput);
+      $('#nestable-custom').nestable({maxDepth: '3', group: "custom"});
 
       $('#nestable-standart').nestable_nodrag('collapseAll');
       $('#nestable-custom').nestable('collapseAll');
 
-      // output initial serialised data
-      updateOutput($('#nestable-standart').data('output', $('#nestable-output-standart')));
-      updateOutput($('#nestable-custom').data('output', $('#nestable-output-custom')));
+      $('[data-bs="true"]').bootstrapSwitch();
+      $('[data-bs="true"]').on('switchChange.bootstrapSwitch', function(event, state) {
+
+        var tmp_vis = 1;
+        if (state == true) { tmp_vis = 1; } else { tmp_vis = 0; };
+        $(this).val(tmp_vis);
+
+        var jsn = {
+          'standart-menu-data': $('#form').serializeObject(),
+          'custom-menu-data': ''
+        };
+
+        $('#nestable-output-standart').text(JSON.stringify(jsn));
+
+      });
+
+
 
       // collapse-expand buttons
       $('#button-collapse-standart').on('click', function()
@@ -280,31 +231,33 @@
 
       $('#button-expand-custom').on('click', function()
       { $('#nestable-custom').nestable_nodrag('expandAll'); });
+
+
+      // add new custom element
+      $('#button-add-custom').on('click', function()
+      {
+
+      });
+
+
+      // iconpicker
+      $('.supericon').iconpicker();
+      $('.icp').on('iconpickerSelected', function(e) {
+        $('.superinput').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
+        // Events sample:
+        // This event is only triggered when the actual input value is changed
+        // by user interaction
+        // $('.icp').on('iconpickerSelected', function(e) {
+        //     $('.lead .picker-target').get(0).className = 'picker-target fa-3x ' +
+        //             e.iconpickerInstance.options.iconBaseClass + ' ' +
+        //             e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue);
+        // });
+      });
+
+
   });
 
 
-  function handlebar_templating(some_html, some_json)
-  {
-    var re = /{{([^}}]+)?}}/g, match;
-    while(match = re.exec(some_html)) {
-        some_html = some_html.replace(match[0], some_json[match[1]]);
-    };
-    return some_html;
-  }
-
-  $(document).ready(function()
-  {
-
-    $('#button-add-custom').on('click', function()
-    {
-      $('#addModal').remove();
-      var html = $('#add-item-modal').html();
-
-
-      html = handlebar_templating(html, json);
-    });
-
-  });
 
   $(document).on('click', '.create', function(){
     var that = this;
@@ -325,25 +278,7 @@
     return false;
   });
 
-  $('.supericon').iconpicker();
 
-
-
-  $(function() {
-
-    $('.icp').on('iconpickerSelected', function(e) {
-      $('.superinput').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
-    });
-
-    // Events sample:
-    // This event is only triggered when the actual input value is changed
-    // by user interaction
-    // $('.icp').on('iconpickerSelected', function(e) {
-    //     $('.lead .picker-target').get(0).className = 'picker-target fa-3x ' +
-    //             e.iconpickerInstance.options.iconBaseClass + ' ' +
-    //             e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue);
-    // });
-  });
 
 
 

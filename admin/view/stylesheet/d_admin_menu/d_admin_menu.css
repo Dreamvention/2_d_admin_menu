@@ -315,7 +315,7 @@ button + .dd-handle {
 
 .dd-handle .item-icons {
   position: absolute;
-  top: 5px;
+  top: 0px;
   right: 0px;
   padding: 10px;
   float: right;
