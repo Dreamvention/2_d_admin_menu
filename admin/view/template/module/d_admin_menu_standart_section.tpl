@@ -13,11 +13,11 @@
   </div>
   <button type="button" id="button-restore-standart" class="btn btn-sm btn-success" >Restore default</button>
 </div>
-<ol class="dd-list">
+<ol class="dd-list dd-nodrag">
 
       <!-- first level -->
       <?php foreach($standart_menu_data as $smd_first_item) { ?>
-      <li id="dd_<?php echo $smd_first_item['id']; ?>" class="dd-item" data-id="<?php echo $smd_first_item['id']; ?>">
+      <li id="dd_<?php echo $smd_first_item['id']; ?>" class="dd-item dd-nodrag" data-id="<?php echo $smd_first_item['id']; ?>">
 
         <div class="dd-handle">
           <?php if($smd_first_item['icon'] == '>>') { ?>
@@ -36,10 +36,10 @@
 
         <!-- second level -->
         <?php if($smd_first_item['children']) { ?>
-        <ol class="dd-list">
+        <ol class="dd-list dd-nodrag">
         <?php foreach($smd_first_item['children'] as $smd_second_item) { ?>
 
-        <li id="dd_<?php echo $smd_second_item['id']; ?>" class="dd-item" data-id="<?php echo $smd_second_item['id']; ?>">
+        <li id="dd_<?php echo $smd_second_item['id']; ?>" class="dd-item dd-nodrag" data-id="<?php echo $smd_second_item['id']; ?>">
 
           <div class="dd-handle">
             <?php if($smd_second_item['icon'] == '>>') { ?>
@@ -58,9 +58,9 @@
 
           <!-- third level -->
           <?php if($smd_second_item['children']) { ?>
-          <ol class="dd-list">
+          <ol class="dd-list dd-nodrag">
           <?php foreach($smd_second_item['children'] as $smd_third_item) { ?>
-          <li id="dd_<?php echo $smd_third_item['id']; ?>" class="dd-item" data-id="<?php echo $smd_third_item['id']; ?>">
+          <li id="dd_<?php echo $smd_third_item['id']; ?>" class="dd-item dd-nodrag" data-id="<?php echo $smd_third_item['id']; ?>">
 
             <div class="dd-handle">
               <?php if($smd_third_item['icon'] == '>>') { ?>

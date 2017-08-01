@@ -257,6 +257,10 @@ button + .dd-handle {
   font-weight: bold;
 }
 
+.custom-menu-item > button {
+  margin: 18px 5px 0px 7px;
+}
+
 .dd-item > button:before {
   content: '+';
   display: block;
@@ -321,11 +325,33 @@ button + .dd-handle {
   float: right;
 }
 
+.dd-handle .item-icons-custom {
+  position: absolute;
+  top: 6px;
+  right: 9px;
+  padding: 10px;
+  float: right;
+}
+
 .dd-handle .item-icons span {
   cursor: pointer;
 }
 
+.dd-handle .item-icons-custom span {
+  cursor: pointer;
+}
+
+.dd-handle input {
+  font-size: 11px;
+  padding: 4px 9px;
+  line-height: 10px;
+}
+
 .item-icons span {
+  cursor: pointer;
+}
+
+.item-icons-custom span {
   cursor: pointer;
 }
 
@@ -337,3 +363,18 @@ button + .dd-handle {
   width: 30px;
 }
 
+.custom-item-name {
+  width: 100px;
+}
+
+.custom-item-link {
+  width: 245px;
+}
+
+#standart-menu {
+  min-width: 350px;
+}
+
+#custom-menu {
+  min-width: 530px;
+}

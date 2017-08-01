@@ -99,18 +99,6 @@
 
                                   <div id="d_menu" class="tab-pane active">
 
-                                  <div class="form-group">
-                                      <div class="btn-group">
-                                          <button type="button" class="btn btn-default iconpicker-component"><i class="fa fa-fw fa-heart"></i></button>
-                                          <button type="button" class="icp icp-dd btn dropdown-toggle supericon" data-selected="fa-car" data-toggle="dropdown">
-                                              <span class="caret"></span>
-                                              <span class="sr-only">Toggle Dropdown</span>
-                                          </button>
-                                          <div class="dropdown-menu"></div>
-                                      </div>
-                                  </div>
-
-
                                     <div class="col-sm-12">
 
                                     <!-- STANDART MENU -->
@@ -124,6 +112,8 @@
                                       </div>
                                       <br/><br/><br/><br/>
                                       <textarea id="nestable-output-standart"></textarea>
+                                      <br/><br/><br/><br/>
+                                      <textarea id="nestable-output-custom"></textarea>
                                     </div>
                                     </div>
 
@@ -151,14 +141,12 @@
 
                       <div class="tab-pane" id="instruction" >
                           <div class="tab-body">
-                          <button id="serializeForm" class="btn btn-success" type="button">CLICK TO SERIALIZE</button>
                               <?php echo $text_instruction; ?>
+                              <?php echo "<pre>"; print_r($setting); echo "</pre>"; ?>
                           </div>
                       </div>
 
                   </div>
-
-
 
                 </form>
             </div>
@@ -191,12 +179,57 @@
 
 <script>
 
+  function handlebar_templating(some_html, some_json)
+  {
+    var re = /{{([^}}]+)?}}/g, match;
+    while(match = re.exec(some_html)) {
+        some_html = some_html.replace(match[0], some_json[match[1]]);
+    };
+    return some_html;
+  }
+
+  function updateOutput(e)
+  {
+      var list   = e.length ? e : $(e.target),
+          output = list.data('output');
+      if (window.JSON) {
+          output.val(window.JSON.stringify(list.nestable('serialize')));
+      } else {
+          output.val('JSON browser support required for this demo.');
+      }
+  };
+
+  // function make
+
+  function changeCustomItemsType(serialize_data)
+  {
+
+    for (var i = serialize_data.length - 1; i >= 0; i--) {
+      if ("children" in serialize_data[i]) {
+        $('#dd_custom_' + serialize_data[i]['id'] + ' > .dd-handle .item-link').css('display', 'none');
+
+        for (var i2 = serialize_data[i]['children'].length - 1; i2 >= 0; i2--) {
+          $('#dd_custom_' + serialize_data[i]['children'][i2]['id'] + ' .item-icon-picker');
+        }
+
+      } else {
+        $('#dd_custom_' + serialize_data[i]['id'] + ' > .dd-handle .item-link').css('display', 'inline-block');
+      }
+
+    }
+  }
+
   $(document).ready(function()
   {
 
       $('#nestable-standart').nestable_nodrag({maxDepth: '3', group: "standart"});
 
-      $('#nestable-custom').nestable({maxDepth: '3', group: "custom"});
+      $('#nestable-custom').nestable({maxDepth: '2', group: "custom"})
+      .on('change', function(){
+        updateOutput($('#nestable-custom').data('output', $('#nestable-output-custom')));
+        changeCustomItemsType($('#nestable-custom').nestable('serialize'));
+      });
+
 
       $('#nestable-standart').nestable_nodrag('collapseAll');
       $('#nestable-custom').nestable('collapseAll');
@@ -209,15 +242,12 @@
         $(this).val(tmp_vis);
 
         var jsn = {
-          'standart-menu-data': $('#form').serializeObject(),
-          'custom-menu-data': ''
+          'menus-data': $('#form').serializeObject(),
         };
 
         $('#nestable-output-standart').text(JSON.stringify(jsn));
 
       });
-
-
 
       // collapse-expand buttons
       $('#button-collapse-standart').on('click', function()
@@ -227,59 +257,75 @@
       { $('#nestable-standart').nestable_nodrag('expandAll'); });
 
       $('#button-collapse-custom').on('click', function()
-      { $('#nestable-custom').nestable_nodrag('collapseAll'); });
+      { $('#nestable-custom').nestable('collapseAll'); });
 
       $('#button-expand-custom').on('click', function()
-      { $('#nestable-custom').nestable_nodrag('expandAll'); });
+      { $('#nestable-custom').nestable('expandAll'); });
 
 
-      // add new custom element
+      // add new custom element (button)
       $('#button-add-custom').on('click', function()
       {
+        var tmp_new_id = 0;
+        $('.custom-removebtn').each(function() {
+          if ($(this).data('delId') > tmp_new_id) {
+            tmp_new_id = $(this).data('delId');
+          }
+        });
+        tmp_new_id = tmp_new_id + 1;
+        console.log('create custom element ID: ', tmp_new_id);
 
+        var html = $('#new_custom_item').html();
+        var tmp_json = {
+          new_custom_id: tmp_new_id
+        };
+        html = handlebar_templating(html, tmp_json);
+        $('.main-custom-list').append(html);
+
+        // iconpicker reinitialize
+        $('.supericon-yep').each(function() {
+          $(this).iconpicker();
+        });
+
+        return false;
+      });
+
+      // remove custom element
+      $(document).on('click','.custom-removebtn', function() {
+        console.log('removing custom element ID: ', $(this).data('delId'));
+        $(('#dd_custom_' + $(this).data('delId'))).remove();
       });
 
 
       // iconpicker
-      $('.supericon').iconpicker();
-      $('.icp').on('iconpickerSelected', function(e) {
-        $('.superinput').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
-        // Events sample:
-        // This event is only triggered when the actual input value is changed
-        // by user interaction
-        // $('.icp').on('iconpickerSelected', function(e) {
-        //     $('.lead .picker-target').get(0).className = 'picker-target fa-3x ' +
-        //             e.iconpickerInstance.options.iconBaseClass + ' ' +
-        //             e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue);
-        // });
+      $('.supericon-yep').each(function() {
+        $(this).iconpicker();
       });
 
-
   });
 
+  $(document).on('click', '#save_and_stay', function() {
 
-
-  $(document).on('click', '.create', function(){
-    var that = this;
-    $('#addModal').remove();
-    var html = $('#add-item-modal').html();
-    var json = {
-      menu_item_id: 0,
-      item_parent: '',
-      item_position: '',
-      item_icon: '',
-      save: '<?php echo $create; ?>'
+    var jsn = {
+      'menus-data': $('#form').serializeArray(),
+      'custom-nested-data': $('#nestable-custom').nestable('serialize')
     };
 
-    html = handlebar_templating(html, json);
-
-    $('body').append(html);
-    $('#addModal').modal('show');
-    return false;
+    $.ajax({
+        type: 'post',
+        url: $('#form').attr('action') + '&save',
+        data: jsn,
+        beforeSend: function() {
+            $('#form').fadeTo('slow', 0.5);
+        },
+        complete: function() {
+            $('#form').fadeTo('slow', 1);
+        },
+        success: function(response) {
+            console.log(response);
+        }
+    });
   });
-
-
-
 
 
 </script>

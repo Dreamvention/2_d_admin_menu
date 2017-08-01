@@ -208,7 +208,8 @@ class ControllerModuleDAdminMenu extends Controller
         $data['setting'] = $this->model_module_d_admin_menu->getSetting($data['setting_id']);
 
         $data['standart_menu'] = $this->load->view('module/d_admin_menu_standart_section.tpl', array("standart_menu_data" => $data['setting']['main_menu']['menu_data']));
-        $data['custom_menu'] = $this->load->view('module/d_admin_menu_custom_section.tpl', array("custom_menu_data" => $data['setting']['custom_menu']));
+        $data['custom_menu'] = $this->load->view('module/d_admin_menu_custom_section.tpl', array("custom_menu_data"  => $data['setting']['custom_menu'],
+                                                                                                 "modules_for_links" => $this->getModulesForLinks()));
 
 
         $data['header'] = $this->load->controller('common/header');
@@ -224,7 +225,7 @@ class ControllerModuleDAdminMenu extends Controller
     /////////                             ASSISTING                             /////////
     /////////////////////////////////////////////////////////////////////////////////////
 
-    public function some_sort(&$some_array)
+    private function some_sort(&$some_array)
     {
         usort($some_array, function ($a, $b)
         {
@@ -243,7 +244,7 @@ class ControllerModuleDAdminMenu extends Controller
         return $this->config->get('d_admin_menu');
     }
 
-    public function createSetting()
+    private function createSetting()
     {
         $json = array();
 
@@ -256,6 +257,7 @@ class ControllerModuleDAdminMenu extends Controller
             ),
             "custom_menu"   => array(
                 "0"                 => array(
+                    "id"                    => 1,
                     "icon"                  => "fa-flask",
                     "name"                  => "Shopunity",
                     "href"                  => "index.php?route=extension/d_shopunity/extension&token=",
@@ -277,6 +279,65 @@ class ControllerModuleDAdminMenu extends Controller
         $this->response->setOutput(json_encode($json));
     }
 
+    private function getModulesForLinks()
+    {
+        $tmp_mdls_data = array();
+        $cat_files = glob(DIR_APPLICATION . 'controller/extension/extension/*.php', GLOB_BRACE);
+
+        foreach ($cat_files as $c_file) {
+            $extension = basename($c_file, '.php');
+
+            $this->load->language('extension/extension/' . $extension);
+
+            if ($this->user->hasPermission('access', 'extension/extension/' . $extension)) {
+                $cat_files = glob(DIR_APPLICATION . 'controller/{extension/' . $extension . ',' . $extension . '}/*.php', GLOB_BRACE);
+
+                $tmp_mdls_data[] = array(
+                    'code' => $extension,
+                    'text' => $this->language->get('heading_title'),
+                    'extra'=> $this->getExtensionList($extension)
+                );
+            }
+        }
+
+        return $tmp_mdls_data;
+    }
+
+    private function getExtensionList($category_shortname)
+    {
+        $this->load->model('extension/extension');
+        $extensions = $this->model_extension_extension->getInstalled($category_shortname);
+
+        $extra_data = array();
+
+        // Compatibility code for old extension folders
+        $files = glob(DIR_APPLICATION . 'controller/{extension/' . $category_shortname . ',' . $category_shortname . '}/*.php', GLOB_BRACE);
+
+        if ($files) {
+            foreach ($files as $file) {
+                $extension = basename($file, '.php');
+
+                $this->load->language('extension/' . $category_shortname . '/' . $extension);
+
+                $extra_data[] = array(
+                    'name'          => $this->language->get('heading_title'),
+                    'shortname'     => $extension,
+                    'edit'          => 'extension/'. $category_shortname .'/' . $extension
+                );
+            }
+        }
+
+        $sort_order = array();
+
+        foreach ($extra_data as $key => $value) {
+            $sort_order[$key] = $value['name'];
+        }
+
+        array_multisort($sort_order, SORT_ASC, $extra_data);
+
+        return $extra_data;
+    }
+
 
 
 
@@ -293,9 +354,6 @@ class ControllerModuleDAdminMenu extends Controller
             $this->error['warning'] = $this->language->get('error_permission');
             return false;
         }
-        // if (isset($this->request->post['config'])) {
-        //     return false;
-        // }
 
         return true;
     }

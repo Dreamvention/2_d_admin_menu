@@ -104,7 +104,7 @@
                 }
 
                 e.preventDefault();
-                list.dragStart(e.touches ? e.touches[0] : e);
+                // list.dragStart(e.touches ? e.touches[0] : e);
             };
 
             var onMoveEvent = function(e)
