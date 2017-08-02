@@ -4,6 +4,7 @@ $_['d_admin_menu'] = [
             'id' => '1',
             'icon' => "fa-dashboard",
             'name' => "Dashboard",
+            'lng_name' => "dashboard",
             'href' => "index.php?route=common/dashboard&token=",
             'children' => [],
             'sort_order' => 0,
@@ -11,6 +12,7 @@ $_['d_admin_menu'] = [
         1 => [
             'id' => '2',
             'icon' => "fa-tags",
+            'lng_name' => "catalog",
             'name' => "Catalog",
             'href' => "",
             'children' => [
@@ -389,6 +391,7 @@ $_['d_admin_menu'] = [
                             'sort_order' => 2,
                         ],
                     ],
+                    'is_visible' => 1,
                     'sort_order' => 1,
                 ],
                 2 => [

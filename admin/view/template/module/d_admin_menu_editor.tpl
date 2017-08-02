@@ -5,7 +5,6 @@
         <div class="container-fluid">
             <div class="form-inline pull-right">
                 <button id="save_and_stay" data-toggle="tooltip" title="<?php echo $button_save_and_stay; ?>" class="btn btn-success"><i class="fa fa-save"></i></button>
-                <button type="submit" form="form" data-toggle="tooltip" title="<?php echo $button_save; ?>" class="btn btn-primary"><i class="fa fa-save"></i></button>
                 <a href="<?php echo $cancel; ?>" data-toggle="tooltip" title="<?php echo $button_cancel; ?>" class="btn btn-default"><i class="fa fa-reply"></i></a>
             </div>
             <h1><?php echo $heading_title; ?> <?php echo $version; ?></h1>
@@ -42,7 +41,7 @@
                 <h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $text_edit; ?></h3>
             </div>
             <div class="panel-body">
-                <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+                <form action="<?php echo $save_and_stay; ?>" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
 
                   <ul  class="nav nav-tabs">
                     <li class="active">
@@ -110,10 +109,6 @@
                                       <div class="dd nestable" id="nestable-standart">
                                         <?php echo $standart_menu; ?>
                                       </div>
-                                      <br/><br/><br/><br/>
-                                      <textarea id="nestable-output-standart"></textarea>
-                                      <br/><br/><br/><br/>
-                                      <textarea id="nestable-output-custom"></textarea>
                                     </div>
                                     </div>
 
@@ -158,25 +153,6 @@
 
 </div>
 
-
-<script>
-  $.fn.serializeObject = function() {
-       var o = {};
-       var a = this.serializeArray();
-       $.each(a, function() {
-           if (o[this.name] !== undefined) {
-               if (!o[this.name].push) {
-                   o[this.name] = [o[this.name]];
-               }
-               o[this.name].push(this.value || '');
-           } else {
-               o[this.name] = this.value || '';
-           }
-       });
-       return o;
-     };
-</script>
-
 <script>
 
   function handlebar_templating(some_html, some_json)
@@ -199,17 +175,21 @@
       }
   };
 
-  // function make
-
   function changeCustomItemsType(serialize_data)
   {
 
     for (var i = serialize_data.length - 1; i >= 0; i--) {
       if ("children" in serialize_data[i]) {
+
         $('#dd_custom_' + serialize_data[i]['id'] + ' > .dd-handle .item-link').css('display', 'none');
 
-        for (var i2 = serialize_data[i]['children'].length - 1; i2 >= 0; i2--) {
-          $('#dd_custom_' + serialize_data[i]['children'][i2]['id'] + ' .item-icon-picker');
+        // second children
+        for (var ii = serialize_data[i]['children'].length - 1; ii >= 0; ii--) {
+          if ("children" in serialize_data[i]['children'][ii]) {
+            $('#dd_custom_' + serialize_data[i]['children'][ii]['id'] + ' > .dd-handle .item-link').css('display', 'none');
+          } else {
+            $('#dd_custom_' + serialize_data[i]['children'][ii]['id'] + ' > .dd-handle .item-link').css('display', 'inline-block');
+          }
         }
 
       } else {
@@ -224,13 +204,13 @@
 
       $('#nestable-standart').nestable_nodrag({maxDepth: '3', group: "standart"});
 
-      $('#nestable-custom').nestable({maxDepth: '2', group: "custom"})
+      $('#nestable-custom').nestable({maxDepth: '3', group: "custom"})
       .on('change', function(){
-        updateOutput($('#nestable-custom').data('output', $('#nestable-output-custom')));
+        // updateOutput($('#nestable-custom').data('output', $('#nestable-output-custom')));
         changeCustomItemsType($('#nestable-custom').nestable('serialize'));
       });
 
-
+      changeCustomItemsType($('#nestable-custom').nestable('serialize'));
       $('#nestable-standart').nestable_nodrag('collapseAll');
       $('#nestable-custom').nestable('collapseAll');
 
@@ -245,8 +225,14 @@
           'menus-data': $('#form').serializeObject(),
         };
 
-        $('#nestable-output-standart').text(JSON.stringify(jsn));
+        // $('#nestable-output-standart').text(JSON.stringify(jsn));
+      });
 
+      // restore default setting (standart-menu)
+      $('#button-restore-standart').on('click', function() {
+        $('[data-bs="true"]').each(function() {
+          $(this).bootstrapSwitch('state', true, true);
+        });
       });
 
       // collapse-expand buttons
@@ -273,7 +259,6 @@
           }
         });
         tmp_new_id = tmp_new_id + 1;
-        console.log('create custom element ID: ', tmp_new_id);
 
         var html = $('#new_custom_item').html();
         var tmp_json = {
@@ -281,8 +266,9 @@
         };
         html = handlebar_templating(html, tmp_json);
         $('.main-custom-list').append(html);
+        console.log('create custom element ID: ', tmp_new_id);
 
-        // iconpicker reinitialize
+        // iconpicker re-init
         $('.supericon-yep').each(function() {
           $(this).iconpicker();
         });
@@ -292,15 +278,21 @@
 
       // remove custom element
       $(document).on('click','.custom-removebtn', function() {
-        console.log('removing custom element ID: ', $(this).data('delId'));
         $(('#dd_custom_' + $(this).data('delId'))).remove();
+        console.log('removing custom element ID: ', $(this).data('delId'));
       });
 
 
-      // iconpicker
+      // iconpicker init
       $('.supericon-yep').each(function() {
         $(this).iconpicker();
       });
+
+      // icon input update
+      $(document).on('iconpickerSelected', '.icp', function(e) {
+        $("input[name='custom-menu[" + $(this).data('id') +"][icon]']").val(e.iconpickerValue);
+      });
+
 
   });
 

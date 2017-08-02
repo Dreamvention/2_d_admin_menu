@@ -368,7 +368,7 @@ button + .dd-handle {
 }
 
 .custom-item-link {
-  width: 245px;
+  width: 275px;
 }
 
 #standart-menu {
@@ -376,5 +376,5 @@ button + .dd-handle {
 }
 
 #custom-menu {
-  min-width: 530px;
+  min-width: 610px;
 }

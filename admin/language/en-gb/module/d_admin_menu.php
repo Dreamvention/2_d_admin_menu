@@ -9,7 +9,10 @@ $_['text_edit']                 = 'Edit Admin Menu';
 $_['tab_setting']               = 'Setting';
 $_['tab_instruction']           = 'Instruction';
 
+// button
+$_['button_save_and_stay']      = 'Save and stay';
 
+$_['text_menu']                 = 'Edit Menu';
 $_['text_standart_menu']        = 'Standart Menu';
 $_['text_custom_menu']          = 'Custom Menu';
 

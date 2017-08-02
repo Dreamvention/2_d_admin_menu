@@ -62,7 +62,7 @@ class ControllerModuleDAdminMenu extends Controller
         $this->load->model('setting/setting');
 
         // get config file
-        $data['config_file'] = $this->getAppropriateConfig();
+        $data['config_file'] = $this->getAppropriateLanguage();
 
         // save post
 
@@ -86,8 +86,6 @@ class ControllerModuleDAdminMenu extends Controller
         $this->document->addStyle('view/stylesheet/d_admin_menu/library/fontawesome-iconpicker.min.css');
 
         $this->document->addStyle('view/stylesheet/d_admin_menu/d_admin_menu.css');
-
-
 
         $url = '';
         $data['module_link'] = HTTPS_SERVER . 'index.php?route=' . $this->route . '&token=' . $this->session->data['token'] . $url;
@@ -179,8 +177,8 @@ class ControllerModuleDAdminMenu extends Controller
 
         $data['text_intro_create_setting'] = $this->language->get('text_intro_create_setting');
 
-        // action
-        $data['action'] = HTTPS_SERVER . 'index.php?route=' . $this->route . '&token=' . $this->session->data['token'] . $url;
+        // save_and_stay
+        $data['save_and_stay'] = $this->model_module_d_admin_menu->ajax($this->route.'/save_and_stay', 'token=' . $this->session->data['token'] . $url, 'SSL');
 
         if(VERSION < '2.3.0.0'){
             $data['cancel'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL');
@@ -208,8 +206,13 @@ class ControllerModuleDAdminMenu extends Controller
         $data['setting'] = $this->model_module_d_admin_menu->getSetting($data['setting_id']);
 
         $data['standart_menu'] = $this->load->view('module/d_admin_menu_standart_section.tpl', array("standart_menu_data" => $data['setting']['main_menu']['menu_data']));
-        $data['custom_menu'] = $this->load->view('module/d_admin_menu_custom_section.tpl', array("custom_menu_data"  => $data['setting']['custom_menu'],
-                                                                                                 "modules_for_links" => $this->getModulesForLinks()));
+
+
+        $data['custom_menu'] = $this->load->view('module/d_admin_menu_custom_section.tpl', array("custom_menu_data"   => $data['setting']['custom_menu'],
+                                                                                                 "modules_for_links"  => $this->getModulesForLinks(),
+                                                                                                 "text_phd_item_name" => $this->language->get('text_placeholder_item_name')));
+
+        $this->getAppropriateLanguage();
 
 
         $data['header'] = $this->load->controller('common/header');
@@ -236,13 +239,90 @@ class ControllerModuleDAdminMenu extends Controller
         });
     }
 
-    private function getAppropriateConfig()
+    public function getAppropriateConfig()
     {
         if ((VERSION >= '2.3.0.0')  && (VERSION < '3.0.0.0')) {
             $this->load->config('d_admin_menu/d_admin_menu_230');
         }
         return $this->config->get('d_admin_menu');
     }
+
+    public function getAppropriateMenuName($menu_item_lng_name)
+    {
+        if ((VERSION >= '2.3.0.0')  && (VERSION < '3.0.0.0')) {
+            $lng = new Language();
+            $lng->load('common/column_left');
+
+            if ($lng->get('text_' . $menu_item_lng_name)) {
+                return $lng->get('text_' . $menu_item_lng_name);
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function getAppropriateLanguage()
+    {
+        $standart_menu = $this->getAppropriateConfig();
+
+        foreach ($standart_menu as $sm_key => $sm_value) {
+
+
+            if ($sm_value['href']) {
+                preg_match('/\/[a-z]+/', $sm_value['href'], $match);
+                if ($this->getAppropriateMenuName(trim($match[0], '/')) != false) {
+                    $standart_menu[$sm_key]['name'] = $this->getAppropriateMenuName(trim($match[0], '/'));
+                }
+                unset($match);
+            } elseif (array_key_exists('lng_name', $sm_value)) {
+                if ($this->getAppropriateMenuName($sm_value['lng_name']) !== false) {
+                    $standart_menu[$sm_key]['name'] = $this->getAppropriateMenuName($sm_value['lng_name']);
+                }
+            }
+
+            if ($sm_value['children']) {
+
+
+                foreach ($sm_value['children'] as $sm_key_2 => $sm_value_2) {
+
+                    if ($sm_value_2['href']) {
+                        preg_match('/\/[a-z]+/', $sm_value_2['href'], $match);
+                        if ($this->getAppropriateMenuName(trim($match[0], '/')) !== false) {
+                            $standart_menu[$sm_key]['children'][$sm_key_2] = $this->getAppropriateMenuName(trim($match[0], '/'));
+                        }
+                        unset($match);
+                    } elseif (array_key_exists('lng_name', $sm_value_2)) {
+                        if ($this->getAppropriateMenuName($sm_value_2['lng_name']) !== false) {
+                            $standart_menu[$sm_key]['children'][$sm_key_2] = $this->getAppropriateMenuName($sm_value_2['lng_name']);
+                        }
+                    }
+
+                    if ($sm_value_2['children']) {
+
+                        foreach ($sm_value_2['children'] as $sm_key_3 => $sm_value_3) {
+
+                            if ($sm_value_3['href']) {
+                                preg_match('/\/[a-z]+/', $sm_value_3['href'], $match);
+                                if ($this->getAppropriateMenuName(trim($match[0], '/')) !== false) {
+                                    $standart_menu[$sm_key]['children'][$sm_key_2]['children'][$sm_key_3] = $this->getAppropriateMenuName(trim($match[0], '/'));
+                                }
+                                unset($match);
+                            } elseif (array_key_exists('lng_name', $sm_value_3)) {
+                                if ($this->getAppropriateMenuName($sm_value_3['lng_name']) !== false) {
+                                    $standart_menu[$sm_key]['children'][$sm_key_2]['children'][$sm_key_3] = $this->getAppropriateMenuName($sm_value_3['lng_name']);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return $standart_menu;
+    }
+
+
 
     private function createSetting()
     {
@@ -253,14 +333,14 @@ class ControllerModuleDAdminMenu extends Controller
             "name"          => $setting_name,
             "main_menu"     => array(
                 "version"           => VERSION,
-                "menu_data"         => $this->getAppropriateConfig()
+                "menu_data"         => $this->getAppropriateLanguage()
             ),
             "custom_menu"   => array(
                 "0"                 => array(
                     "id"                    => 1,
                     "icon"                  => "fa-flask",
                     "name"                  => "Shopunity",
-                    "href"                  => "index.php?route=extension/d_shopunity/extension&token=",
+                    "href"                  => "index.php?route=extension/module/d_shopunity&token=",
                     "children"              => array(),
                     "sort_order"            => 0
                 )
@@ -336,6 +416,176 @@ class ControllerModuleDAdminMenu extends Controller
         array_multisort($sort_order, SORT_ASC, $extra_data);
 
         return $extra_data;
+    }
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////                              ACTIONS                              /////////
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    public function save_and_stay()
+    {
+
+        $current_setting = $this->model_module_d_admin_menu->getSetting($this->model_module_d_admin_menu->getLastSettingId());
+
+        if (isset($this->request->post['menus-data'])) {
+
+            $menus_data = $this->request->post['menus-data'];
+            $custom_nested_data = $this->request->post['custom-nested-data'];
+
+            // STANDART MENU
+            foreach ($current_setting['main_menu']['menu_data'] as $mm_key => $mm_value) {
+
+                // first level
+                if (array_key_exists('is_visible', $mm_value)) {
+                    foreach ($menus_data as $md_value) {
+                        if (('standart-menu[' . $mm_value['id'] . '][visibility]') == trim($md_value['name'])) {
+                            $current_setting['main_menu']['menu_data'][$mm_key]['is_visible'] = 1;
+                            break;
+                        } else {
+                            $current_setting['main_menu']['menu_data'][$mm_key]['is_visible'] = 0;
+                        }
+                    }
+                }
+
+                // second level
+                if ($mm_value['children']) {
+
+                    foreach ($mm_value['children'] as $mm_key_2 => $mm_value_2) {
+                        if (array_key_exists('is_visible', $mm_value_2)) {
+                            foreach ($menus_data as $md_value) {
+                                if ('standart-menu[' . $mm_value_2['id'] . '][visibility]' == $md_value['name']) {
+                                    $current_setting['main_menu']['menu_data'][$mm_key]['children'][$mm_key_2]['is_visible'] = 1;
+                                    break;
+                                } else {
+                                    $current_setting['main_menu']['menu_data'][$mm_key]['children'][$mm_key_2]['is_visible'] = 0;
+                                }
+                            }
+                        }
+
+
+                        //third level
+                        if ($mm_value_2['children']) {
+
+                            foreach ($mm_value_2['children'] as $mm_key_3 => $mm_value_3) {
+                                if (array_key_exists('is_visible', $mm_value_3)) {
+                                    foreach ($menus_data as $md_value) {
+                                        if ('standart-menu[' . $mm_value_3['id'] . '][visibility]' == $md_value['name']) {
+                                            $current_setting['main_menu']['menu_data'][$mm_key]['children'][$mm_key_2]['children'][$mm_key_3]['is_visible'] = 1;
+                                            break;
+                                        } else {
+                                            $current_setting['main_menu']['menu_data'][$mm_key]['children'][$mm_key_2]['children'][$mm_key_3]['is_visible'] = 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // CUSTOM MENU
+            $new_custom_menu = array();
+
+            // first level
+            foreach ($custom_nested_data as $cnd_value) {
+
+                $cnd_first_children = array();
+                if (array_key_exists('children', $cnd_value)) {
+
+                    // second level
+                    foreach ($cnd_value['children'] as $cnd_value_2) {
+
+                        // third level
+                        $cnd_second_children = array();
+                        if (array_key_exists('children', $cnd_value_2)) {
+
+                            foreach ($cnd_value_2['children'] as $cnd_key_3 => $cnd_value_3) {
+
+                                foreach ($menus_data as $md_value) {
+                                    if ('custom-menu[' . $cnd_value_3['id'] . '][icon]' == $md_value['name']) {
+                                        $fc_icon = $md_value['value'];
+                                    }
+                                    if ('custom-menu[' . $cnd_value_3['id'] . '][name]' == $md_value['name']) {
+                                        $fc_name = $md_value['value'];
+                                    }
+                                    if ('custom-menu[' . $cnd_value_3['id'] . '][item_link]' == $md_value['name']) {
+                                        $fc_link = $md_value['value'];
+                                    }
+                                }
+
+                                $cnd_second_children[] = array(
+                                    "id"           => $cnd_value_3['id'],
+                                    "icon"         => $fc_icon,
+                                    "name"         => $fc_name,
+                                    "href"         => ('index.php?route=' .$fc_link. '&token='),
+                                    "children"     => array(),
+                                    "sort_order"   => 0
+                                );
+                                unset($fc_icon, $fc_name, $fc_link);
+                            }
+                        }
+
+                        foreach ($menus_data as $md_value) {
+                            if ('custom-menu[' . $cnd_value_2['id'] . '][icon]' == $md_value['name']) {
+                                $fc_icon = $md_value['value'];
+                            }
+                            if ('custom-menu[' . $cnd_value_2['id'] . '][name]' == $md_value['name']) {
+                                $fc_name = $md_value['value'];
+                            }
+                            if ('custom-menu[' . $cnd_value_2['id'] . '][item_link]' == $md_value['name']) {
+                                $fc_link = $md_value['value'];
+                            }
+                        }
+
+                        $cnd_first_children[] = array(
+                            "id"           => $cnd_value_2['id'],
+                            "icon"         => $fc_icon,
+                            "name"         => $fc_name,
+                            "href"         => ('index.php?route=' .$fc_link. '&token='),
+                            "children"     => $cnd_second_children,
+                            "sort_order"   => 0
+                        );
+                        unset($fc_icon, $fc_name, $fc_link);
+                    }
+                }
+
+                foreach ($menus_data as $md_value) {
+                    if ('custom-menu[' . $cnd_value['id'] . '][icon]' == $md_value['name']) {
+                        $fc_icon = $md_value['value'];
+                    }
+                    if ('custom-menu[' . $cnd_value['id'] . '][name]' == $md_value['name']) {
+                        $fc_name = $md_value['value'];
+                    }
+                    if ('custom-menu[' . $cnd_value['id'] . '][item_link]' == $md_value['name']) {
+                        $fc_link = $md_value['value'];
+                    }
+                }
+
+                $new_custom_menu[] = array(
+                    "id"           => $cnd_value['id'],
+                    "icon"         => $fc_icon,
+                    "name"         => $fc_name,
+                    "href"         => ('index.php?route=' .$fc_link. '&token='),
+                    "children"     => $cnd_first_children,
+                    "sort_order"   => 0
+                );
+                unset($fc_icon, $fc_name, $fc_link);
+
+            }
+
+            $current_setting['custom_menu'] = $new_custom_menu;
+
+            // SAVE SETTING
+            $setting_id = $this->model_module_d_admin_menu->editSetting($this->model_module_d_admin_menu->getLastSettingId(), $current_setting);
+
+        } else {
+
+            // feelsbadman
+        }
     }
 
 

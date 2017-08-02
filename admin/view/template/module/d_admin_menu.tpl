@@ -2,7 +2,7 @@
 <ul id="menu2">
         <?php foreach ($config['menus'] as $k=>$menu) { ?>
         <li id="" data-sort="<?php echo $k?>">
-            <?php if ($menu['href']) { ?>
+            <?php if (!$menu['children']) {?>
             <a href="<?php echo $menu['href'].$token; ?>"><i class="fa <?php echo $menu['icon']; ?> fw"></i>
                 <span><?php echo $menu['name']; ?></span></a>
             <?php } else { ?>
@@ -13,7 +13,7 @@
             <ul>
                 <?php foreach ($menu['children'] as $children_1) { ?>
                 <li style="<?php echo ($children_1['is_visible'] == 0) ? 'display: none;' : ''; ?>">
-                    <?php if ($children_1['href']) { ?>
+                    <?php if (!$children_1['children']) { ?>
                     <a href="<?php echo $children_1['href'].$token; ?>"><?php echo $children_1['name']; ?></a>
                     <?php } else { ?>
                     <a class="parent"><?php echo $children_1['name']; ?></a>
@@ -22,7 +22,7 @@
                     <ul>
                         <?php foreach ($children_1['children'] as $children_2) { ?>
                         <li style="<?php echo ($children_2['is_visible'] == 0) ? 'display: none;' : ''; ?>">
-                            <?php if ($children_2['href']) { ?>
+                            <?php if (!$children_2['children']) { ?>
                             <a href="<?php echo $children_2['href'].$token; ?>"><?php echo $children_2['name']; ?></a>
                             <?php } else { ?>
                             <a class="parent"><?php echo $children_2['name']; ?></a>
