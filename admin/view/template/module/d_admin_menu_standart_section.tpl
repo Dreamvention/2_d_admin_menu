@@ -1,11 +1,3 @@
-
-<?php if(!$standart_menu_data) {?>
-<ol class="dd-empty">
-</ol>
-<?php } ?>
-
-
-<?php if($standart_menu_data) {  ?>
 <div class="well well-sm">
   <div style="float: right;">
     <button type="button" id="button-collapse-standart" class="btn btn-sm" >Collapse All</button>
@@ -13,6 +5,14 @@
   </div>
   <button type="button" id="button-restore-standart" class="btn btn-sm btn-success" >Restore default</button>
 </div>
+
+<?php if(!$standart_menu_data) {?>
+<ol class="dd-list dd-nodrag">
+</ol>
+<?php } ?>
+
+
+<?php if($standart_menu_data) {  ?>
 <ol class="dd-list dd-nodrag">
 
       <!-- first level -->

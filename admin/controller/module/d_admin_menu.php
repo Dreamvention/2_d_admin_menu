@@ -253,8 +253,8 @@ class ControllerModuleDAdminMenu extends Controller
             $lng = new Language();
             $lng->load('common/column_left');
 
-            if ($lng->get('text_' . $menu_item_lng_name)) {
-                return $lng->get('text_' . $menu_item_lng_name);
+            if ($lng->get($menu_item_lng_name)) {
+                return $lng->get($menu_item_lng_name);
             } else {
                 return false;
             }
@@ -265,16 +265,10 @@ class ControllerModuleDAdminMenu extends Controller
     {
         $standart_menu = $this->getAppropriateConfig();
 
+        // first level
         foreach ($standart_menu as $sm_key => $sm_value) {
 
-
-            if ($sm_value['href']) {
-                preg_match('/\/[a-z]+/', $sm_value['href'], $match);
-                if ($this->getAppropriateMenuName(trim($match[0], '/')) != false) {
-                    $standart_menu[$sm_key]['name'] = $this->getAppropriateMenuName(trim($match[0], '/'));
-                }
-                unset($match);
-            } elseif (array_key_exists('lng_name', $sm_value)) {
+            if (array_key_exists('lng_name', $sm_value)) {
                 if ($this->getAppropriateMenuName($sm_value['lng_name']) !== false) {
                     $standart_menu[$sm_key]['name'] = $this->getAppropriateMenuName($sm_value['lng_name']);
                 }
@@ -282,41 +276,29 @@ class ControllerModuleDAdminMenu extends Controller
 
             if ($sm_value['children']) {
 
-
+                // second level
                 foreach ($sm_value['children'] as $sm_key_2 => $sm_value_2) {
 
-                    if ($sm_value_2['href']) {
-                        preg_match('/\/[a-z]+/', $sm_value_2['href'], $match);
-                        if ($this->getAppropriateMenuName(trim($match[0], '/')) !== false) {
-                            $standart_menu[$sm_key]['children'][$sm_key_2] = $this->getAppropriateMenuName(trim($match[0], '/'));
-                        }
-                        unset($match);
-                    } elseif (array_key_exists('lng_name', $sm_value_2)) {
+                    if (array_key_exists('lng_name', $sm_value_2)) {
                         if ($this->getAppropriateMenuName($sm_value_2['lng_name']) !== false) {
-                            $standart_menu[$sm_key]['children'][$sm_key_2] = $this->getAppropriateMenuName($sm_value_2['lng_name']);
+                            $standart_menu[$sm_key]['children'][$sm_key_2]['name'] = $this->getAppropriateMenuName($sm_value_2['lng_name']);
                         }
                     }
 
                     if ($sm_value_2['children']) {
 
+                        // third level
                         foreach ($sm_value_2['children'] as $sm_key_3 => $sm_value_3) {
 
-                            if ($sm_value_3['href']) {
-                                preg_match('/\/[a-z]+/', $sm_value_3['href'], $match);
-                                if ($this->getAppropriateMenuName(trim($match[0], '/')) !== false) {
-                                    $standart_menu[$sm_key]['children'][$sm_key_2]['children'][$sm_key_3] = $this->getAppropriateMenuName(trim($match[0], '/'));
-                                }
-                                unset($match);
-                            } elseif (array_key_exists('lng_name', $sm_value_3)) {
+                            if (array_key_exists('lng_name', $sm_value_3)) {
                                 if ($this->getAppropriateMenuName($sm_value_3['lng_name']) !== false) {
-                                    $standart_menu[$sm_key]['children'][$sm_key_2]['children'][$sm_key_3] = $this->getAppropriateMenuName($sm_value_3['lng_name']);
+                                    $standart_menu[$sm_key]['children'][$sm_key_2]['children'][$sm_key_3]['name'] = $this->getAppropriateMenuName($sm_value_3['lng_name']);
                                 }
                             }
                         }
                     }
                 }
             }
-
         }
 
         return $standart_menu;
