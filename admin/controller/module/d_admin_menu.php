@@ -212,8 +212,6 @@ class ControllerModuleDAdminMenu extends Controller
                                                                                                  "modules_for_links"  => $this->getModulesForLinks(),
                                                                                                  "text_phd_item_name" => $this->language->get('text_placeholder_item_name')));
 
-        $this->getAppropriateLanguage();
-
 
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');

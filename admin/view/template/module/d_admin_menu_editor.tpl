@@ -137,7 +137,6 @@
                       <div class="tab-pane" id="instruction" >
                           <div class="tab-body">
                               <?php echo $text_instruction; ?>
-                              <?php echo "<pre>"; print_r($setting); echo "</pre>"; ?>
                           </div>
                       </div>
 
