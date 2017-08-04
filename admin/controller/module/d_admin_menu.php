@@ -14,7 +14,7 @@ class ControllerModuleDAdminMenu extends Controller
         parent::__construct($registry);
 
         $this->load->model('module/d_admin_menu');
-        $this->d_shopunity = (file_exists(DIR_SYSTEM.'mbooth/extension/d_shopunity.json'));
+        $this->d_shopunity = (file_exists(DIR_SYSTEM.'library/d_shopunity/extension/d_shopunity.json'));
 
         if ($this->d_shopunity) {
             $this->load->model('d_shopunity/mbooth');
@@ -51,8 +51,8 @@ class ControllerModuleDAdminMenu extends Controller
             $this->response->redirect($this->url->link($this->route.'/required', 'codename=d_shopunity&token='.$this->session->data['token'], 'SSL'));
         }
 
-        // $this->load->model('d_shopunity/mbooth');
-        // $this->model_d_shopunity_mbooth->validateDependencies($this->codename);
+        $this->load->model('d_shopunity/mbooth');
+        $this->model_d_shopunity_mbooth->validateDependencies($this->codename);
 
         $this->model_module_d_admin_menu->installDatabase();
 
@@ -74,18 +74,23 @@ class ControllerModuleDAdminMenu extends Controller
         $this->document->addScript('view/javascript/shopunity/bootstrap-switch/bootstrap-switch.min.js');
         $this->document->addStyle('view/stylesheet/shopunity/bootstrap-switch/bootstrap-switch.css');
 
-        $this->document->addScript('view/javascript/shopunity/bootstrap-sortable.js');
-        $this->document->addScript('view/javascript/shopunity/tinysort/jquery.tinysort.min.js');
-        $this->document->addScript('view/javascript/shopunity/serializeObject/serializeObject.js');
+        // $this->document->addScript('view/javascript/shopunity/bootstrap-sortable.js');
+        // $this->document->addScript('view/javascript/shopunity/tinysort/jquery.tinysort.min.js');
+        // $this->document->addScript('view/javascript/shopunity/serializeObject/serializeObject.js');
 
         $this->document->addScript('view/javascript/d_admin_menu/library/jquery.nestable.nodrag.js');
         $this->document->addScript('view/javascript/d_admin_menu/library/jquery.nestable.js');
-        $this->document->addScript('view/javascript/d_admin_menu/library/handlebars-v4.0.5.js');
+
+        $this->document->addScript('view/javascript/d_admin_menu/library/alertify.min.js');
+        $this->document->addStyle('view/stylesheet/d_admin_menu/library/alertify/alertify.min.css');
+        $this->document->addStyle('view/stylesheet/d_admin_menu/library/alertify/bootstrap-theme.cstm.min.css');
 
         $this->document->addScript('view/javascript/d_admin_menu/library/fontawesome-iconpicker.js');
         $this->document->addStyle('view/stylesheet/d_admin_menu/library/fontawesome-iconpicker.min.css');
 
-        $this->document->addStyle('view/stylesheet/d_admin_menu/d_admin_menu.css');
+        $this->document->addScript('https://use.fontawesome.com/0b3dfb29a7.js');
+
+        $this->document->addStyle('view/stylesheet/d_admin_menu/d_admin_menu_editor.css');
 
         $url = '';
         $data['module_link'] = HTTPS_SERVER . 'index.php?route=' . $this->route . '&token=' . $this->session->data['token'] . $url;
@@ -167,6 +172,12 @@ class ControllerModuleDAdminMenu extends Controller
         $data['button_add'] = $this->language->get('button_add');
         $data['button_remove'] = $this->language->get('button_remove');
         $data['button_hide'] = $this->language->get('button_hide');
+        $data['button_support_email'] = $this->language->get('button_support_email');
+
+        // Entry
+        $data['entry_support'] = $this->language->get('entry_support');
+        $data['entry_status'] = $this->language->get('entry_status');
+
 
         // Text
         $data['text_enabled'] = $this->language->get('text_enabled');
@@ -204,6 +215,9 @@ class ControllerModuleDAdminMenu extends Controller
             $data['setting_id'] = $this->model_module_d_admin_menu->getLastSettingId();
         }
         $data['setting'] = $this->model_module_d_admin_menu->getSetting($data['setting_id']);
+
+
+        $data[$this->codename . '_status'] = $data['setting']['status'];
 
         $data['standart_menu'] = $this->load->view('module/d_admin_menu_standart_section.tpl', array("standart_menu_data" => $data['setting']['main_menu']['menu_data']));
 
@@ -311,6 +325,7 @@ class ControllerModuleDAdminMenu extends Controller
         $setting_name = "default-setting";
         $new_setting = array(
             "name"          => $setting_name,
+            "status"        => 1,
             "main_menu"     => array(
                 "version"           => VERSION,
                 "menu_data"         => $this->getAppropriateLanguage()
@@ -559,12 +574,28 @@ class ControllerModuleDAdminMenu extends Controller
 
             $current_setting['custom_menu'] = $new_custom_menu;
 
+            // SET STATUS
+            foreach ($menus_data as $md_value) {
+                if (($this->codename . '_status') == trim($md_value['name'])) {
+                    $current_setting['status'] = 1;
+                    break;
+                } else {
+                    $current_setting['status'] = 0;
+                }
+            }
+
             // SAVE SETTING
             $setting_id = $this->model_module_d_admin_menu->editSetting($this->model_module_d_admin_menu->getLastSettingId(), $current_setting);
 
         } else {
 
             // feelsbadman
+        }
+
+        // ON-OFF MODULE
+        $this->uninstallEvents();
+        if ($current_setting['status'] == 1) {
+            $this->installEvents();
         }
     }
 
@@ -590,27 +621,23 @@ class ControllerModuleDAdminMenu extends Controller
 
     public function install()
     {
-        if($this->validate()){
-            $this->load->model('module/d_admin_menu');
-            $this->model_module_d_admin_menu->installDatabase();
+        $this->load->model('module/d_admin_menu');
+        $this->model_module_d_admin_menu->installDatabase();
 
-            if($this->d_shopunity){
-                $this->load->model('d_shopunity/mbooth');
-                $this->model_d_shopunity_mbooth->installDependencies($this->codename);
-            }
-
-            $this->installEvents();
+        if($this->d_shopunity){
+            $this->load->model('d_shopunity/mbooth');
+            $this->model_d_shopunity_mbooth->installDependencies($this->codename);
         }
+
+        $this->installEvents();
     }
 
     public function uninstall()
     {
-        if($this->validate()){
-            $this->load->model('module/d_admin_menu');
-            $this->model_module_d_admin_menu->uninstallDatabase();
+        $this->load->model('module/d_admin_menu');
+        $this->model_module_d_admin_menu->uninstallDatabase();
 
-            $this->uninstallEvents();
-        }
+        $this->uninstallEvents();
     }
 
     public function installEvents()

@@ -66,13 +66,13 @@
 
                               <div class="col-sm-2">
                                 <ul class="nav nav-pills s-nav-stacked">
-                                  <li>
+                                  <li class="active">
                                     <a href="#d_home" data-toggle="tab">
                                       <span class="fa fa-home fa-fw"></span> <span><?php echo $text_home; ?></span>
                                     </a>
                                   </li>
                                   <?php if($setting_id) { ?>
-                                  <li class="active">
+                                  <li>
                                     <a href="#d_menu" data-toggle="tab">
                                       <span class="fa fa-bookmark-o fa-fw"></span> <span><?php echo $text_menu; ?></span>
                                     </a>
@@ -84,7 +84,7 @@
                               <div class="col-sm-10">
                                 <div class="tab-content">
 
-                                  <div id="d_home" class="tab-pane">
+                                  <div id="d_home" class="tab-pane active">
                                     <div class="page-header">
                                         <h3><span class="fa fa-home"></span> <span><?php echo $text_home; ?></span></h3>
                                     </div>
@@ -93,10 +93,33 @@
                                     <?php } ?>
                                     <div class="row">
                                     <!-- HOME CONTENT -->
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label" for="input_status"><?php echo $entry_status; ?></label>
+                                            <div class="col-sm-8">
+                                                <input type="checkbox" value="1" name="<?php echo $id; ?>_status" id="input_status" data-on-color="success" data-bs-status="true" <?php echo (${$id.'_status'} == '1') ? 'checked="checked"' : ''; ?> class="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label" for="button_support_email"><?php echo $entry_support; ?></label>
+                                            <div class="col-sm-4">
+                                                <a href="mailto:<?php echo $support_email; ?>?Subject=Request Support: <?php echo $heading_title; ?>&body=Shop: <?php echo HTTP_SERVER; ?>" id="button_support_email" class="btn btn-primary btn-block"><i class="fa fa-support"></i> <?php echo $button_support_email; ?></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                    <div class="bs-callout bs-callout-info">
+                                    <h4>Note!</h4>
+                                    <p>Some note here.</p>
+                                    </div>
+
                                   </div>
 
-                                  <div id="d_menu" class="tab-pane active">
+                                  <div id="d_menu" class="tab-pane">
 
                                     <div class="col-sm-12">
 
@@ -214,6 +237,7 @@
       $('#nestable-custom').nestable('collapseAll');
 
       $('[data-bs="true"]').bootstrapSwitch();
+      $('[data-bs-status="true"]').bootstrapSwitch();
       $('[data-bs="true"]').on('switchChange.bootstrapSwitch', function(event, state) {
 
         var tmp_vis = 1;
@@ -304,7 +328,7 @@
 
     $.ajax({
         type: 'post',
-        url: $('#form').attr('action') + '&save',
+        url: $('#form').attr('action'),
         data: jsn,
         beforeSend: function() {
             $('#form').fadeTo('slow', 0.5);
@@ -313,7 +337,12 @@
             $('#form').fadeTo('slow', 1);
         },
         success: function(response) {
+            alertify.success('Setting saved');
+            // alertify.message('Please refresh your page');
             console.log(response);
+        },
+        error: function() {
+            alertify.error('Something went wrong :(');
         }
     });
   });
