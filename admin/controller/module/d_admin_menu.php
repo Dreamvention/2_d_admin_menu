@@ -253,15 +253,30 @@ class ControllerModuleDAdminMenu extends Controller
 
     public function getAppropriateConfig()
     {
-        if ((VERSION >= '2.3.0.0')  && (VERSION < '3.0.0.0')) {
+        if ((VERSION >= '2.0.0.0')  && (VERSION < '2.3.0.0')) {
+
+            $this->load->config('d_admin_menu/d_admin_menu_201');
+
+        } elseif ((VERSION >= '2.3.0.0')  && (VERSION < '3.0.0.0')) {
+
             $this->load->config('d_admin_menu/d_admin_menu_230');
+
         }
         return $this->config->get('d_admin_menu');
     }
 
     public function getAppropriateMenuName($menu_item_lng_name)
     {
-        if ((VERSION >= '2.3.0.0')  && (VERSION < '3.0.0.0')) {
+        if ((VERSION >= '2.0.0.0')  && (VERSION < '2.3.0.0')) {
+            $lng = new Language();
+            $lng->load('common/menu');
+
+            if ($lng->get($menu_item_lng_name)) {
+                return $lng->get($menu_item_lng_name);
+            } else {
+                return false;
+            }
+        } elseif ((VERSION >= '2.3.0.0')  && (VERSION < '3.0.0.0')) {
             $lng = new Language();
             $lng->load('common/column_left');
 
@@ -270,6 +285,8 @@ class ControllerModuleDAdminMenu extends Controller
             } else {
                 return false;
             }
+        } else {
+            return false;
         }
     }
 
@@ -549,6 +566,7 @@ class ControllerModuleDAdminMenu extends Controller
                 }
 
                 foreach ($menus_data as $md_value) {
+                    $fc_icon = ''; $fc_name = ''; $fc_link = '';
                     if ('custom-menu[' . $cnd_value['id'] . '][icon]' == $md_value['name']) {
                         $fc_icon = $md_value['value'];
                     }
@@ -644,6 +662,7 @@ class ControllerModuleDAdminMenu extends Controller
     {
         $this->load->model('module/d_event_manager');
 
+        $this->model_module_d_event_manager->installCompatibility();
         $this->model_module_d_event_manager->addEvent('d_admin_menu', 'admin/view/common/column_left/after', 'module/d_admin_menu/view_column_left_after');
         $this->model_module_d_event_manager->addEvent('d_admin_menu_script', 'admin/view/common/header/before', 'module/d_admin_menu/view_column_left_scripts_before');
     }
@@ -681,7 +700,7 @@ class ControllerModuleDAdminMenu extends Controller
         $data['config']['menus'] = $standart_menu;
 
         $data['token'] = $this->session->data['token'];
-        return $this->load->view('module/d_admin_menu', $data);
+        return $this->load->view('module/d_admin_menu.tpl', $data);
     }
 
     public function view_column_left_after(&$route, &$data, &$output)
