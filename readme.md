@@ -4,7 +4,7 @@ Customise Opencart admin menu.
 
 ### Supported Opencart versions:
 
-- [ ]
-- [+] 2.3+
-- [+] 3.0+
+- [ ] 2.0+
+- [x] 2.3+
+- [x] 3.0+
 
