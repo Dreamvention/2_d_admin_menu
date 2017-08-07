@@ -84,13 +84,9 @@
                               <div class="col-sm-10">
                                 <div class="tab-content">
 
-                                  <div id="d_home" class="tab-pane active">
-                                    <div class="page-header">
-                                        <h3><span class="fa fa-home"></span> <span><?php echo $text_home; ?></span></h3>
-                                    </div>
-                                    <?php if(!$setting){ ?>
-                                    <div class="bs-callout bs-callout-warning"><?php echo $text_intro_create_setting; ?></div>
-                                    <?php } ?>
+
+                                  <div id="d_menu" class="tab-pane active">
+
                                     <div class="row">
                                     <!-- HOME CONTENT -->
 
@@ -112,14 +108,7 @@
                                     </div>
                                     </div>
 
-                                    <div class="bs-callout bs-callout-info">
-                                    <h4>Note!</h4>
-                                    <p>Some note here.</p>
-                                    </div>
-
-                                  </div>
-
-                                  <div id="d_menu" class="tab-pane">
+                                    <hr>
 
                                     <div class="col-sm-12">
 
