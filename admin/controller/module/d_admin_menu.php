@@ -64,8 +64,6 @@ class ControllerModuleDAdminMenu extends Controller
         // get config file
         $data['config_file'] = $this->getAppropriateLanguage();
 
-        // save post
-
         // styles and scripts
         if(!file_exists('view/stylesheet/shopunity/')){
           $this->error['shopunity'] = $this->language->get('shopunity_download');
@@ -76,7 +74,7 @@ class ControllerModuleDAdminMenu extends Controller
 
         // $this->document->addScript('view/javascript/shopunity/bootstrap-sortable.js');
         // $this->document->addScript('view/javascript/shopunity/tinysort/jquery.tinysort.min.js');
-        // $this->document->addScript('view/javascript/shopunity/serializeObject/serializeObject.js');
+        $this->document->addScript('view/javascript/shopunity/serializeObject/serializeObject.js');
 
         $this->document->addScript('view/javascript/d_admin_menu/library/jquery.nestable.nodrag.js');
         $this->document->addScript('view/javascript/d_admin_menu/library/jquery.nestable.js');
@@ -93,7 +91,7 @@ class ControllerModuleDAdminMenu extends Controller
         $this->document->addStyle('view/stylesheet/d_admin_menu/d_admin_menu_editor.css');
 
         $url = '';
-        $data['module_link'] = HTTPS_SERVER . 'index.php?route=' . $this->route . '&token=' . $this->session->data['token'] . $url;
+        $data['module_link'] = HTTPS_SERVER . 'index.php?route=' . $this->route . '&token=' . $this->session->data['token'] . $url; //////
 
         if (isset($this->request->get['store_id'])) {
             $url .= '&store_id=' . $this->store_id;
@@ -216,10 +214,9 @@ class ControllerModuleDAdminMenu extends Controller
         }
         $data['setting'] = $this->model_module_d_admin_menu->getSetting($data['setting_id']);
 
-
         $data[$this->codename . '_status'] = $data['setting']['status'];
 
-        $data['standart_menu'] = $this->load->view('module/d_admin_menu_standart_section.tpl', array("standart_menu_data" => $data['setting']['main_menu']['menu_data']));
+        $data['standart_menu'] = $this->load->view('module/d_admin_menu_standart_section.tpl', array("standart_menu_data" => $data['setting']['main_menu']['menu_data'])); /////
 
 
         $data['custom_menu'] = $this->load->view('module/d_admin_menu_custom_section.tpl', array("custom_menu_data"   => $data['setting']['custom_menu'],
@@ -290,9 +287,33 @@ class ControllerModuleDAdminMenu extends Controller
         }
     }
 
-    public function getAppropriateLanguage()
+    public function fillMenuWithIds()
     {
         $standart_menu = $this->getAppropriateConfig();
+
+        $temp_id = 1;
+
+        foreach ($standart_menu as $sm_key => $sm_value) {
+            $standart_menu[$sm_key]['id'] = $temp_id;
+            $temp_id = $temp_id + 1;
+
+            foreach ($sm_value['children'] as $sm_key_2 => $sm_value_2) {
+                $standart_menu[$sm_key]['children'][$sm_key_2]['id'] = $temp_id;
+                $temp_id = $temp_id + 1;
+
+                foreach ($sm_value_2['children'] as $sm_key_3 => $sm_value_3) {
+                    $standart_menu[$sm_key]['children'][$sm_key_2]['children'][$sm_key_3]['id'] = $temp_id;
+                    $temp_id = $temp_id + 1;
+                }
+            }
+        }
+
+        return $standart_menu;
+    }
+
+    public function getAppropriateLanguage()
+    {
+        $standart_menu = $this->fillMenuWithIds();
 
         // first level
         foreach ($standart_menu as $sm_key => $sm_value) {
