@@ -587,7 +587,6 @@ class ControllerModuleDAdminMenu extends Controller
                 }
 
                 foreach ($menus_data as $md_value) {
-                    $fc_icon = ''; $fc_name = ''; $fc_link = '';
                     if ('custom-menu[' . $cnd_value['id'] . '][icon]' == $md_value['name']) {
                         $fc_icon = $md_value['value'];
                     }
