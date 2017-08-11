@@ -4,7 +4,7 @@ $_['d_admin_menu'] = [
             'icon' => "fa-dashboard",
             'name' => "Dashboard",
             'lng_name' => "text_dashboard",
-            'href' => "index.php?route=common/dashboard&token=",
+            'href' => "index.php?route=common/dashboard&",
             'children' => []
         ],
         1 => [
@@ -17,7 +17,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Categories",
                     'lng_name' => "text_category",
-                    'href' => "index.php?route=catalog/category&token=",
+                    'href' => "index.php?route=catalog/category&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -25,7 +25,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Products",
                     'lng_name' => "text_product",
-                    'href' => "index.php?route=catalog/product&token=",
+                    'href' => "index.php?route=catalog/product&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -33,7 +33,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Recurring Profiles",
                     'lng_name' => "text_recurring",
-                    'href' => "index.php?route=catalog/recurring&token=",
+                    'href' => "index.php?route=catalog/recurring&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -41,7 +41,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Filters",
                     'lng_name' => "text_filter",
-                    'href' => "index.php?route=catalog/filter&token=",
+                    'href' => "index.php?route=catalog/filter&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -55,7 +55,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Attributes",
                             'lng_name' => "text_attribute",
-                            'href' => "index.php?route=catalog/attribute&token=",
+                            'href' => "index.php?route=catalog/attribute&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -63,7 +63,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Attribute Groups",
                             'lng_name' => "text_attribute_group",
-                            'href' => "index.php?route=catalog/attribute_group&token=",
+                            'href' => "index.php?route=catalog/attribute_group&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -74,7 +74,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Options",
                     'lng_name' => "text_option",
-                    'href' => "index.php?route=catalog/option&token=",
+                    'href' => "index.php?route=catalog/option&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -82,7 +82,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Manufactures",
                     'lng_name' => "text_manufacturer",
-                    'href' => "index.php?route=catalog/manufacturer&token=",
+                    'href' => "index.php?route=catalog/manufacturer&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -90,7 +90,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Downloads",
                     'lng_name' => "text_download",
-                    'href' => "index.php?route=catalog/download&token=",
+                    'href' => "index.php?route=catalog/download&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -98,7 +98,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Reviews",
                     'lng_name' => "text_review",
-                    'href' => "index.php?route=catalog/review&token=",
+                    'href' => "index.php?route=catalog/review&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -106,7 +106,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Information",
                     'lng_name' => "text_information",
-                    'href' => "index.php?route=catalog/information&token=",
+                    'href' => "index.php?route=catalog/information&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -123,7 +123,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Extension Installer",
                     'lng_name' => "text_installer",
-                    'href' => "index.php?route=extension/installer&token=",
+                    'href' => "index.php?route=extension/installer&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -131,14 +131,14 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Extensions",
                     'lng_name' => "text_extension",
-                    'href' => "index.php?route=extension/extension&token=",
+                    'href' => "index.php?route=extension/extension&",
                     'children' => []
                 ],
                 2 => [
                     'icon' => ">>",
                     'name' => "Modifications",
                     'lng_name' => "text_modification",
-                    'href' => "index.php?route=extension/modification&token=",
+                    'href' => "index.php?route=extension/modification&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -146,7 +146,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Events",
                     'lng_name' => "text_event",
-                    'href' => "index.php?route=extension/event&token=",
+                    'href' => "index.php?route=extension/event&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -163,7 +163,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Layouts",
                     'lng_name' => "text_layout",
-                    'href' => "index.php?route=design/layout&token=",
+                    'href' => "index.php?route=design/layout&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -171,7 +171,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Banners",
                     'lng_name' => "text_banner",
-                    'href' => "index.php?route=design/banner&token=",
+                    'href' => "index.php?route=design/banner&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -187,7 +187,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Orders",
                     'lng_name' => "text_order",
-                    'href' => "index.php?route=sale/order&token=",
+                    'href' => "index.php?route=sale/order&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -195,7 +195,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Recurring Profiles",
                     'lng_name' => "text_recurring",
-                    'href' => "index.php?route=sale/recurring&token=",
+                    'href' => "index.php?route=sale/recurring&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -203,7 +203,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Recurring Profiles",
                     'lng_name' => "text_return",
-                    'href' => "index.php?route=sale/return&token=",
+                    'href' => "index.php?route=sale/return&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -217,7 +217,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Gift Vouchers",
                             'lng_name' => "text_voucher",
-                            'href' => "index.php?route=sale/voucher&token=",
+                            'href' => "index.php?route=sale/voucher&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -225,7 +225,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Voucher Themes",
                             'lng_name' => "text_voucher_theme",
-                            'href' => "index.php?route=sale/voucher_theme&token=",
+                            'href' => "index.php?route=sale/voucher_theme&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -244,7 +244,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Customers",
                     'lng_name' => "text_customer",
-                    'href' => "index.php?route=customer/customer&token=",
+                    'href' => "index.php?route=customer/customer&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -252,7 +252,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Customer Groups",
                     'lng_name' => "text_customer_group",
-                    'href' => "index.php?route=customer/customer_group&token=",
+                    'href' => "index.php?route=customer/customer_group&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -260,7 +260,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Custom Fields",
                     'lng_name' => "text_custom_field",
-                    'href' => "index.php?route=customer/custom_field&token=",
+                    'href' => "index.php?route=customer/custom_field&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -276,7 +276,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Marketing",
                     'lng_name' => "text_marketing",
-                    'href' => "index.php?route=marketing/marketing&token=",
+                    'href' => "index.php?route=marketing/marketing&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -284,7 +284,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Affiliates",
                     'lng_name' => "text_affiliate",
-                    'href' => "index.php?route=marketing/affiliate&token=",
+                    'href' => "index.php?route=marketing/affiliate&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -292,7 +292,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Coupons",
                     'lng_name' => "text_coupon",
-                    'href' => "index.php?route=marketing/coupon&token=",
+                    'href' => "index.php?route=marketing/coupon&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -300,7 +300,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Mail",
                     'lng_name' => "text_contact",
-                    'href' => "index.php?route=marketing/contact&token=",
+                    'href' => "index.php?route=marketing/contact&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -316,7 +316,7 @@ $_['d_admin_menu'] = [
                     'icon' => ">>",
                     'name' => "Settings",
                     'lng_name' => "text_setting",
-                    'href' => "index.php?route=setting/store&token=",
+                    'href' => "index.php?route=setting/store&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -330,7 +330,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Users",
                             'lng_name' => "text_users",
-                            'href' => "index.php?route=user/user&token=",
+                            'href' => "index.php?route=user/user&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -338,7 +338,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "User Groups",
                             'lng_name' => "text_user_group",
-                            'href' => "index.php?route=user/user_permission&token=",
+                            'href' => "index.php?route=user/user_permission&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -346,7 +346,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "API",
                             'lng_name' => "text_api",
-                            'href' => "index.php?route=user/api&token=",
+                            'href' => "index.php?route=user/api&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -363,7 +363,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Store Location",
                             'lng_name' => "text_location",
-                            'href' => "index.php?route=localisation/location&token=",
+                            'href' => "index.php?route=localisation/location&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -371,7 +371,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Languages",
                             'lng_name' => "text_language",
-                            'href' => "index.php?route=localisation/language&token=",
+                            'href' => "index.php?route=localisation/language&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -379,7 +379,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Currencies",
                             'lng_name' => "text_currency",
-                            'href' => "index.php?route=localisation/currency&token=",
+                            'href' => "index.php?route=localisation/currency&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -387,7 +387,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Stock Statuses",
                             'lng_name' => "text_stock_status",
-                            'href' => "index.php?route=localisation/stock_status&token=",
+                            'href' => "index.php?route=localisation/stock_status&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -395,7 +395,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Order Statuses",
                             'lng_name' => "text_order_status",
-                            'href' => "index.php?route=localisation/order_status&token=",
+                            'href' => "index.php?route=localisation/order_status&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -409,7 +409,7 @@ $_['d_admin_menu'] = [
                                     'icon' => ">>",
                                     'name' => "Return Statuses",
                                     'lng_name' => "text_return_status",
-                                    'href' => "index.php?route=localisation/return_status&token=",
+                                    'href' => "index.php?route=localisation/return_status&",
                                     'children' => [],
                                     'is_visible' => 1
                                 ],
@@ -417,7 +417,7 @@ $_['d_admin_menu'] = [
                                     'icon' => ">>",
                                     'name' => "Return Actions",
                                     'lng_name' => "text_return_action",
-                                    'href' => "index.php?route=localisation/return_action&token=",
+                                    'href' => "index.php?route=localisation/return_action&",
                                     'children' => [],
                                     'is_visible' => 1
                                 ],
@@ -425,7 +425,7 @@ $_['d_admin_menu'] = [
                                     'icon' => ">>",
                                     'name' => "Return Reasons",
                                     'lng_name' => "text_return_reason",
-                                    'href' => "index.php?route=localisation/return_reason&token=",
+                                    'href' => "index.php?route=localisation/return_reason&",
                                     'children' => [],
                                     'is_visible' => 1
                                 ],
@@ -436,7 +436,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Countries",
                             'lng_name' => "text_country",
-                            'href' => "index.php?route=localisation/country&token=",
+                            'href' => "index.php?route=localisation/country&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -444,7 +444,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Zones",
                             'lng_name' => "text_zone",
-                            'href' => "index.php?route=localisation/zone&token=",
+                            'href' => "index.php?route=localisation/zone&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -452,7 +452,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Geo Zones",
                             'lng_name' => "text_geo_zone",
-                            'href' => "index.php?route=localisation/geo_zone&token=",
+                            'href' => "index.php?route=localisation/geo_zone&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -466,7 +466,7 @@ $_['d_admin_menu'] = [
                                     'icon' => ">>",
                                     'name' => "Taxs Classes",
                                     'lng_name' => "text_tax_class",
-                                    'href' => "index.php?route=localisation/tax_class&token=",
+                                    'href' => "index.php?route=localisation/tax_class&",
                                     'children' => [],
                                     'is_visible' => 1
                                 ],
@@ -474,7 +474,7 @@ $_['d_admin_menu'] = [
                                     'icon' => ">>",
                                     'name' => "Tax Rates",
                                     'lng_name' => "text_tax_rate",
-                                    'href' => "index.php?route=localisation/tax_rate&token=",
+                                    'href' => "index.php?route=localisation/tax_rate&",
                                     'children' => [],
                                     'is_visible' => 1
                                 ],
@@ -484,7 +484,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Length Classes",
                             'lng_name' => "text_length_class",
-                            'href' => "index.php?route=localisation/length_class&token=",
+                            'href' => "index.php?route=localisation/length_class&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -492,7 +492,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Weight Classes",
                             'lng_name' => "text_weight_class",
-                            'href' => "index.php?route=localisation/weight_class&token=",
+                            'href' => "index.php?route=localisation/weight_class&",
                             'children' => [],
                             'is_visible' => 1
                         ],
@@ -509,7 +509,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Uploads",
                             'lng_name' => "text_upload",
-                            'href' => "index.php?route=tool/upload&token=",
+                            'href' => "index.php?route=tool/upload&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -517,7 +517,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Backup / Restore",
                             'lng_name' => "text_backup",
-                            'href' => "index.php?route=tool/backup&token=",
+                            'href' => "index.php?route=tool/backup&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -525,7 +525,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Error Logs",
                             'lng_name' => "text_log",
-                            'href' => "index.php?route=tool/log&token=",
+                            'href' => "index.php?route=tool/log&",
                             'children' => [],
                             'is_visible' => 1,
                         ]
@@ -550,7 +550,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Orders",
                             'lng_name' => "text_report_sale_order",
-                            'href' => "index.php?route=report/sale_order&token=",
+                            'href' => "index.php?route=report/sale_order&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -558,7 +558,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Tax",
                             'lng_name' => "text_report_sale_tax",
-                            'href' => "index.php?route=report/sale_tax&token=",
+                            'href' => "index.php?route=report/sale_tax&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -566,7 +566,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Shipping",
                             'lng_name' => "text_report_sale_shipping",
-                            'href' => "index.php?route=report/sale_shipping&token=",
+                            'href' => "index.php?route=report/sale_shipping&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -574,7 +574,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Returns",
                             'lng_name' => "text_report_sale_return",
-                            'href' => "index.php?route=report/sale_return&token=",
+                            'href' => "index.php?route=report/sale_return&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -582,7 +582,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Coupons",
                             'lng_name' => "text_report_sale_coupon",
-                            'href' => "index.php?route=report/sale_coupon&token=",
+                            'href' => "index.php?route=report/sale_coupon&",
                             'children' => [],
                             'is_visible' => 1,
                         ]
@@ -599,7 +599,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Viewed",
                             'lng_name' => "text_report_product_viewed",
-                            'href' => "index.php?route=report/product_viewed&token=",
+                            'href' => "index.php?route=report/product_viewed&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -607,7 +607,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Orders",
                             'lng_name' => "text_report_product_purchased",
-                            'href' => "index.php?route=report/product_purchased&token=",
+                            'href' => "index.php?route=report/product_purchased&",
                             'children' => [],
                             'is_visible' => 1,
                         ]
@@ -624,7 +624,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Customers Online",
                             'lng_name' => "text_report_customer_online",
-                            'href' => "index.php?route=report/customer_online&token=",
+                            'href' => "index.php?route=report/customer_online&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -632,7 +632,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Customer Activity",
                             'lng_name' => "text_report_customer_activity",
-                            'href' => "index.php?route=report/customer_activity&token=",
+                            'href' => "index.php?route=report/customer_activity&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -640,7 +640,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Customer Searches",
                             'lng_name' => "text_report_customer_search",
-                            'href' => "index.php?route=report/customer_search&token=",
+                            'href' => "index.php?route=report/customer_search&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -648,7 +648,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Orders",
                             'lng_name' => "text_report_customer_order",
-                            'href' => "index.php?route=report/customer_order&token=",
+                            'href' => "index.php?route=report/customer_order&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -656,7 +656,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Reward Points",
                             'lng_name' => "text_report_customer_reward",
-                            'href' => "index.php?route=report/customer_reward&token=",
+                            'href' => "index.php?route=report/customer_reward&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -664,7 +664,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Credit",
                             'lng_name' => "text_report_customer_credit",
-                            'href' => "index.php?route=report/customer_credit&token=",
+                            'href' => "index.php?route=report/customer_credit&",
                             'children' => [],
                             'is_visible' => 1,
                         ]
@@ -681,7 +681,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Marketing",
                             'lng_name' => "text_report_marketing",
-                            'href' => "index.php?route=report/marketing&token=",
+                            'href' => "index.php?route=report/marketing&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -689,7 +689,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Affiliates",
                             'lng_name' => "text_report_affiliate",
-                            'href' => "index.php?route=report/affiliate&token=",
+                            'href' => "index.php?route=report/affiliate&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
@@ -697,7 +697,7 @@ $_['d_admin_menu'] = [
                             'icon' => ">>",
                             'name' => "Affiliate Activity",
                             'lng_name' => "text_report_affiliate_activity",
-                            'href' => "index.php?route=report/affiliate_activity&token=",
+                            'href' => "index.php?route=report/affiliate_activity&",
                             'children' => [],
                             'is_visible' => 1,
                         ]

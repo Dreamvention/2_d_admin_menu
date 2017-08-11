@@ -1,59 +1,59 @@
-<?php echo $header; ?><?php echo $column_left; ?>
+{{ header }}{{ column_left }}
 
 <div id="content">
     <div class="page-header">
         <div class="container-fluid">
             <div class="form-inline pull-right">
-                <button id="save_and_stay" data-toggle="tooltip" title="<?php echo $button_save_and_stay; ?>" class="btn btn-success"><i class="fa fa-save"></i></button>
-                <a href="<?php echo $cancel; ?>" data-toggle="tooltip" title="<?php echo $button_cancel; ?>" class="btn btn-default"><i class="fa fa-reply"></i></a>
+                <button id="save_and_stay" data-toggle="tooltip" title="{{ button_save_and_stay }}" class="btn btn-success"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
             </div>
-            <h1><?php echo $heading_title; ?> <?php echo $version; ?></h1>
+            <h1>{{ heading_title }} {{ version }}</h1>
             <ul class="breadcrumb">
-                <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-                <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
-                <?php } ?>
+                {% for breadcrumb in breadcrumbs %}
+                <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endfor %}
             </ul>
         </div>
     </div>
 
     <div class="container-fluid">
-        <?php if (!empty($error['warning'])) { ?>
+        {% if (error['warning'] is not empty) %}
         <div class="alert alert-danger">
-            <i class="fa fa-exclamation-circle"></i> <?php echo $error['warning']; ?>
+            <i class="fa fa-exclamation-circle"></i> {{ error['warning'] }}
             <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
-        <?php } ?>
-        <?php if (!empty($error['shopunity'])) { ?>
+        {% endif %}
+        {% if (error['shopunity'] is not empty) %}
         <div class="alert alert-danger">
             <i class="fa fa-exclamation-circle"></i>
-            <?php echo $error['shopunity']; ?>
+            {{ error['shopunity'] }}
         </div>
-        <?php } ?>
-        <?php if (!empty($success)) { ?>
+        {% endif %}
+        {% if (success is not empty) %}
         <div class="alert alert-success">
-            <i class="fa fa-exclamation-circle"></i> <?php echo $success; ?>
+            <i class="fa fa-exclamation-circle"></i> {{ success }}
             <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
-        <?php } ?>
+        {% endif %}
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $text_edit; ?></h3>
+                <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
             </div>
             <div class="panel-body">
-                <form action="<?php echo $save_and_stay; ?>" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+                <form action="{{ save_and_stay }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
 
                   <ul  class="nav nav-tabs">
                     <li class="active">
                         <a href="#setting" data-toggle="tab">
                             <span class="fa fa-cog"></span>
-                            <?php echo $tab_setting; ?>
+                            {{ tab_setting }}
                         </a>
                     </li>
                     <li>
                         <a href="#instruction" data-toggle="tab">
                             <span class="fa fa-graduation-cap"></span>
-                            <?php echo $tab_instruction; ?>
+                            {{ tab_instruction }}
                         </a>
                     </li>
                   </ul>
@@ -68,16 +68,16 @@
                                 <ul class="nav nav-pills s-nav-stacked">
                                   <li class="active">
                                     <a href="#d_home" data-toggle="tab">
-                                      <span class="fa fa-home fa-fw"></span> <span><?php echo $text_home; ?></span>
+                                      <span class="fa fa-home fa-fw"></span> <span>{{ text_home }}</span>
                                     </a>
                                   </li>
-                                  <?php if($setting_id) { ?>
+                                  {% if (setting_id) %}
                                   <li>
                                     <a href="#d_menu" data-toggle="tab">
-                                      <span class="fa fa-bookmark-o fa-fw"></span> <span><?php echo $text_menu; ?></span>
+                                      <span class="fa fa-bookmark-o fa-fw"></span> <span>{{ text_menu }}</span>
                                     </a>
                                   </li>
-                                  <?php } ?>
+                                  {% endif %}
                                 </ul>
                               </div> -->
 
@@ -92,17 +92,17 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="col-sm-4 control-label" for="input_status"><?php echo $entry_status; ?></label>
+                                            <label class="col-sm-4 control-label" for="input_status">{{ entry_status }}</label>
                                             <div class="col-sm-8">
-                                                <input type="checkbox" value="1" name="<?php echo $id; ?>_status" id="input_status" data-on-color="success" data-bs-status="true" <?php echo (${$id.'_status'} == '1') ? 'checked="checked"' : ''; ?> class="form-control" />
+                                                <input type="checkbox" value="1" name="{{ id }}_status" id="input_status" data-on-color="success" data-bs-status="true"{{ d_admin_menu_status == '1' ? 'checked="checked"' : '' }} class="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="col-sm-4 control-label" for="button_support_email"><?php echo $entry_support; ?></label>
+                                            <label class="col-sm-4 control-label" for="button_support_email">{{ entry_support }}</label>
                                             <div class="col-sm-4">
-                                                <a href="mailto:<?php echo $support_email; ?>?Subject=Request Support: <?php echo $heading_title; ?>&body=Shop: <?php echo HTTP_SERVER; ?>" id="button_support_email" class="btn btn-primary btn-block"><i class="fa fa-support"></i> <?php echo $button_support_email; ?></a>
+                                                <a href="mailto:{{ support_email }}?Subject=Request Support: {{ heading_title }}&body=Shop: {{ constant('HTTP_SERVER') }}" id="button_support_email" class="btn btn-primary btn-block"><i class="fa fa-support"></i> {{ button_support_email }}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -115,11 +115,11 @@
                                     <!-- STANDART MENU -->
                                     <div class="panel-group col-sm-5">
                                     <h3 class="page-header">
-                                        <span class="fa fa-bookmark-o fa-fw"></span> <span><?php echo $text_standart_menu; ?></span>
+                                        <span class="fa fa-bookmark-o fa-fw"></span> <span>{{ text_standart_menu }}</span>
                                     </h3>
                                     <div id="standart-menu">
                                       <div class="dd nestable" id="nestable-standart">
-                                        <?php echo $standart_menu; ?>
+                                        {{ standart_menu }}
                                       </div>
                                     </div>
                                     </div>
@@ -127,11 +127,11 @@
                                     <!-- CUSTOM MENU -->
                                     <div class="panel-group col-sm-7" style="float: right;">
                                     <h3 class="page-header">
-                                        <span class="fa fa-bookmark fa-fw"></span> <span><?php echo $text_custom_menu; ?></span>
+                                        <span class="fa fa-bookmark fa-fw"></span> <span>{{ text_custom_menu }}</span>
                                     </h3>
                                     <div id="custom-menu">
                                       <div class="dd nestable" id="nestable-custom">
-                                        <?php echo $custom_menu; ?>
+                                        {{ custom_menu }}
                                       </div>
                                     </div>
                                     </div>
@@ -148,7 +148,7 @@
 
                       <div class="tab-pane" id="instruction" >
                           <div class="tab-body">
-                              <?php echo $text_instruction; ?>
+                              {{ text_instruction }}
                           </div>
                       </div>
 
@@ -166,9 +166,9 @@
 
 <script>
 
-  function handlebar_templating(some_html, some_json)
+  function goose_templating(some_html, some_json)
   {
-    var re = /{{([^}}]+)?}}/g, match;
+    var re = /%%([^%%]+)?%%/g, match;
     while(match = re.exec(some_html)) {
         some_html = some_html.replace(match[0], some_json[match[1]]);
     };
@@ -276,7 +276,7 @@
         var tmp_json = {
           new_custom_id: tmp_new_id
         };
-        html = handlebar_templating(html, tmp_json);
+        html = goose_templating(html, tmp_json);
         $('.main-custom-list').append(html);
         console.log('create custom element ID: ', tmp_new_id);
 
@@ -339,4 +339,4 @@
 
 </script>
 
-<?php echo $footer; ?>
+{{ footer }}

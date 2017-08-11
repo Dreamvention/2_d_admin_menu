@@ -1,6 +1,6 @@
 <?php
 
-class ModelModuleDAdminMenu extends Model
+class ModelExtensionModuleDAdminMenu extends Model
 {
     public function __construct($registry)
     {

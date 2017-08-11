@@ -19,8 +19,9 @@ $_['text_menu']                 = 'Edit Menu';
 $_['text_standart_menu']        = 'Standart Menu';
 $_['text_custom_menu']          = 'Custom Menu';
 
+$_['text_success_setting_created'] = 'Setting succesfully created';
 $_['text_intro_create_setting'] = 'Please, create setting first!';
-
+$_['text_modules']              = 'Modules';
 
 // support
 $_['text_support'] = 'Support';
