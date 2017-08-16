@@ -55,7 +55,6 @@
         "admin/model/extension/module/d_admin_menu.php",
 
         "admin/language/en-gb/extension/module/d_admin_menu.php",
-        "admin/language/en-gb/extension/module/d_admin_menu_instruction.php",
         "admin/view/template/extension/module/d_admin_menu.twig",
         "admin/view/template/extension/module/d_admin_menu_editor.twig"
     ],
@@ -71,11 +70,11 @@
         },
         {
             "version": "0.1.0",
-            "change": "Made the rockets fly."
+            "change": "Made the rockets fly"
         },
         {
             "version": "0.0.1",
-            "change": "Initial Commit."
+            "change": "Initial Commit"
         }
     ]
 }

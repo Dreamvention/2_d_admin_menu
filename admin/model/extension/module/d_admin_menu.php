@@ -5,6 +5,9 @@ class ModelExtensionModuleDAdminMenu extends Model
     public function __construct($registry)
     {
         parent::__construct($registry);
+
+        $this->load->language($this->route);
+
         if(!defined('DIR_ROOT')){
             define('DIR_ROOT', substr_replace(DIR_SYSTEM, '/', -8));
         }
@@ -116,6 +119,7 @@ class ModelExtensionModuleDAdminMenu extends Model
                 SET `name` = '" . $this->db->escape($data['name']) . "',
                     `value` = '" . $this->db->escape(json_encode($data)) . "'
                 WHERE setting_id = '" . (int)$setting_id . "'");
+        return $setting_id;
     }
 
     public function deleteSetting($setting_id)
@@ -126,10 +130,180 @@ class ModelExtensionModuleDAdminMenu extends Model
 
 
 
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////                         HELPER FUNCTIONS                          /////////
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    public function some_sort(&$some_array)
+    {
+        usort($some_array, function ($a, $b)
+        {
+            if ($a['sort_order'] == $b['sort_order']) {
+                return 0;
+            }
+            return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
+        });
+    }
+
+    public function getAppropriateConfig()
+    {
+        if ((VERSION >= '2.0.0.0') && (VERSION < '2.3.0.0')) {
+
+            $this->load->config('d_admin_menu/d_admin_menu_201');
+
+        } elseif ((VERSION >= '2.3.0.0') && (VERSION < '3.0.0.0')) {
+
+            $this->load->config('d_admin_menu/d_admin_menu_230');
+
+        } elseif (VERSION >='3.0.0.0') {
+
+            $this->load->config('d_admin_menu/d_admin_menu_302');
+        }
+        return $this->config->get('menu_data');
+    }
+
+    public function getLanguage($menu_item_lng_name)
+    {
+        $lang_path = $this->getAppropriateConfig()['lang_path'];
+
+        $lng = new Language();
+        $lng->load($lang_path);
+
+        if ($lng->get($menu_item_lng_name) &&
+            $lng->get($menu_item_lng_name) != $menu_item_lng_name) {
+            return $lng->get($menu_item_lng_name);
+        } else {
+            return false;
+        }
+    }
+
+    public function fillMenuWithIds()
+    {
+        $standart_menu = $this->getAppropriateConfig()['menu'];
+
+        $temp_id = 1;
+
+        foreach ($standart_menu as $sm_key => $sm_value) {
+            $standart_menu[$sm_key]['id'] = $temp_id;
+            $temp_id = $temp_id + 1;
+
+            foreach ($sm_value['children'] as $sm_key_2 => $sm_value_2) {
+                $standart_menu[$sm_key]['children'][$sm_key_2]['id'] = $temp_id;
+                $temp_id = $temp_id + 1;
+
+                foreach ($sm_value_2['children'] as $sm_key_3 => $sm_value_3) {
+                    $standart_menu[$sm_key]['children'][$sm_key_2]['children'][$sm_key_3]['id'] = $temp_id;
+                    $temp_id = $temp_id + 1;
+                }
+            }
+        }
+
+        return $standart_menu;
+    }
+
+    public function fillMenuWithLanguage($standart_menu)
+    {
+        // first level
+        foreach ($standart_menu as $sm_key => $sm_value) {
+
+            if (array_key_exists('lng_name', $sm_value)) {
+                if ($this->getLanguage($sm_value['lng_name']) !== false) {
+                    $standart_menu[$sm_key]['name'] = $this->getLanguage($sm_value['lng_name']);
+                }
+            }
+
+            if ($sm_value['children']) {
+
+                // second level
+                foreach ($sm_value['children'] as $sm_key_2 => $sm_value_2) {
+
+                    if (array_key_exists('lng_name', $sm_value_2)) {
+                        if ($this->getLanguage($sm_value_2['lng_name']) !== false) {
+                            $standart_menu[$sm_key]['children'][$sm_key_2]['name'] = $this->getLanguage($sm_value_2['lng_name']);
+                        }
+                    }
+
+                    if ($sm_value_2['children']) {
+
+                        // third level
+                        foreach ($sm_value_2['children'] as $sm_key_3 => $sm_value_3) {
+
+                            if (array_key_exists('lng_name', $sm_value_3)) {
+                                if ($this->getLanguage($sm_value_3['lng_name']) !== false) {
+                                    $standart_menu[$sm_key]['children'][$sm_key_2]['children'][$sm_key_3]['name'] = $this->getLanguage($sm_value_3['lng_name']);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $standart_menu;
+    }
+
+    public function getModulesForLinks()
+    {
+        $tmp_mdls_data = array();
+        $cat_files = glob(DIR_APPLICATION . 'controller/extension/extension/*.php', GLOB_BRACE);
+
+        foreach ($cat_files as $c_file) {
+            $extension = basename($c_file, '.php');
+
+            // Compatibility code for old extension folders
+            $this->load->language('extension/extension/' . $extension);
+
+            if ($this->user->hasPermission('access', 'extension/extension/' . $extension)) {
+                $cat_files = glob(DIR_APPLICATION . 'controller/extension/' . $extension . '/*.php', GLOB_BRACE);
+
+                $tmp_mdls_data[] = array(
+                    'code' => $extension,
+                    'text' => $this->language->get('heading_title'),
+                    'extra'=> $this->getExtensionList($extension)
+                );
+            }
+        }
+
+        return $tmp_mdls_data;
+    }
+
+    private function getExtensionList($category_shortname)
+    {
+        $extra_data = array();
+
+        // Compatibility code for old extension folders
+        $files = glob(DIR_APPLICATION . 'controller/{extension/' . $category_shortname . ',' . $category_shortname . '}/*.php', GLOB_BRACE);
+
+        if ($files) {
+            foreach ($files as $file) {
+                $extension = basename($file, '.php');
+
+                $this->load->language('extension/' . $category_shortname . '/' . $extension);
+
+                $extra_data[] = array(
+                    'name'          => $this->language->get('heading_title'),
+                    'shortname'     => $extension,
+                    'edit'          => 'extension/'. $category_shortname .'/' . $extension
+                );
+            }
+        }
+
+        $sort_order = array();
+
+        foreach ($extra_data as $key => $value) {
+            $sort_order[$key] = $value['name'];
+        }
+
+        array_multisort($sort_order, SORT_ASC, $extra_data);
+
+        return $extra_data;
+    }
+
+
 
 
     /////////////////////////////////////////////////////////////////////////////////////
-    /////////                         HELPER FUNCTIONS                          /////////
+    /////////                           (*)>(*)>(*)>                            /////////
     /////////////////////////////////////////////////////////////////////////////////////
 
     /*

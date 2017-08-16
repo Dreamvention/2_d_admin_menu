@@ -327,10 +327,8 @@
         },
         success: function(response) {
             alertify.success('Setting saved');
-            // alertify.message('Please refresh your page');
-            console.log(response);
         },
-        error: function() {
+        error: function(response) {
             alertify.error('Something went wrong :(');
         }
     });

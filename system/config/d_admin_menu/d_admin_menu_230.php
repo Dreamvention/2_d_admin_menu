@@ -1,5 +1,11 @@
 <?php
-$_['d_admin_menu'] = [
+$_;
+$_['menu_data'] = [
+
+    'lang_path' => 'common/column_left',
+
+    'menu' => [
+
         0 => [
             'icon' => "fa-dashboard",
             'name' => "Dashboard",
@@ -706,4 +712,5 @@ $_['d_admin_menu'] = [
                 ]
             ],
         ]
+    ]
 ];
