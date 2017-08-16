@@ -153,7 +153,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         // Action
         $data['module_link'] = $this->model_extension_d_opencart_patch_url->link($this->route);
         $data['cancel'] = $this->model_extension_d_opencart_patch_url->getExtensionLink('module');
-        $data['save_and_stay'] = $this->model_extension_d_opencart_patch_url->link($this->route.'/save_and_stay', $url);;
+        $data['save_and_stay'] = $this->model_extension_d_opencart_patch_url->link($this->route.'/save_and_stay', $url);
 
         // Success & error
         if (isset($this->session->data['success'])) {

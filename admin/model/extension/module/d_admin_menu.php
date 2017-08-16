@@ -147,9 +147,13 @@ class ModelExtensionModuleDAdminMenu extends Model
 
     public function getAppropriateConfig()
     {
-        if ((VERSION >= '2.0.0.0') && (VERSION < '2.3.0.0')) {
+        if ((VERSION >= '2.0.0.0') && (VERSION < '2.0.3.1')) {
 
             $this->load->config('d_admin_menu/d_admin_menu_201');
+
+        } elseif ((VERSION >= '2.0.3.1') && (VERSION < '2.3.0.0')) {
+
+            $this->load->config('d_admin_menu/d_admin_menu_230');
 
         } elseif ((VERSION >= '2.3.0.0') && (VERSION < '3.0.0.0')) {
 
