@@ -145,8 +145,7 @@ $_['menu_data'] = [
                     'name' => "Modules",
                     'lng_name' => "text_module",
                     'href' => "index.php?route=extension/module&",
-                    'children' => [],
-                    'is_visible' => 1
+                    'children' => []
                 ],
                 3 => [
                     'icon' => ">>",

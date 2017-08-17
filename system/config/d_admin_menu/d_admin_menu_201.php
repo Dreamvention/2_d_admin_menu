@@ -145,8 +145,7 @@ $_['menu_data'] = [
                     'name' => "Modules",
                     'lng_name' => "text_module",
                     'href' => "index.php?route=extension/module&",
-                    'children' => [],
-                    'is_visible' => 1
+                    'children' => []
                 ],
                 3 => [
                     'icon' => ">>",
@@ -373,7 +372,8 @@ $_['menu_data'] = [
                             'children' => [],
                             'is_visible' => 1
                         ],
-                    ]
+                    ],
+                    'is_visible' => 1
                 ],
                 2 => [
                     'icon' => ">>",
@@ -588,7 +588,6 @@ $_['menu_data'] = [
                     'is_visible' => 1,
                 ]
             ],
-            'is_visible' => 1,
         ],
         7 => [
             'icon' => "fa-bar-chart-o",
