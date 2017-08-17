@@ -254,7 +254,7 @@ class ModelExtensionModuleDAdminMenu extends Model
     {
         $tmp_mdls_data = array();
 
-        // before 230 fixx
+        // before 230 fix
         $path_fix = (VERSION >= '2.3.0.0') ? 'extension/' : '';
 
         $cat_files = glob(DIR_APPLICATION . 'controller/extension/'.$path_fix.'*.php', GLOB_BRACE);
