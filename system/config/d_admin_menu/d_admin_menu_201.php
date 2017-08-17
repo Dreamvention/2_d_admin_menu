@@ -1,5 +1,4 @@
 <?php
-$_;
 $_['menu_data'] = [
 
     'lang_path' => 'common/menu',
@@ -135,24 +134,49 @@ $_['menu_data'] = [
                 ],
                 1 => [
                     'icon' => ">>",
-                    'name' => "Extensions",
-                    'lng_name' => "text_extension",
-                    'href' => "index.php?route=extension/extension&",
-                    'children' => []
-                ],
-                2 => [
-                    'icon' => ">>",
                     'name' => "Modifications",
                     'lng_name' => "text_modification",
                     'href' => "index.php?route=extension/modification&",
                     'children' => [],
                     'is_visible' => 1
                 ],
+                2 => [
+                    'icon' => ">>",
+                    'name' => "Modules",
+                    'lng_name' => "text_module",
+                    'href' => "index.php?route=extension/module&",
+                    'children' => [],
+                    'is_visible' => 1
+                ],
                 3 => [
                     'icon' => ">>",
-                    'name' => "Events",
-                    'lng_name' => "text_event",
-                    'href' => "index.php?route=extension/event&",
+                    'name' => "Shipping",
+                    'lng_name' => "text_shipping",
+                    'href' => "index.php?route=extension/shipping&",
+                    'children' => [],
+                    'is_visible' => 1
+                ],
+                4 => [
+                    'icon' => ">>",
+                    'name' => "Payments",
+                    'lng_name' => "text_payment",
+                    'href' => "index.php?route=extension/payment&",
+                    'children' => [],
+                    'is_visible' => 1
+                ],
+                5 => [
+                    'icon' => ">>",
+                    'name' => "Order Totals",
+                    'lng_name' => "text_total",
+                    'href' => "index.php?route=extension/total&",
+                    'children' => [],
+                    'is_visible' => 1
+                ],
+                6 => [
+                    'icon' => ">>",
+                    'name' => "Feeds",
+                    'lng_name' => "text_feed",
+                    'href' => "index.php?route=extension/feed&",
                     'children' => [],
                     'is_visible' => 1
                 ],
@@ -160,30 +184,6 @@ $_['menu_data'] = [
             ]
         ],
         3 => [
-            'icon' => "fa-television",
-            'name' => "Design",
-            'lng_name' => "text_design",
-            'href' => "",
-            'children' => [
-                0 => [
-                    'icon' => ">>",
-                    'name' => "Layouts",
-                    'lng_name' => "text_layout",
-                    'href' => "index.php?route=design/layout&",
-                    'children' => [],
-                    'is_visible' => 1
-                ],
-                1 => [
-                    'icon' => ">>",
-                    'name' => "Banners",
-                    'lng_name' => "text_banner",
-                    'href' => "index.php?route=design/banner&",
-                    'children' => [],
-                    'is_visible' => 1
-                ],
-            ]
-        ],
-        4 => [
             'icon' => "fa-shopping-cart",
             'name' => "Sales",
             'lng_name' => "text_sale",
@@ -207,13 +207,53 @@ $_['menu_data'] = [
                 ],
                 2 => [
                     'icon' => ">>",
-                    'name' => "Recurring Profiles",
+                    'name' => "Returns",
                     'lng_name' => "text_return",
                     'href' => "index.php?route=sale/return&",
                     'children' => [],
                     'is_visible' => 1
                 ],
                 3 => [
+                    'icon' => ">>",
+                    'name' => "Customers",
+                    'lng_name' => "text_customer",
+                    'href' => "",
+                    'children' => [
+                        0 => [
+                            'icon' => ">>",
+                            'name' => "Customers",
+                            'lng_name' => "text_customer",
+                            'href' => "index.php?route=sale/customer&",
+                            'children' => [],
+                            'is_visible' => 1
+                        ],
+                        1 => [
+                            'icon' => ">>",
+                            'name' => "Customer Groups",
+                            'lng_name' => "text_customer_group",
+                            'href' => "index.php?route=sale/customer_group&",
+                            'children' => [],
+                            'is_visible' => 1
+                        ],
+                        2 => [
+                            'icon' => ">>",
+                            'name' => "Custom Fields",
+                            'lng_name' => "text_custom_field",
+                            'href' => "index.php?route=sale/custom_field&",
+                            'children' => [],
+                            'is_visible' => 1
+                        ],
+                        3 => [
+                            'icon' => ">>",
+                            'name' => "Banned IP",
+                            'lng_name' => "text_custom_field",
+                            'href' => "index.php?route=sale/custom_ban_ip&",
+                            'children' => [],
+                            'is_visible' => 1
+                        ],
+                    ]
+                ],
+                4 => [
                     'icon' => ">>",
                     'name' => "Gift Vouchers",
                     'lng_name' => "text_voucher",
@@ -238,41 +278,26 @@ $_['menu_data'] = [
                     ],
                     'is_visible' => 1
                 ],
+                5 => [
+                    'icon' => ">>",
+                    'name' => "PayPal",
+                    'lng_name' => "text_paypal",
+                    'href' => "",
+                    'children' => [
+                        0 => [
+                            'icon' => ">>",
+                            'name' => "Search",
+                            'lng_name' => "text_search",
+                            'href' => "index.php?route=payment/pp_express/search&",
+                            'children' => [],
+                            'is_visible' => 1
+                        ],
+                    ],
+                    'is_visible' => 1
+                ]
             ]
         ],
-        5 => [
-            'icon' => "fa-user",
-            'name' => "Customers",
-            'lng_name' => "text_customer",
-            'href' => "",
-            'children' => [
-                0 => [
-                    'icon' => ">>",
-                    'name' => "Customers",
-                    'lng_name' => "text_customer",
-                    'href' => "index.php?route=customer/customer&",
-                    'children' => [],
-                    'is_visible' => 1
-                ],
-                1 => [
-                    'icon' => ">>",
-                    'name' => "Customer Groups",
-                    'lng_name' => "text_customer_group",
-                    'href' => "index.php?route=customer/customer_group&",
-                    'children' => [],
-                    'is_visible' => 1
-                ],
-                2 => [
-                    'icon' => ">>",
-                    'name' => "Custom Fields",
-                    'lng_name' => "text_custom_field",
-                    'href' => "index.php?route=customer/custom_field&",
-                    'children' => [],
-                    'is_visible' => 1
-                ],
-            ]
-        ],
-        6 => [
+        4 => [
             'icon' => "fa-share-alt",
             'name' => "Marketing",
             'lng_name' => "text_marketing",
@@ -312,7 +337,7 @@ $_['menu_data'] = [
                 ],
             ]
         ],
-        7 => [
+        5 => [
             'icon' => "fa-cog",
             'name' => "System",
             'lng_name' => "text_system",
@@ -327,6 +352,30 @@ $_['menu_data'] = [
                     'is_visible' => 1
                 ],
                 1 => [
+                    'icon' => ">>",
+                    'name' => "Design",
+                    'lng_name' => "text_design",
+                    'href' => "",
+                    'children' => [
+                        0 => [
+                            'icon' => ">>",
+                            'name' => "Layouts",
+                            'lng_name' => "text_layout",
+                            'href' => "index.php?route=design/layout&",
+                            'children' => [],
+                            'is_visible' => 1
+                        ],
+                        1 => [
+                            'icon' => ">>",
+                            'name' => "Banners",
+                            'lng_name' => "text_banner",
+                            'href' => "index.php?route=design/banner&",
+                            'children' => [],
+                            'is_visible' => 1
+                        ],
+                    ]
+                ],
+                2 => [
                     'icon' => ">>",
                     'name' => "Users",
                     'lng_name' => "text_users",
@@ -359,7 +408,7 @@ $_['menu_data'] = [
                     ],
                     'is_visible' => 1
                 ],
-                2 => [
+                3 => [
                     'icon' => ">>",
                     'name' => "Localisation",
                     'lng_name' => "text_localisation",
@@ -505,42 +554,43 @@ $_['menu_data'] = [
                     ],
                     'is_visible' => 1,
                 ],
-                3 => [
-                    'icon' => ">>",
-                    'name' => "Tools",
-                    'lng_name' => "text_tools",
-                    'href' => "",
-                    'children' => [
-                        0 => [
-                            'icon' => ">>",
-                            'name' => "Uploads",
-                            'lng_name' => "text_upload",
-                            'href' => "index.php?route=tool/upload&",
-                            'children' => [],
-                            'is_visible' => 1,
-                        ],
-                        1 => [
-                            'icon' => ">>",
-                            'name' => "Backup / Restore",
-                            'lng_name' => "text_backup",
-                            'href' => "index.php?route=tool/backup&",
-                            'children' => [],
-                            'is_visible' => 1,
-                        ],
-                        3 => [
-                            'icon' => ">>",
-                            'name' => "Error Logs",
-                            'lng_name' => "text_log",
-                            'href' => "index.php?route=tool/log&",
-                            'children' => [],
-                            'is_visible' => 1,
-                        ]
-                    ],
-                    'is_visible' => 1,
-                ],
+
             ],
         ],
-        8 => [
+        6 => [
+            'icon' => "fa-wrench",
+            'name' => "Tools",
+            'lng_name' => "text_tools",
+            'href' => "",
+            'children' => [
+                0 => [
+                    'icon' => ">>",
+                    'name' => "Uploads",
+                    'lng_name' => "text_upload",
+                    'href' => "index.php?route=tool/upload&",
+                    'children' => [],
+                    'is_visible' => 1,
+                ],
+                1 => [
+                    'icon' => ">>",
+                    'name' => "Backup / Restore",
+                    'lng_name' => "text_backup",
+                    'href' => "index.php?route=tool/backup&",
+                    'children' => [],
+                    'is_visible' => 1,
+                ],
+                3 => [
+                    'icon' => ">>",
+                    'name' => "Error Logs",
+                    'lng_name' => "text_log",
+                    'href' => "index.php?route=tool/log&",
+                    'children' => [],
+                    'is_visible' => 1,
+                ]
+            ],
+            'is_visible' => 1,
+        ],
+        7 => [
             'icon' => "fa-bar-chart-o",
             'name' => "Reports",
             'lng_name' => "text_reports",

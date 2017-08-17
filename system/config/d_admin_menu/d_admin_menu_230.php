@@ -1,5 +1,4 @@
 <?php
-$_;
 $_['menu_data'] = [
 
     'lang_path' => 'common/column_left',
@@ -207,7 +206,7 @@ $_['menu_data'] = [
                 ],
                 2 => [
                     'icon' => ">>",
-                    'name' => "Recurring Profiles",
+                    'name' => "Return",
                     'lng_name' => "text_return",
                     'href' => "index.php?route=sale/return&",
                     'children' => [],
