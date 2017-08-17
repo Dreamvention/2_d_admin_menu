@@ -206,7 +206,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $setting_name = "default-setting";
         $new_setting = array(
             "name"          => $setting_name,
-            "status"        => 1,
+            "status"        => 0,
             "main_menu"     => array(
                 "version"           => VERSION,
                 "menu_data"         => $this->model_extension_module_d_admin_menu->fillMenuWithLanguage($this->model_extension_module_d_admin_menu->fillMenuWithIds())

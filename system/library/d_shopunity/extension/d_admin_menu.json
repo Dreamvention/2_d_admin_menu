@@ -2,7 +2,7 @@
     "codename": "d_admin_menu",
     "version": "1.0.0",
     "name": "Admin Menu",
-    "description": "Module for changing Admin menu",
+    "description": "Manage your Opencart admin menu to make it fit your needs",
     "index": "extension/module/d_admin_menu",
     "author": {
         "name": "Dreamvention",
@@ -37,8 +37,8 @@
         "url": "extension/extension/module/uninstall&extension=d_admin_menu"
     },
     "support": {
-        "email": "support@shodreamventionpunity.com",
-        "url": "https://dreamvention.com/"
+        "email": "support@dreamvention.com",
+        "url": "https://dreamvention.com/support"
     },
     "required": {
         "d_opencart_patch": ">= 1.0.0",
@@ -53,7 +53,6 @@
 
         "admin/controller/extension/module/d_admin_menu.php",
         "admin/model/extension/module/d_admin_menu.php",
-
         "admin/language/en-gb/extension/module/d_admin_menu.php",
         "admin/view/template/extension/module/d_admin_menu.twig",
         "admin/view/template/extension/module/d_admin_menu_editor.twig",
