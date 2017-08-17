@@ -180,6 +180,14 @@ $_['menu_data'] = [
                     'children' => [],
                     'is_visible' => 1
                 ],
+                7 => [
+                    'icon' => ">>",
+                    'name' => "Anti-Fraud",
+                    'lng_name' => "text_fraud",
+                    'href' => "index.php?route=extension/fraud&",
+                    'children' => [],
+                    'is_visible' => 1
+                ],
 
             ]
         ],
@@ -199,7 +207,7 @@ $_['menu_data'] = [
                 ],
                 1 => [
                     'icon' => ">>",
-                    'name' => "Recurring Profiles",
+                    'name' => "Recurring Orders",
                     'lng_name' => "text_recurring",
                     'href' => "index.php?route=sale/recurring&",
                     'children' => [],
@@ -694,21 +702,13 @@ $_['menu_data'] = [
                         ],
                         2 => [
                             'icon' => ">>",
-                            'name' => "Customer Searches",
-                            'lng_name' => "text_report_customer_search",
-                            'href' => "index.php?route=report/customer_search&",
-                            'children' => [],
-                            'is_visible' => 1,
-                        ],
-                        3 => [
-                            'icon' => ">>",
                             'name' => "Orders",
                             'lng_name' => "text_report_customer_order",
                             'href' => "index.php?route=report/customer_order&",
                             'children' => [],
                             'is_visible' => 1,
                         ],
-                        4 => [
+                        3 => [
                             'icon' => ">>",
                             'name' => "Reward Points",
                             'lng_name' => "text_report_customer_reward",
@@ -716,7 +716,7 @@ $_['menu_data'] = [
                             'children' => [],
                             'is_visible' => 1,
                         ],
-                        5 => [
+                        4 => [
                             'icon' => ">>",
                             'name' => "Credit",
                             'lng_name' => "text_report_customer_credit",
