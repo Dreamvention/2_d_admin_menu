@@ -449,8 +449,6 @@ class ControllerExtensionModuleDAdminMenu extends Controller
 
         $this->load->model($this->route);
         $this->model_extension_module_d_admin_menu->installDatabase();
-
-        $this->installEvents();
     }
 
     public function uninstall()
