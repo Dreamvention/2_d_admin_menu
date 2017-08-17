@@ -336,7 +336,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                                     "id"           => $cnd_value_3['id'],
                                     "icon"         => $fc_icon,
                                     "name"         => $fc_name,
-                                    "href"         => ('index.php?route=' .$fc_link. '&token='),
+                                    "href"         => ('index.php?route=' .$fc_link. '&'),
                                     "children"     => array(),
                                     "sort_order"   => 0
                                 );
@@ -360,7 +360,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                             "id"           => $cnd_value_2['id'],
                             "icon"         => $fc_icon,
                             "name"         => $fc_name,
-                            "href"         => ('index.php?route=' .$fc_link. '&token='),
+                            "href"         => ('index.php?route=' .$fc_link. '&'),
                             "children"     => $cnd_second_children,
                             "sort_order"   => 0
                         );
@@ -384,7 +384,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                     "id"           => $cnd_value['id'],
                     "icon"         => $fc_icon,
                     "name"         => $fc_name,
-                    "href"         => ('index.php?route=' .$fc_link. '&token='),
+                    "href"         => ('index.php?route=' .$fc_link. '&'),
                     "children"     => $cnd_first_children,
                     "sort_order"   => 0
                 );
