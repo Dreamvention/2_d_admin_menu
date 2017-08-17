@@ -253,16 +253,19 @@ class ModelExtensionModuleDAdminMenu extends Model
     public function getModulesForLinks()
     {
         $tmp_mdls_data = array();
-        $cat_files = glob(DIR_APPLICATION . 'controller/extension/extension/*.php', GLOB_BRACE);
+
+        // before 230 fix
+        $path_fix = (VERSION >= '2.3.0.0') ? 'extension/' : '';
+
+        $cat_files = glob(DIR_APPLICATION . 'controller/extension/'.$path_fix.'*.php', GLOB_BRACE);
 
         foreach ($cat_files as $c_file) {
             $extension = basename($c_file, '.php');
 
             // Compatibility code for old extension folders
-            $this->load->language('extension/extension/' . $extension);
-
-            if ($this->user->hasPermission('access', 'extension/extension/' . $extension)) {
-                $cat_files = glob(DIR_APPLICATION . 'controller/extension/' . $extension . '/*.php', GLOB_BRACE);
+            $this->load->language('extension/' . $path_fix . $extension);
+            if ($this->user->hasPermission('access', 'extension/' . $path_fix . $extension)) {
+                $cat_files = glob(DIR_APPLICATION . 'controller/' . $path_fix . $extension . '/*.php', GLOB_BRACE);
 
                 $tmp_mdls_data[] = array(
                     'code' => $extension,
@@ -270,6 +273,7 @@ class ModelExtensionModuleDAdminMenu extends Model
                     'extra'=> $this->getExtensionList($extension)
                 );
             }
+
         }
 
         return $tmp_mdls_data;
@@ -279,19 +283,24 @@ class ModelExtensionModuleDAdminMenu extends Model
     {
         $extra_data = array();
 
+        // before 230 fix
+        $path_fix = (VERSION >= '2.3.0.0') ? 'extension/' : '';
+
+        // ,' . $category_shortname . '
+
         // Compatibility code for old extension folders
-        $files = glob(DIR_APPLICATION . 'controller/{extension/' . $category_shortname . ',' . $category_shortname . '}/*.php', GLOB_BRACE);
+        $files = glob(DIR_APPLICATION . 'controller/{'. $path_fix . $category_shortname . '}/*.php', GLOB_BRACE);
 
         if ($files) {
             foreach ($files as $file) {
                 $extension = basename($file, '.php');
 
-                $this->load->language('extension/' . $category_shortname . '/' . $extension);
+                $this->load->language($path_fix . $category_shortname . '/' . $extension);
 
                 $extra_data[] = array(
                     'name'          => $this->language->get('heading_title'),
                     'shortname'     => $extension,
-                    'edit'          => 'extension/'. $category_shortname .'/' . $extension
+                    'edit'          => $path_fix . $category_shortname .'/' . $extension
                 );
             }
         }

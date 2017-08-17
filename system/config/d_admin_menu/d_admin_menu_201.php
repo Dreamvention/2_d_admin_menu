@@ -372,8 +372,7 @@ $_['menu_data'] = [
                             'children' => [],
                             'is_visible' => 1
                         ],
-                    ],
-                    'is_visible' => 1
+                    ]
                 ],
                 2 => [
                     'icon' => ">>",
@@ -587,7 +586,7 @@ $_['menu_data'] = [
                     'children' => [],
                     'is_visible' => 1,
                 ]
-            ],
+            ]
         ],
         7 => [
             'icon' => "fa-bar-chart-o",
