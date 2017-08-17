@@ -57,10 +57,15 @@
         "admin/view/template/extension/module/d_admin_menu.twig",
         "admin/view/template/extension/module/d_admin_menu_editor.twig",
         "admin/view/template/extension/module/d_admin_menu_custom_section.twig",
-        "admin/view/template/extension/module/d_admin_menu_standart_section.twig"
+        "admin/view/template/extension/module/d_admin_menu_standart_section.twig",
+
+        "system/config/d_admin_menu/d_admin_menu_201.php",
+        "system/config/d_admin_menu/d_admin_menu_203.php",
+        "system/config/d_admin_menu/d_admin_menu_210.php",
+        "system/config/d_admin_menu/d_admin_menu_230.php",
+        "system/config/d_admin_menu/d_admin_menu_302.php"
     ],
     "dirs": [
-        "system/config/d_admin_menu",
         "admin/view/javascript/d_admin_menu",
         "admin/view/stylesheet/d_admin_menu"
     ],
