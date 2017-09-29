@@ -50,14 +50,11 @@
     },
     "files": [
         "system/library/d_shopunity/extension/d_admin_menu.json",
+        "system/library/d_shopunity/install/d_admin_menu.xml",
 
         "admin/controller/extension/module/d_admin_menu.php",
         "admin/model/extension/module/d_admin_menu.php",
         "admin/language/en-gb/extension/module/d_admin_menu.php",
-        "admin/view/template/extension/module/d_admin_menu.twig",
-        "admin/view/template/extension/module/d_admin_menu_editor.twig",
-        "admin/view/template/extension/module/d_admin_menu_custom_section.twig",
-        "admin/view/template/extension/module/d_admin_menu_standart_section.twig",
 
         "system/config/d_admin_menu/d_admin_menu_201.php",
         "system/config/d_admin_menu/d_admin_menu_203.php",
@@ -67,9 +64,14 @@
     ],
     "dirs": [
         "admin/view/javascript/d_admin_menu",
-        "admin/view/stylesheet/d_admin_menu"
+        "admin/view/stylesheet/d_admin_menu",
+        "admin/view/template/extension/module/d_admin_menu"
     ],
     "changelog": [
+        {
+            "version": "1.0.1",
+            "change": "Add inheritance mode"
+        },
         {
             "version": "1.0.0",
             "change": "Adaptation for 3.x"

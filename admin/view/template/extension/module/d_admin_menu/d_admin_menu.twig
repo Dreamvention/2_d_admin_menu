@@ -10,7 +10,7 @@
             <span>{{ menu['name'] }}</span></a>
         {% endif %}
         {% if (menu['children']) %}
-        <ul>
+        <ul {% if constant('VERSION') >= '3.0.0.0' %}class="collapse"{% endif %}>
             {% for children_1 in menu['children'] %}
             <li style="{{ (children_1['is_visible'] is defined and children_1['is_visible'] == 0) ? 'display: none;' : '' }}">
                 {% if (not children_1['children']) %}
@@ -19,7 +19,7 @@
                 <a class="parent">{{ children_1['name'] }}</a>
                 {% endif %}
                 {% if (children_1['children']) %}
-                <ul>
+                <ul {% if constant('VERSION') >= '3.0.0.0' %}class="collapse"{% endif %}>
                     {% for children_2 in children_1['children'] %}
                     <li style="{{ (children_1['is_visible'] is defined and children_2['is_visible'] == 0) ? 'display: none;' : '' }}">
                         {% if (not children_2['children']) %}
@@ -28,7 +28,7 @@
                         <a class="parent">{{ children_2['name'] }}</a>
                         {% endif %}
                         {% if (children_2['children']) %}
-                        <ul>
+                        <ul {% if constant('VERSION') >= '3.0.0.0' %}class="collapse"{% endif %}>
                             {% for children_3 in children_2['children'] %}
                             <li><a href="{{ children_3['href'] ~ token }}">{{ children_3['name'] }}</a>
                             </li>

@@ -47,8 +47,6 @@ class ControllerExtensionModuleDAdminMenu extends Controller
             }
         }
 
-        // $this->model_extension_module_d_admin_menu->installDatabase();
-
         // Styles and scripts
         $this->document->addStyle('view/stylesheet/d_bootstrap_extra/bootstrap.css');
         $this->document->addStyle('view/javascript/d_bootstrap_switch/css/bootstrap-switch.css');
@@ -86,12 +84,12 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['breadcrumbs'] = array();
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('text_home'),
-            'href' => $this->model_extension_d_opencart_patch_url->link('common/home')
+            'href' => $this->model_extension_d_opencart_patch_url->link('common/dashboard')
         );
 
         $data['breadcrumbs'][] = array(
             'text'      => $this->language->get('text_modules'),
-            'href'      => $this->model_extension_d_opencart_patch_url->getExtensionLink('modules')
+            'href'      => $this->model_extension_d_opencart_patch_url->getExtensionLink('module')
         );
 
         $data['breadcrumbs'][] = array(
@@ -100,8 +98,17 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         );
 
         // Notification
-        foreach ($this->error as $key => $error) {
-            $data['error'][$key] = $error;
+        if (isset($this->error['warning'])) {
+            $data['error_warning'] = $this->error['warning'];
+        } else {
+            $data['error_warning'] = '';
+        }
+
+        if (isset($this->session->data['success'])) {
+            $data['success'] = $this->session->data['success'];
+            unset($this->session->data['success']);
+        } else {
+            $data['success'] = '';
         }
 
         // Heading
@@ -155,16 +162,6 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['cancel'] = $this->model_extension_d_opencart_patch_url->getExtensionLink('module');
         $data['save_and_stay'] = $this->model_extension_d_opencart_patch_url->link($this->route.'/save_and_stay', $url);
 
-        // Success & error
-        if (isset($this->session->data['success'])) {
-            $data['success'] = $this->session->data['success'];
-            unset($this->session->data['success']);
-        } else { $data['success'] = ''; }
-
-        if (isset($this->session->data['error'])) {
-            $data['error']['warning'] = $this->session->data['error'];
-            unset($this->session->data['error']);
-        }
 
         // Create setting if not exist
         $data['setting_id'] = $this->model_extension_module_d_admin_menu->getLastSettingId();
@@ -175,12 +172,13 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['setting'] = $this->model_extension_module_d_admin_menu->getSetting($data['setting_id']);
 
         $data[$this->codename . '_status'] = $data['setting']['status'];
+        $data[$this->codename . '_work_mode'] = $data['setting']['work_mode'];
 
-        $data['standart_menu'] = $this->model_extension_d_opencart_patch_load->view($this->route . '_standart_section',
+        $data['standart_menu'] = $this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename . '_standart_section',
             array("standart_menu_data" => $data['setting']['main_menu']['menu_data'])
         );
 
-        $data['custom_menu'] = $this->model_extension_d_opencart_patch_load->view($this->route . '_custom_section',
+        $data['custom_menu'] = $this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename . '_custom_section',
             array("custom_menu_data"   => $data['setting']['custom_menu'],
                   "modules_for_links"  => $this->model_extension_module_d_admin_menu->getModulesForLinks(),
                   "text_phd_item_name" => $this->language->get('text_placeholder_item_name'))
@@ -190,7 +188,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
 
-        $this->response->setOutput($this->model_extension_d_opencart_patch_load->view($this->route . '_editor', $data));
+        $this->response->setOutput($this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename . '_editor', $data));
     }
 
 
@@ -207,6 +205,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $new_setting = array(
             "name"          => $setting_name,
             "status"        => 0,
+            "work_mode"     => 1,
             "main_menu"     => array(
                 "version"           => VERSION,
                 "menu_data"         => $this->model_extension_module_d_admin_menu->fillMenuWithLanguage($this->model_extension_module_d_admin_menu->fillMenuWithIds())
@@ -243,10 +242,10 @@ class ControllerExtensionModuleDAdminMenu extends Controller
 
     public function save_and_stay()
     {
-        $current_setting = $this->model_extension_module_d_admin_menu->getSetting($this->model_extension_module_d_admin_menu->getLastSettingId());
+        $current_setting = $this->model_extension_module_d_admin_menu->getSetting();
         $json = array();
 
-        if (isset($this->request->post['menus-data'])) {
+        if (isset($this->request->post['menus-data']) && $this->validate()) {
 
             $menus_data = $this->request->post['menus-data'];
             $custom_nested_data = $this->request->post['custom-nested-data'];
@@ -404,14 +403,29 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                 }
             }
 
+            // SET WORK MODE
+            foreach ($menus_data as $md_value) {
+                if (($this->codename . '_work_mode') == trim($md_value['name'])) {
+                    $current_setting['work_mode'] = 1;
+                    break;
+                } else {
+                    $current_setting['work_mode'] = 0;
+                }
+            }
+
             // SAVE SETTING
             $setting_id = $this->model_extension_module_d_admin_menu->editSetting($this->model_extension_module_d_admin_menu->getLastSettingId(), $current_setting);
-            $json['setting_saved'] = 'success';
+            $this->session->data['success'] = $this->language->get('text_success');
             $json['setting_id'] = $setting_id;
+        }
 
+        $json['error'] = $this->error;
+
+        if (isset($this->session->data['success'])) {
+            $json['success'] = $this->session->data['success'];
+            unset($this->session->data['success']);
         } else {
-
-            $json['setting_saved'] = 'error';
+            $json['success'] = '';
         }
 
         // ON-OFF MODULE
@@ -449,12 +463,14 @@ class ControllerExtensionModuleDAdminMenu extends Controller
 
         $this->load->model($this->route);
         $this->model_extension_module_d_admin_menu->installDatabase();
+        $this->model_extension_module_d_admin_menu->modification_handler(1);
     }
 
     public function uninstall()
     {
         $this->load->model($this->route);
         $this->model_extension_module_d_admin_menu->uninstallDatabase();
+        $this->model_extension_module_d_admin_menu->modification_handler(0);
 
         $this->uninstallEvents();
     }
@@ -462,8 +478,12 @@ class ControllerExtensionModuleDAdminMenu extends Controller
     public function installEvents()
     {
         $this->load->model('extension/module/d_event_manager');
-        $this->model_extension_module_d_event_manager->installCompatibility();
+        if (!$this->model_extension_module_d_event_manager->isCompatible()) {
+            $this->model_extension_module_d_event_manager->installCompatibility();
+        }
+
         $this->model_extension_module_d_event_manager->addEvent('d_admin_menu', 'admin/view/common/column_left/after', $this->route . '/view_column_left_after');
+        $this->model_extension_module_d_event_manager->addEvent('d_admin_menu', 'admin/view/common/column_left/before', $this->route . '/view_column_left_before');
         $this->model_extension_module_d_event_manager->addEvent('d_admin_menu_script', 'admin/view/common/header/before', $this->route . '/view_column_left_scripts_before');
     }
 
@@ -481,17 +501,12 @@ class ControllerExtensionModuleDAdminMenu extends Controller
     /////////                               VIEW                                /////////
     /////////////////////////////////////////////////////////////////////////////////////
 
-    public function displayMenu()
+    public function display_menu($display_menu_setting)
     {
-        // need to be deleted
-        $data['setting_id'] = $this->model_extension_module_d_admin_menu->getLastSettingId();
-        if ($data['setting_id'] === false) {
-            $this->createSetting();
-            $data['setting_id'] = $this->model_extension_module_d_admin_menu->getLastSettingId();
+        $standart_menu = array();
+        if ($display_menu_setting['work_mode'] == 0) {
+            $standart_menu = $display_menu_setting['main_menu']['menu_data'];
         }
-        $display_menu_setting = $this->model_extension_module_d_admin_menu->getSetting($data['setting_id']);
-
-        $standart_menu = $display_menu_setting['main_menu']['menu_data'];
         $custom_menu = $display_menu_setting['custom_menu'];
 
         foreach ($custom_menu as $custom_md) {
@@ -509,30 +524,40 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         }
 
         $data['token'] = $this->model_extension_d_opencart_patch_user->getUrlToken();
-        return $this->model_extension_d_opencart_patch_load->view($this->route, $data);
+        return $this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename, $data);
     }
 
     public function view_column_left_after(&$route, &$data, &$output)
     {
-        $html_dom = new d_simple_html_dom();
+        $display_menu_setting = $this->model_extension_module_d_admin_menu->getSetting();
+        $admin_menu = $this->load->controller($this->route . '/display_menu', $display_menu_setting);
 
-        $html_dom->load($output, $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
+        if ($display_menu_setting['work_mode'] == 0) {
 
-        $admin_menu = $this->load->controller($this->route . '/displayMenu');
+            $html_dom = new d_simple_html_dom();
+            $html_dom->load($output, $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
 
-        //insert menu
-        if ($html_dom) {
-            //hide standard menu
-            // $html_dom->find('#menu', 0)->style = 'display:none';
-            $html_dom->find('#menu', 0)->outertext = $admin_menu;
+            if ($html_dom) {
+                $html_dom->find('#menu', 0)->outertext = $admin_menu;
+            }
+
+            $output = (string)$html_dom;
         }
+    }
 
-        $output = (string)$html_dom;
+    public function view_column_left_before(&$route, &$data, &$output)
+    {
+        $display_menu_setting = $this->model_extension_module_d_admin_menu->getSetting();
+        $admin_menu = $this->load->controller($this->route . '/display_menu', $display_menu_setting);
+
+        if ($display_menu_setting['work_mode'] == 1) {
+            $data['d_admin_menu'] = $admin_menu;
+        }
     }
 
     public function view_column_left_scripts_before(&$route, &$data, &$output)
     {
-        //add fontawesome icons
+        // Add fontawesome icons
         $data['scripts'][] = 'https://use.fontawesome.com/0b3dfb29a7.js';
     }
 

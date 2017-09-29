@@ -73,22 +73,24 @@
                                     <div class="row">
                                     <!-- HOME CONTENT -->
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label" for="input_status">{{ entry_status }}</label>
-                                            <div class="col-sm-8">
-                                                <input type="checkbox" value="1" name="{{ id }}_status" id="input_status" data-on-color="success" data-bs-status="true"{{ d_admin_menu_status == '1' ? 'checked="checked"' : '' }} class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label" for="button_support_email">{{ entry_support }}</label>
-                                            <div class="col-sm-4">
-                                                <a href="mailto:{{ support_email }}?Subject=Request Support: {{ heading_title }}&body=Shop: {{ constant('HTTP_SERVER') }}" id="button_support_email" class="btn btn-primary btn-block"><i class="fa fa-support"></i> {{ button_support_email }}</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                      <div class="col-md-6">
+                                          <div class="form-group">
+                                              <label class="col-sm-4 control-label" for="input_status"><span data-toggle="tooltip" title="{{ help_status }}">{{ entry_status }}</span></label>
+                                              <div class="col-sm-8">
+                                                  <input type="checkbox" value="1" name="{{ id }}_status" id="input_status" data-on-color="success"  data-bs-status="true" {{ attribute(_context, id ~ '_status') == '1' ? 'checked="checked"' : '' }} class="form-control" />
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      <div class="col-md-6">
+                                          <div class="form-group">
+                                              <label class="col-sm-4 control-label" for="input_work_mode"><span data-toggle="tooltip" title="{{ help_work_mode }}">{{ entry_work_mode }}</span></label>
+                                              <div class="col-sm-8">
+                                                  <input type="checkbox" value="1" name="{{ id }}_work_mode" id="input_work_mode" data-on-color="primary" data-off-color="primary" data-on-text="{{ text_inherit }}" data-off-text="{{ text_replace }}" data-label-width="20" data-bs-status="true" {{ attribute(_context, id ~ '_work_mode') == '1' ? 'checked="checked"' : '' }} class="form-control" />
+                                              </div>
+                                          </div>
+                                      </div>
+
                                     </div>
 
                                     <hr>
@@ -148,6 +150,24 @@
 </div>
 
 <script>
+
+  function alert_handler(json)
+  {
+    if (typeof json === 'string') {
+      json = JSON.parse(json);
+    }
+
+    if (json['error']) {
+
+      for (i in json['error']) {
+          alertify.error(json['error'][i]);
+      }
+    }
+
+    if (json['success']) {
+      alertify.success(json['success']);
+    }
+  }
 
   function goose_templating(some_html, some_json)
   {
@@ -210,6 +230,23 @@
 
       $('[data-bs="true"]').bootstrapSwitch();
       $('[data-bs-status="true"]').bootstrapSwitch();
+
+      if ($('#input_work_mode').prop('checked')) {
+        $('#standart-menu').css('pointer-events', 'none');
+        $('#standart-menu').fadeTo('slow', 0.3);
+      }
+
+      $('#input_work_mode').on('switchChange.bootstrapSwitch', function(event, state) {
+
+          if (state == true) {
+            $('#standart-menu').css('pointer-events', 'none');
+            $('#standart-menu').fadeTo('slow', 0.3);
+          } else {
+            $('#standart-menu').css('pointer-events', 'all');
+            $('#standart-menu').fadeTo('slow', 1);
+          }
+      });
+
       $('[data-bs="true"]').on('switchChange.bootstrapSwitch', function(event, state) {
 
         var tmp_vis = 1;
@@ -308,11 +345,11 @@
         complete: function() {
             $('#form').fadeTo('slow', 1);
         },
-        success: function(response) {
-            alertify.success('Setting saved');
+        success: function(json) {
+            alert_handler(json);
         },
-        error: function(response) {
-            alertify.error('Something went wrong :(');
+        error: function(json) {
+            alert_handler(json);
         }
     });
   });
