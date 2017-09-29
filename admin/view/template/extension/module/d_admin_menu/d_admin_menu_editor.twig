@@ -253,10 +253,9 @@
         if (state == true) { tmp_vis = 1; } else { tmp_vis = 0; };
         $(this).val(tmp_vis);
 
-        var jsn = {
-          'menus-data': $('#form').serializeObject(),
-        };
-
+        // var jsn = {
+        //   'menus-data': $('#form').serializeObject(),
+        // };
         // $('#nestable-output-standart').text(JSON.stringify(jsn));
       });
 
@@ -324,7 +323,6 @@
       $(document).on('iconpickerSelected', '.icp', function(e) {
         $("input[name='custom-menu[" + $(this).data('id') +"][icon]']").val(e.iconpickerValue);
       });
-
 
   });
 

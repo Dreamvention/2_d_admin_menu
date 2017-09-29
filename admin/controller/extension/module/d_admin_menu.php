@@ -128,12 +128,26 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['tab_setting'] = $this->language->get('tab_setting');
         $data['tab_instruction'] = $this->language->get('tab_instruction');
 
+        // Text
         $data['text_home'] = $this->language->get('text_home');
         $data['text_general'] = $this->language->get('text_general');
         $data['text_menu'] = $this->language->get('text_menu');
         $data['text_standart_menu'] = $this->language->get('text_standart_menu');
         $data['text_custom_menu'] = $this->language->get('text_custom_menu');
         $data['text_instruction'] = $this->language->get('text_instruction');
+        $data['text_enabled'] = $this->language->get('text_enabled');
+        $data['text_disabled'] = $this->language->get('text_disabled');
+        $data['text_enable'] = $this->language->get('text_enable');
+        $data['text_select'] = $this->language->get('text_select');
+        $data['text_none'] = $this->language->get('text_none');
+        $data['text_replace'] = $this->language->get('text_replace');
+        $data['text_inherit'] = $this->language->get('text_inherit');
+        $data['text_intro_create_setting'] = $this->language->get('text_intro_create_setting');
+
+        // Help
+        $data['help_status'] = $this->language->get('help_status');
+        $data['help_standart_menu'] = $this->language->get('help_standart_menu');
+        $data['help_work_mode'] = $this->language->get('help_work_mode');
 
         // Button
         $data['button_save'] = $this->language->get('button_save');
@@ -148,14 +162,6 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         // Entry
         $data['entry_support'] = $this->language->get('entry_support');
         $data['entry_status'] = $this->language->get('entry_status');
-
-        // Text
-        $data['text_enabled'] = $this->language->get('text_enabled');
-        $data['text_disabled'] = $this->language->get('text_disabled');
-        $data['text_enable'] = $this->language->get('text_enable');
-        $data['text_select'] = $this->language->get('text_select');
-        $data['text_none'] = $this->language->get('text_none');
-        $data['text_intro_create_setting'] = $this->language->get('text_intro_create_setting');
 
         // Action
         $data['module_link'] = $this->model_extension_d_opencart_patch_url->link($this->route);
@@ -248,7 +254,11 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         if (isset($this->request->post['menus-data']) && $this->validate()) {
 
             $menus_data = $this->request->post['menus-data'];
-            $custom_nested_data = $this->request->post['custom-nested-data'];
+
+            $custom_nested_data = array();
+            if (isset($this->request->post['custom-nested-data'])) {
+                $custom_nested_data = $this->request->post['custom-nested-data'];
+            }
 
             // STANDART MENU
             foreach ($current_setting['main_menu']['menu_data'] as $mm_key => $mm_value) {
@@ -557,7 +567,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
 
     public function view_column_left_scripts_before(&$route, &$data, &$output)
     {
-        // Add fontawesome icons
+        // Add fontawesome icons to COLUMN_LEFT
         $data['scripts'][] = 'https://use.fontawesome.com/0b3dfb29a7.js';
     }
 

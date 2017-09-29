@@ -29,6 +29,7 @@ $_['text_inherit']                      = 'Inherit';
 
 // Help
 $_['help_status']                       = 'Module status';
+$_['help_standart_menu']                = "Change 'work mode' to make it editable";
 $_['help_work_mode']                    = "'Replace mode' will replace your current menu. \n 'Inherit mode' don't.";
 
 // Success
