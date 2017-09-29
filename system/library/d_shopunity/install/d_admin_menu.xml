@@ -12,7 +12,7 @@
             <operation error="skip">
                 <search><![CDATA[<nav id="column-left"><?php echo $profile; ?><?php echo $menu; ?><?php echo $stats; ?></nav>]]></search>
                 <add position="replace"><![CDATA[
-                    <nav id="column-left"><?php echo $profile; ?><?php echo $menu; ?><?php echo $d_admin_menu; ?><?php echo $stats; ?></nav>
+                    <nav id="column-left"><?php echo $profile; ?><?php echo $menu; ?><?php echo ($d_admin_menu) ? $d_admin_menu : ''; ?><?php echo $stats; ?></nav>
                 ]]></add>
             </operation>
         </file>
@@ -22,7 +22,7 @@
             <operation error="skip">
                 <search><![CDATA[<div id="stats">]]></search>
                 <add position="before"><![CDATA[
-                    <?php echo $d_admin_menu; ?>
+                    <?php echo ($d_admin_menu) ? $d_admin_menu : ''; ?>
                 ]]></add>
             </operation>
         </file>

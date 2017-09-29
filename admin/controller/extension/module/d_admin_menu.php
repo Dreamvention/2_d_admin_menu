@@ -160,7 +160,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['button_support_email'] = $this->language->get('button_support_email');
 
         // Entry
-        $data['entry_support'] = $this->language->get('entry_support');
+        $data['entry_work_mode'] = $this->language->get('entry_work_mode');
         $data['entry_status'] = $this->language->get('entry_status');
 
         // Action
