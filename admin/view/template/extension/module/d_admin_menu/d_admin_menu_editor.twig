@@ -220,13 +220,11 @@
 
       $('#nestable-custom').nestable({maxDepth: '3', group: "custom"})
       .on('change', function(){
-        // updateOutput($('#nestable-custom').data('output', $('#nestable-output-custom')));
         changeCustomItemsType($('#nestable-custom').nestable('serialize'));
       });
-
       changeCustomItemsType($('#nestable-custom').nestable('serialize'));
+
       $('#nestable-standart').nestable_nodrag('collapseAll');
-      // $('#nestable-custom').nestable('collapseAll');
 
       $('[data-bs="true"]').bootstrapSwitch();
       $('[data-bs-status="true"]').bootstrapSwitch();
@@ -237,7 +235,6 @@
       }
 
       $('#input_work_mode').on('switchChange.bootstrapSwitch', function(event, state) {
-
           if (state == true) {
             $('#standart-menu').css('pointer-events', 'none');
             $('#standart-menu').fadeTo('slow', 0.3);
@@ -248,15 +245,9 @@
       });
 
       $('[data-bs="true"]').on('switchChange.bootstrapSwitch', function(event, state) {
-
         var tmp_vis = 1;
         if (state == true) { tmp_vis = 1; } else { tmp_vis = 0; };
         $(this).val(tmp_vis);
-
-        // var jsn = {
-        //   'menus-data': $('#form').serializeObject(),
-        // };
-        // $('#nestable-output-standart').text(JSON.stringify(jsn));
       });
 
       // restore default setting (standart-menu)
