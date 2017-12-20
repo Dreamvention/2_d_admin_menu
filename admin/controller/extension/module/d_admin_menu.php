@@ -192,7 +192,8 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                 "custom_menu_data"   => $data['setting']['custom_menu'],
                 "modules_for_links"  => $this->model_extension_module_d_admin_menu->getModulesForLinks(),
                 "text_phd_item_name" => $this->language->get('text_placeholder_item_name'),
-                "button_custom_route_item" => $this->language->get('button_custom_route_item')
+                "button_custom_route_item" => $this->language->get('button_custom_route_item'),
+                "text_custom_route" => $this->language->get('text_custom_route')
             )
         );
 
