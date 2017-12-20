@@ -160,7 +160,6 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['button_remove'] = $this->language->get('button_remove');
         $data['button_hide'] = $this->language->get('button_hide');
         $data['button_support_email'] = $this->language->get('button_support_email');
-        $data['button_custom_route_item'] = $this->language->get('button_custom_route_item');
 
 
         // Entry
@@ -189,9 +188,12 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         );
 
         $data['custom_menu'] = $this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename . '_custom_section',
-            array("custom_menu_data"   => $data['setting']['custom_menu'],
-                  "modules_for_links"  => $this->model_extension_module_d_admin_menu->getModulesForLinks(),
-                  "text_phd_item_name" => $this->language->get('text_placeholder_item_name'))
+            array(
+                "custom_menu_data"   => $data['setting']['custom_menu'],
+                "modules_for_links"  => $this->model_extension_module_d_admin_menu->getModulesForLinks(),
+                "text_phd_item_name" => $this->language->get('text_placeholder_item_name'),
+                "button_custom_route_item" => $this->language->get('button_custom_route_item')
+            )
         );
 
         $data['header'] = $this->load->controller('common/header');
