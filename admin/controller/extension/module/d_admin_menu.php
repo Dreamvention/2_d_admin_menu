@@ -143,6 +143,8 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['text_replace'] = $this->language->get('text_replace');
         $data['text_inherit'] = $this->language->get('text_inherit');
         $data['text_intro_create_setting'] = $this->language->get('text_intro_create_setting');
+        $data['text_default_route'] = $this->language->get('text_default_route');
+        $data['text_custom_route'] = $this->language->get('text_custom_route');
 
         // Help
         $data['help_status'] = $this->language->get('help_status');
@@ -158,6 +160,8 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['button_remove'] = $this->language->get('button_remove');
         $data['button_hide'] = $this->language->get('button_hide');
         $data['button_support_email'] = $this->language->get('button_support_email');
+        $data['button_custom_route_item'] = $this->language->get('button_custom_route_item');
+
 
         // Entry
         $data['entry_work_mode'] = $this->language->get('entry_work_mode');
@@ -221,6 +225,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                     "id"                    => 1,
                     "icon"                  => "fa-flask",
                     "name"                  => "Shopunity",
+                    "custom_route"           => False,
                     "href"                  => "index.php?route=extension/module/d_shopunity&",
                     "children"              => array(),
                     "sort_order"            => 0
@@ -339,17 +344,21 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                                     if ('custom-menu[' . $cnd_value_3['id'] . '][item_link]' == $md_value['name']) {
                                         $fc_link = $md_value['value'];
                                     }
+                                    if ('custom-menu[' . $cnd_value_3['id'] . '][custom_route]' == $md_value['name']) {
+                                        $fc_cr = $md_value['value'];
+                                    }
                                 }
 
                                 $cnd_second_children[] = array(
                                     "id"           => $cnd_value_3['id'],
                                     "icon"         => $fc_icon,
                                     "name"         => $fc_name,
+                                    "custom_route" => isset($fc_cr) ? $fc_link : False,
                                     "href"         => ('index.php?route=' .$fc_link. '&'),
                                     "children"     => array(),
                                     "sort_order"   => 0
                                 );
-                                unset($fc_icon, $fc_name, $fc_link);
+                                unset($fc_icon, $fc_name, $fc_link, $fc_cr);
                             }
                         }
 
@@ -363,17 +372,21 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                             if ('custom-menu[' . $cnd_value_2['id'] . '][item_link]' == $md_value['name']) {
                                 $fc_link = $md_value['value'];
                             }
+                            if ('custom-menu[' . $cnd_value_2['id'] . '][custom_route]' == $md_value['name']) {
+                                $fc_cr = $md_value['value'];
+                            }
                         }
 
                         $cnd_first_children[] = array(
                             "id"           => $cnd_value_2['id'],
                             "icon"         => $fc_icon,
                             "name"         => $fc_name,
+                            "custom_route"  => isset($fc_cr) ? $fc_link : False,
                             "href"         => ('index.php?route=' .$fc_link. '&'),
                             "children"     => $cnd_second_children,
                             "sort_order"   => 0
                         );
-                        unset($fc_icon, $fc_name, $fc_link);
+                        unset($fc_icon, $fc_name, $fc_link, $fc_cr);
                     }
                 }
 
@@ -387,17 +400,21 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                     if ('custom-menu[' . $cnd_value['id'] . '][item_link]' == $md_value['name']) {
                         $fc_link = $md_value['value'];
                     }
+                    if ('custom-menu[' . $cnd_value['id'] . '][custom_route]' == $md_value['name']) {
+                        $fc_cr = $md_value['value'];
+                    }
                 }
 
                 $new_custom_menu[] = array(
                     "id"           => $cnd_value['id'],
                     "icon"         => $fc_icon,
                     "name"         => $fc_name,
+                    "custom_route" => isset($fc_cr) ? $fc_link : False,
                     "href"         => ('index.php?route=' .$fc_link. '&'),
                     "children"     => $cnd_first_children,
                     "sort_order"   => 0
                 );
-                unset($fc_icon, $fc_name, $fc_link);
+                unset($fc_icon, $fc_name, $fc_link, $fc_cr);
 
             }
 

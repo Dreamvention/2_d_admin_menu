@@ -15,6 +15,7 @@ $_['entry_work_mode']                   = 'Work mode';
 
 // Button
 $_['button_save_and_stay']              = 'Save and stay';
+$_['button_custom_route_item']          = 'Custom Route Item';
 
 // Text
 $_['text_menu']                         = 'Edit Menu';
@@ -26,6 +27,9 @@ $_['text_intro_create_setting']         = 'Please, create setting first!';
 $_['text_modules']                      = 'Modules';
 $_['text_replace']                      = 'Replace';
 $_['text_inherit']                      = 'Inherit';
+$_['text_default_route']                = 'Default Route';
+$_['text_custom_route']                 = 'Custom Route';
+
 
 // Help
 $_['help_status']                       = 'Module status';

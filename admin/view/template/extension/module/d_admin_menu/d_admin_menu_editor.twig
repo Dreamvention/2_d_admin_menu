@@ -298,6 +298,33 @@
         return false;
       });
 
+      // add new custom element (button)
+      $('#button-add-custom-route').on('click', function()
+      {
+        var tmp_new_id = 0;
+        $('.custom-removebtn').each(function() {
+          if ($(this).data('delId') > tmp_new_id) {
+            tmp_new_id = $(this).data('delId');
+          }
+        });
+        tmp_new_id = tmp_new_id + 1;
+
+        var html = $('#new_custom_route_item').html();
+        var tmp_json = {
+          new_custom_id: tmp_new_id
+        };
+        html = goose_templating(html, tmp_json);
+        $('.main-custom-list').append(html);
+        console.log('create custom element ID: ', tmp_new_id);
+
+        // iconpicker re-init
+        $('.supericon-yep').each(function() {
+          $(this).iconpicker();
+        });
+
+        return false;
+      });
+
       // remove custom element
       $(document).on('click','.custom-removebtn', function() {
         $(('#dd_custom_' + $(this).data('delId'))).remove();
