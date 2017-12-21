@@ -35,7 +35,7 @@ $_['text_custom_route']                 = 'Custom Route or URL';
 $_['help_status']                       = 'Module status';
 $_['help_standart_menu']                = "Change 'work mode' to make it editable";
 $_['help_work_mode']                    = "'Replace mode' will replace your current menu. \n 'Inherit mode' don't.";
-$_['help_custom_route']                 = "You need to type 'http://' if you want to use custom URL";
+$_['help_custom_route']                 = "You should type 'http://' or 'https://' if you would like to use a custom URL";
 
 // Success
 $_['success_twig_compatible']           = 'Twig support succesfully installed. You can enter Admin Menu now.';
