@@ -323,6 +323,17 @@ class ModelExtensionModuleDAdminMenu extends Model
         return $extra_data;
     }
 
+    public function get_href_type($link)
+    {
+        preg_match("/(https?:\/\/).+/", $link, $matches);
+
+        if ($matches) {
+            return 'direct_link';
+        } else {
+            return 'route';
+        }
+    }
+
     public function modification_handler($status)
     {
         $this->model_extension_d_opencart_patch_modification->setModification('d_admin_menu.xml', $status);

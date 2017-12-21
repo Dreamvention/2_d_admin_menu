@@ -41,7 +41,7 @@
             {% if cmd_first_item['custom_route'] %}
 
               <input type="hidden" name="custom-menu[{{ cmd_first_item['id'] }}][custom_route]" value="1">
-              <input type="text" name="custom-menu[{{ cmd_first_item['id'] }}][item_link]" value="{{ cmd_first_item['custom_route'] }}" class="custom-item-link" placeholder="{{ text_custom_route }}">
+              <input type="text" name="custom-menu[{{ cmd_first_item['id'] }}][item_link]" value="{{ cmd_first_item['custom_route'] }}" class="custom-item-link custom_route_input" placeholder="{{ text_custom_route }}" title="{{ help_custom_route }}" data-toggle="tooltip" data-placement="bottom">
 
             {% else %}
 
@@ -96,7 +96,7 @@
               {% if cmd_second_item['custom_route'] %}
 
                 <input type="hidden" name="custom-menu[{{ cmd_second_item['id'] }}][custom_route]" value="1">
-                <input type="text" name="custom-menu[{{ cmd_second_item['id'] }}][item_link]" value="{{ cmd_second_item['custom_route'] }}" class="custom-item-link" placeholder="{{ text_custom_route }}">
+                <input type="text" name="custom-menu[{{ cmd_second_item['id'] }}][item_link]" value="{{ cmd_second_item['custom_route'] }}" class="custom-item-link" placeholder="{{ text_custom_route }}"  title="{{ help_custom_route }}" data-toggle="tooltip" data-placement="bottom">
 
               {% else %}
 
@@ -149,7 +149,7 @@
                 {% if cmd_third_item['custom_route'] %}
 
                   <input type="hidden" name="custom-menu[{{ cmd_third_item['id'] }}][custom_route]" value="1">
-                  <input type="text" name="custom-menu[{{ cmd_third_item['id'] }}][item_link]" value="{{ cmd_third_item['custom_route'] }}" class="custom-item-link" placeholder="{{ text_custom_route }}">
+                  <input type="text" name="custom-menu[{{ cmd_third_item['id'] }}][item_link]" value="{{ cmd_third_item['custom_route'] }}" class="custom-item-link" placeholder="{{ text_custom_route }}"  title="{{ help_custom_route }}" data-toggle="tooltip" data-placement="bottom">
 
                 {% else %}
 
@@ -254,7 +254,7 @@
 
         <span class="item-link" style="margin-left: 20px;">
           <input type="hidden" name="custom-menu[%%new_custom_id%%][custom_route]" value="1">
-          <input type="text" name="custom-menu[%%new_custom_id%%][item_link]" value="" class="custom-item-link" placeholder="{{ text_custom_route }}">
+          <input type="text" name="custom-menu[%%new_custom_id%%][item_link]" value="" class="custom-item-link" placeholder="{{ text_custom_route }}"  title="{{ help_custom_route }}" data-toggle="tooltip" data-placement="bottom">
         </span>
 
         <span class="item-icons-custom dd-nodrag">

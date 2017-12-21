@@ -1,6 +1,6 @@
 {
     "codename": "d_admin_menu",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "name": "Admin Menu",
     "description": "Manage your Opencart admin menu to make it fit your needs",
     "index": "extension/module/d_admin_menu",
@@ -68,6 +68,10 @@
         "admin/view/template/extension/module/d_admin_menu"
     ],
     "changelog": [
+        {
+            "version": "1.0.3",
+            "change": "Now you can add custom URL"
+        },
         {
             "version": "1.0.2",
             "change": "Add custom route option"

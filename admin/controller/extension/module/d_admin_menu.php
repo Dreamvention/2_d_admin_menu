@@ -193,7 +193,8 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                 "modules_for_links"  => $this->model_extension_module_d_admin_menu->getModulesForLinks(),
                 "text_phd_item_name" => $this->language->get('text_placeholder_item_name'),
                 "button_custom_route_item" => $this->language->get('button_custom_route_item'),
-                "text_custom_route" => $this->language->get('text_custom_route')
+                "text_custom_route" => $this->language->get('text_custom_route'),
+                "help_custom_route" => $this->language->get('help_custom_route')
             )
         );
 
@@ -223,18 +224,30 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                 "version"           => VERSION,
                 "menu_data"         => $this->model_extension_module_d_admin_menu->fillMenuWithLanguage($this->model_extension_module_d_admin_menu->fillMenuWithIds())
             ),
-            "custom_menu"   => array(
-                "0"                 => array(
-                    "id"                    => 1,
-                    "icon"                  => "fa-flask",
-                    "name"                  => "Shopunity",
-                    "custom_route"           => False,
-                    "href"                  => "index.php?route=extension/module/d_shopunity&",
-                    "children"              => array(),
-                    "sort_order"            => 0
-                )
-            )
+            "custom_menu"   => array()
         );
+
+        $default_data_shopunity = array(
+            "id"                    => 1,
+            "icon"                  => "fa-flask",
+            "name"                  => "Shopunity",
+            "custom_route"          => False,
+            "link"                  => "extension/module/d_shopunity",
+            "children"              => array(),
+            "sort_order"            => 0
+        );
+        $default_data_dreamvention = array(
+            "id"                    => 2,
+            "icon"                  => "fa-euro",
+            "name"                  => "Dreamvention",
+            "custom_route"          => True,
+            "link"                  => "http://dreamvention.ee/",
+            "children"              => array(),
+            "sort_order"            => 0
+        );
+
+        $this->custom_menu_helper($new_setting['custom_menu'], $default_data_shopunity);
+        $this->custom_menu_helper($new_setting['custom_menu'], $default_data_dreamvention);
 
         $setting_id = $this->model_extension_module_d_admin_menu->setSetting($setting_name, $new_setting, $this->store_id);
 
@@ -352,15 +365,16 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                                     }
                                 }
 
-                                $cnd_second_children[] = array(
-                                    "id"           => $cnd_value_3['id'],
-                                    "icon"         => $fc_icon,
-                                    "name"         => $fc_name,
-                                    "custom_route" => isset($fc_cr) ? $fc_link : False,
-                                    "href"         => ('index.php?route=' .$fc_link. '&'),
-                                    "children"     => array(),
-                                    "sort_order"   => 0
+                                $second_data = array(
+                                    "id"                    => $cnd_value_3['id'],
+                                    "icon"                  => $fc_icon,
+                                    "name"                  => $fc_name,
+                                    "custom_route"          => isset($fc_cr) ? $fc_link : False,
+                                    "link"                  => $fc_link,
+                                    "children"              => array(),
+                                    "sort_order"            => 0
                                 );
+                                $this->custom_menu_helper($cnd_second_children, $second_data);
                                 unset($fc_icon, $fc_name, $fc_link, $fc_cr);
                             }
                         }
@@ -380,15 +394,16 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                             }
                         }
 
-                        $cnd_first_children[] = array(
-                            "id"           => $cnd_value_2['id'],
-                            "icon"         => $fc_icon,
-                            "name"         => $fc_name,
-                            "custom_route"  => isset($fc_cr) ? $fc_link : False,
-                            "href"         => ('index.php?route=' .$fc_link. '&'),
-                            "children"     => $cnd_second_children,
-                            "sort_order"   => 0
+                        $first_data = array(
+                            "id"                    => $cnd_value_2['id'],
+                            "icon"                  => $fc_icon,
+                            "name"                  => $fc_name,
+                            "custom_route"          => isset($fc_cr) ? $fc_link : False,
+                            "link"                  => $fc_link,
+                            "children"              => $cnd_second_children,
+                            "sort_order"            => 0
                         );
+                        $this->custom_menu_helper($cnd_first_children, $first_data);
                         unset($fc_icon, $fc_name, $fc_link, $fc_cr);
                     }
                 }
@@ -408,17 +423,17 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                     }
                 }
 
-                $new_custom_menu[] = array(
-                    "id"           => $cnd_value['id'],
-                    "icon"         => $fc_icon,
-                    "name"         => $fc_name,
-                    "custom_route" => isset($fc_cr) ? $fc_link : False,
-                    "href"         => ('index.php?route=' .$fc_link. '&'),
-                    "children"     => $cnd_first_children,
-                    "sort_order"   => 0
+                $_data = array(
+                    "id"                    => $cnd_value['id'],
+                    "icon"                  => $fc_icon,
+                    "name"                  => $fc_name,
+                    "custom_route"          => isset($fc_cr) ? $fc_link : False,
+                    "link"                  => $fc_link,
+                    "children"              => $cnd_first_children,
+                    "sort_order"            => 0
                 );
+                $this->custom_menu_helper($new_custom_menu, $_data);
                 unset($fc_icon, $fc_name, $fc_link, $fc_cr);
-
             }
 
             $current_setting['custom_menu'] = $new_custom_menu;
@@ -467,6 +482,26 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $this->response->setOutput(json_encode($json));
     }
 
+    // ADD MENU ITEM
+    public function custom_menu_helper(&$ref_array, $data)
+    {
+        $custom_route = (isset($data['custom_route']) && $data['custom_route'] != False) ? $data['link'] : False;
+        $href_type = $this->model_extension_module_d_admin_menu->get_href_type($data['link']);
+        $href = ($href_type == 'direct_link') ? $data['link'] : ('index.php?route=' .$data['link']. '&');
+        $children = (isset($data['children'])) ? $data['children'] : array();
+        $sort_order = (isset($data['sort_order'])) ? $data['sort_order'] : 0;
+
+        $ref_array[] = array(
+            'id'            => $data['id'],
+            'icon'          => $data['icon'],
+            'name'          => $data['name'],
+            'custom_route'  => $custom_route,
+            'href'          => $href,
+            'href_type'     => $href_type,
+            'children'      => $children,
+            'sort_order'    => $sort_order
+        );
+    }
 
 
 

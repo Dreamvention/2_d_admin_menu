@@ -342,6 +342,9 @@
         $("input[name='custom-menu[" + $(this).data('id') +"][icon]']").val(e.iconpickerValue);
       });
 
+      // TOOLTIP
+      $('.custom_route_input').tooltip();
+
   });
 
   $(document).on('click', '#save_and_stay', function() {
