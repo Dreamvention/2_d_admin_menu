@@ -179,7 +179,8 @@ class ModelExtensionModuleDAdminMenu extends Model
 
     public function getLanguage($menu_item_lng_name)
     {
-        $lang_path = $this->getAppropriateConfig()['lang_path'];
+        $config = $this->getAppropriateConfig();
+        $lang_path = $config['lang_path'];
 
         $lng = new Language();
         $lng->load($lang_path);
