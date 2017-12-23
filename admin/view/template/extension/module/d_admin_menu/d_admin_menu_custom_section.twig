@@ -33,10 +33,10 @@
             <input type="hidden" name="custom-menu[{{ cmd_first_item['id'] }}][icon]" value="{{ cmd_first_item['icon'] }}">
           </span>
 
-          <span class="item-name" style="margin-left: 20px;">
+          <span class="item-name">
             <input type="item-name" name="custom-menu[{{ cmd_first_item['id'] }}][name]" value="{{ cmd_first_item['name'] }}" class="custom-item-name" placeholder="{{ cmd_first_item['name'] }}">
           </span>
-          <span class="item-link" style="margin-left: 20px;">
+          <span class="item-link">
 
             {% if cmd_first_item['custom_route'] %}
 
@@ -88,10 +88,10 @@
               <input type="hidden" name="custom-menu[{{ cmd_second_item['id'] }}][icon]" value="{{ cmd_second_item['icon'] }}">
             </span>
 
-            <span class="item-name" style="margin-left: 20px;">
+            <span class="item-name">
               <input type="item-name" name="custom-menu[{{ cmd_second_item['id'] }}][name]" value="{{ cmd_second_item['name'] }}" class="custom-item-name" placeholder="{{ cmd_second_item['name'] }}">
             </span>
-            <span class="item-link" style="margin-left: 20px;">
+            <span class="item-link">
 
               {% if cmd_second_item['custom_route'] %}
 
@@ -141,10 +141,10 @@
                 <input type="hidden" name="custom-menu[{{ cmd_third_item['id'] }}][icon]" value="{{ cmd_third_item['icon'] }}">
               </span>
 
-              <span class="item-name" style="margin-left: 20px;">
+              <span class="item-name">
                 <input type="item-name" name="custom-menu[{{ cmd_third_item['id'] }}][name]" value="{{ cmd_third_item['name'] }}" class="custom-item-name" placeholder="{{ cmd_third_item['name'] }}">
               </span>
-              <span class="item-link" style="margin-left: 20px;">
+              <span class="item-link">
 
                 {% if cmd_third_item['custom_route'] %}
 
@@ -207,11 +207,11 @@
             <input type="hidden" name="custom-menu[%%new_custom_id%%][icon]" value="fa-flask">
           </span>
 
-        <span class="item-name" style="margin-left: 20px;">
+        <span class="item-name">
           <input type="item-name" name="custom-menu[%%new_custom_id%%][name]" value="Shopunity" class="custom-item-name" placeholder="{{ text_phd_item_name }}">
         </span>
 
-        <span class="item-link" style="margin-left: 20px;">
+        <span class="item-link">
           <select name="custom-menu[%%new_custom_id%%][item_link]" class="input-sm custom-item-link">
             {% for mfl in modules_for_links %}
             <optgroup label="{{ mfl['text'] }}">
@@ -248,11 +248,11 @@
             <input type="hidden" name="custom-menu[%%new_custom_id%%][icon]" value="fa-flask">
           </span>
 
-        <span class="item-name" style="margin-left: 20px;">
+        <span class="item-name">
           <input type="item-name" name="custom-menu[%%new_custom_id%%][name]" value="Shopunity" class="custom-item-name" placeholder="{{ text_phd_item_name }}">
         </span>
 
-        <span class="item-link" style="margin-left: 20px;">
+        <span class="item-link">
           <input type="hidden" name="custom-menu[%%new_custom_id%%][custom_route]" value="1">
           <input type="text" name="custom-menu[%%new_custom_id%%][item_link]" value="" class="custom-item-link" placeholder="{{ text_custom_route }}"  title="{{ help_custom_route }}" data-toggle="tooltip" data-placement="bottom">
         </span>
