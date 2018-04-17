@@ -21,7 +21,7 @@
       {% for cmd_first_item in custom_menu_data %}
       <li id="dd_custom_{{ cmd_first_item['id'] }}" class="dd-item dd-nodrag custom-menu-item" data-id="{{ cmd_first_item['id'] }}">
 
-        <div class="dd-handle">
+        <div class="dd-handle form-inline">
 
           <span class="item-icon-picker btn-group">
             <button type="button" class="btn btn-default iconpicker-component"><i class="fa fa-fw fa-heart"></i></button>
@@ -34,14 +34,14 @@
           </span>
 
           <span class="item-name">
-            <input type="item-name" name="custom-menu[{{ cmd_first_item['id'] }}][name]" value="{{ cmd_first_item['name'] }}" class="custom-item-name" placeholder="{{ cmd_first_item['name'] }}">
+            <input type="item-name" name="custom-menu[{{ cmd_first_item['id'] }}][name]" value="{{ cmd_first_item['name'] }}" class="custom-item-name form-control" placeholder="{{ cmd_first_item['name'] }}">
           </span>
           <span class="item-link">
 
             {% if cmd_first_item['custom_route'] %}
 
               <input type="hidden" name="custom-menu[{{ cmd_first_item['id'] }}][custom_route]" value="1">
-              <input type="text" name="custom-menu[{{ cmd_first_item['id'] }}][item_link]" value="{{ cmd_first_item['custom_route'] }}" class="custom-item-link custom_route_input" placeholder="{{ text_custom_route }}" title="{{ help_custom_route }}" data-toggle="tooltip" data-placement="bottom">
+              <input type="text" name="custom-menu[{{ cmd_first_item['id'] }}][item_link]" value="{{ cmd_first_item['custom_route'] }}" class="custom-item-link custom_route_input form-control" placeholder="{{ text_custom_route }}" title="{{ help_custom_route }}" data-toggle="tooltip" data-placement="bottom">
 
             {% else %}
 
@@ -76,7 +76,7 @@
         <li id="dd_custom_{{ cmd_second_item['id'] }}" class="dd-item dd-nodrag custom-menu-item" data-id="{{ cmd_second_item['id'] }}">
 
 
-          <div class="dd-handle">
+          <div class="dd-handle form-inline">
 
             <span class="item-icon-picker btn-group">
               <button type="button" class="btn btn-default iconpicker-component"><i class="fa fa-fw fa-heart"></i></button>
@@ -89,7 +89,7 @@
             </span>
 
             <span class="item-name">
-              <input type="item-name" name="custom-menu[{{ cmd_second_item['id'] }}][name]" value="{{ cmd_second_item['name'] }}" class="custom-item-name" placeholder="{{ cmd_second_item['name'] }}">
+              <input type="item-name" name="custom-menu[{{ cmd_second_item['id'] }}][name]" value="{{ cmd_second_item['name'] }}" class="custom-item-name form-control" placeholder="{{ cmd_second_item['name'] }}">
             </span>
             <span class="item-link">
 
@@ -129,7 +129,7 @@
           {% for cmd_third_item in cmd_second_item['children'] %}
           <li id="dd_custom_{{ cmd_third_item['id'] }}" class="dd-item dd-nodrag custom-menu-item" data-id="{{ cmd_third_item['id'] }}">
 
-            <div class="dd-handle">
+            <div class="dd-handle form-inline">
 
               <span class="item-icon-picker btn-group">
                 <button type="button" class="btn btn-default iconpicker-component"><i class="fa fa-fw fa-heart"></i></button>
@@ -142,7 +142,7 @@
               </span>
 
               <span class="item-name">
-                <input type="item-name" name="custom-menu[{{ cmd_third_item['id'] }}][name]" value="{{ cmd_third_item['name'] }}" class="custom-item-name" placeholder="{{ cmd_third_item['name'] }}">
+                <input type="item-name" name="custom-menu[{{ cmd_third_item['id'] }}][name]" value="{{ cmd_third_item['name'] }}" class="custom-item-name form-control" placeholder="{{ cmd_third_item['name'] }}">
               </span>
               <span class="item-link">
 
@@ -196,7 +196,7 @@
 <template id="new_custom_item">
   <li id="dd_custom_%%new_custom_id%%" class="dd-item dd-nodrag custom-menu-item" data-id="%%new_custom_id%%">
 
-      <div class="dd-handle">
+      <div class="dd-handle form-inline">
           <span class="item-icon-picker btn-group">
             <button type="button" class="btn btn-default iconpicker-component"><i class="fa fa-fw fa-flask"></i></button>
             <button type="button" class="icp icp-dd btn dropdown-toggle supericon-yep" data-selected="fa-flask" data-id="%%new_custom_id%%" data-toggle="dropdown">
@@ -208,7 +208,7 @@
           </span>
 
         <span class="item-name">
-          <input type="item-name" name="custom-menu[%%new_custom_id%%][name]" value="Shopunity" class="custom-item-name" placeholder="{{ text_phd_item_name }}">
+          <input type="item-name" name="custom-menu[%%new_custom_id%%][name]" value="Shopunity" class="custom-item-name form-control" placeholder="{{ text_phd_item_name }}">
         </span>
 
         <span class="item-link">
@@ -237,7 +237,7 @@
 <template id="new_custom_route_item">
   <li id="dd_custom_%%new_custom_id%%" class="dd-item dd-nodrag custom-menu-item" data-id="%%new_custom_id%%">
 
-      <div class="dd-handle">
+      <div class="dd-handle form-inline">
           <span class="item-icon-picker btn-group">
             <button type="button" class="btn btn-default iconpicker-component"><i class="fa fa-fw fa-flask"></i></button>
             <button type="button" class="icp icp-dd btn dropdown-toggle supericon-yep" data-selected="fa-flask" data-id="%%new_custom_id%%" data-toggle="dropdown">
@@ -249,7 +249,7 @@
           </span>
 
         <span class="item-name">
-          <input type="item-name" name="custom-menu[%%new_custom_id%%][name]" value="Shopunity" class="custom-item-name" placeholder="{{ text_phd_item_name }}">
+          <input type="item-name" name="custom-menu[%%new_custom_id%%][name]" value="Shopunity" class="custom-item-name form-control" placeholder="{{ text_phd_item_name }}">
         </span>
 
         <span class="item-link">
