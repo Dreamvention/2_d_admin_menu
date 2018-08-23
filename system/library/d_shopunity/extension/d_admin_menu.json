@@ -55,7 +55,7 @@
         "admin/controller/extension/module/d_admin_menu.php",
         "admin/model/extension/module/d_admin_menu.php",
         "admin/language/en-gb/extension/module/d_admin_menu.php",
-        "admin/view/template/extension/d_admin_menu/welcome.php",
+        "admin/view/template/extension/d_admin_menu/welcome.twig",
 
         "system/config/d_admin_menu/d_admin_menu_201.php",
         "system/config/d_admin_menu/d_admin_menu_203.php",
