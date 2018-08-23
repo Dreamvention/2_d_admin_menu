@@ -37,6 +37,11 @@ $_['help_standart_menu']                = "Change 'work mode' to make it editabl
 $_['help_work_mode']                    = "'Replace mode' will replace your current menu. \n 'Inherit mode' don't.";
 $_['help_custom_route']                 = "You should type 'http://' or 'https://' if you would like to use a custom URL";
 
+//support
+$_['text_support']              = 'Support';
+$_['entry_support']             = 'Support<br/><small style="font-size: 70%;">Create a ticket. If you find a bug, even in a free version, please let us know.</small>';
+$_['button_support']            = 'Open ticket';
+
 // Success
 $_['success_twig_compatible']           = 'Twig support succesfully installed. You can enter Admin Menu now.';
 
@@ -45,3 +50,10 @@ $_['error_permission']                  = 'You don\'t have enought rights to mod
 
 // Instruction
 $_['text_instruction']                  = '<h3>Feel free to explore it by yourself ;)</h3>';
+//welcome
+$_['text_welcome_title']            = 'Admin Menu';
+$_['text_welcome_description']      = 'Manage your OpenCart admin menu to make it fit your needs!';
+
+$_['button_setup']                  = 'Setup';
+$_['checkbox_setup'] 				= 'Install Demo Data';
+$_['success_setup']                 = 'Success: You have now setup Module!';

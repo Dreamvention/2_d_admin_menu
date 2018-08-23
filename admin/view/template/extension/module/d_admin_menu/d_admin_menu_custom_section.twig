@@ -45,7 +45,7 @@
 
             {% else %}
 
-              <select name="custom-menu[{{ cmd_first_item['id'] }}][item_link]" class="input-sm custom-item-link">
+              <select name="custom-menu[{{ cmd_first_item['id'] }}][item_link]" class="form-control custom-item-link">
                 {% for mfl in modules_for_links %}
                 <optgroup label="{{ mfl['text'] }}">
                 {% if (not mfl['extra']) %}

@@ -49,13 +49,7 @@
                             <span class="fa fa-cog"></span>
                             {{ tab_setting }}
                         </a>
-                    </li>
-                    <li>
-                        <a href="#instruction" data-toggle="tab">
-                            <span class="fa fa-graduation-cap"></span>
-                            {{ tab_instruction }}
-                        </a>
-                    </li>
+                    </li>                    
                   </ul>
 
                   <div class="tab-content">
@@ -81,7 +75,8 @@
                                               </div>
                                           </div>
                                       </div>
-
+                                    </div>
+                                    <div class="row">
                                       <div class="col-lg-6">
                                           <div class="form-group">
                                               <label class="col-sm-4 control-label" for="input_work_mode"><span data-toggle="tooltip" title="{{ help_work_mode }}">{{ entry_work_mode }}</span></label>
@@ -90,8 +85,8 @@
                                               </div>
                                           </div>
                                       </div>
-
                                     </div>
+                                  </div>
 
                                     <hr>
 
@@ -120,33 +115,27 @@
                                           </div>
                                         </div>
                                       </div>
-
-                                    </div>
-                                  </div>
-
+                                    </div> 
+                                    {# button support #}
+                                    <div class="col-md-12">
+                                      <hr>
+                                      <div class="form-group">
+                                        <label class="col-sm-2 control-label" for="button_support_email">{{ entry_support }}</label>
+                                        <div class="col-sm-10">
+                                           <a href="{{ support_url }}" class="btn btn-success" target="_blank">{{ button_support }}</a>
+                                        </div>
+                                      </div>
+                                    </div>                                
                                 </div>
                               </div>
-
                             </div>
                           </div>
                       </div>
-
-                      <div class="tab-pane" id="instruction" >
-                          <div class="tab-body">
-                              {{ text_instruction }}
-                          </div>
-                      </div>
-
                   </div>
-
                 </form>
             </div>
         </div>
-
-
-
     </div>
-
 </div>
 
 <script>
