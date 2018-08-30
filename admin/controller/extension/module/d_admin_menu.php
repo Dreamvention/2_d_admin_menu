@@ -47,11 +47,6 @@ class ControllerExtensionModuleDAdminMenu extends Controller
 
         $this->model_extension_d_opencart_patch_cache->clearTwig();
 
-        if(!$this->isSetup()){
-            $this->setupView();
-            return;
-        }
-
         if ($this->d_admin_style){
             $this->load->model('extension/d_admin_style/style');
             $this->model_extension_d_admin_style_style->getStyles('light');
@@ -127,12 +122,14 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['text_edit'] = $this->language->get('text_edit');
 
         // Variable
-        $data['id'] = $this->codename;
+        $data['codename'] = $this->codename;
         $data['route'] = $this->route;
         $data['store_id'] = $this->store_id;
         $data['support_email'] = $this->extension['support']['email'];
         $data['version'] = $this->extension['version'];
         $data['token'] = $this->model_extension_d_opencart_patch_user->getUrlToken();
+        $data['get_token'] = $this->model_extension_d_opencart_patch_user->getToken();
+        $data['d_shopunity'] = $this->d_shopunity;
 
         // Tab
         $data['tab_setting'] = $this->language->get('tab_setting');
@@ -176,6 +173,11 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['entry_support'] = $this->language->get('entry_support');
         $data['button_support'] = $this->language->get('button_support');
         $data['support_url'] = $this->extension['support']['url'];
+        $data['text_powered_by'] = $this->language->get('text_powered_by');
+
+        $data['setup'] = $this->isSetup();
+        $data['text_setup'] = $this->language->get('text_setup');
+        $data['setup_link'] = $this->model_extension_d_opencart_patch_url->ajax($this->route.'/setup');
 
         // Entry
         $data['entry_work_mode'] = $this->language->get('entry_work_mode');
@@ -186,32 +188,28 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $data['cancel'] = $this->model_extension_d_opencart_patch_url->getExtensionLink('module');
         $data['save_and_stay'] = $this->model_extension_d_opencart_patch_url->link($this->route.'/save_and_stay', $url);
 
-
-        // Create setting if not exist
         $data['setting_id'] = $this->model_extension_module_d_admin_menu->getLastSettingId();
-        if ($data['setting_id'] === false) {
-            $this->createSetting();
-            $data['setting_id'] = $this->model_extension_module_d_admin_menu->getLastSettingId();
-        }
-        $data['setting'] = $this->model_extension_module_d_admin_menu->getSetting($data['setting_id']);
+        if ($data['setting_id'] !== false) {
 
-        $data[$this->codename . '_status'] = $data['setting']['status'];
-        $data[$this->codename . '_work_mode'] = $data['setting']['work_mode'];
+            $data['setting'] = $this->model_extension_module_d_admin_menu->getSetting($data['setting_id']);
+            $data[$this->codename . '_status'] = $data['setting']['status'];
+            $data[$this->codename . '_work_mode'] = $data['setting']['work_mode'];
 
-        $data['standart_menu'] = $this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename . '_standart_section',
-            array("standart_menu_data" => $data['setting']['main_menu']['menu_data'])
-        );
+            $data['standart_menu'] = $this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename . '_standart_section',
+                array("standart_menu_data" => $data['setting']['main_menu']['menu_data'])
+            );
 
-        $data['custom_menu'] = $this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename . '_custom_section',
-            array(
-                "custom_menu_data"   => $data['setting']['custom_menu'],
-                "modules_for_links"  => $this->model_extension_module_d_admin_menu->getModulesForLinks(),
-                "text_phd_item_name" => $this->language->get('text_placeholder_item_name'),
-                "button_custom_route_item" => $this->language->get('button_custom_route_item'),
-                "text_custom_route" => $this->language->get('text_custom_route'),
-                "help_custom_route" => $this->language->get('help_custom_route')
-            )
-        );
+            $data['custom_menu'] = $this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename . '_custom_section',
+                array(
+                    "custom_menu_data"   => $data['setting']['custom_menu'],
+                    "modules_for_links"  => $this->model_extension_module_d_admin_menu->getModulesForLinks(),
+                    "text_phd_item_name" => $this->language->get('text_placeholder_item_name'),
+                    "button_custom_route_item" => $this->language->get('button_custom_route_item'),
+                    "text_custom_route" => $this->language->get('text_custom_route'),
+                    "help_custom_route" => $this->language->get('help_custom_route')
+                )
+            );
+        };
 
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
@@ -220,76 +218,14 @@ class ControllerExtensionModuleDAdminMenu extends Controller
         $this->response->setOutput($this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename . '_editor', $data));
     }
 
-    public function setupView() {
-        
-        $this->load->model('extension/d_opencart_patch/load');
-        $this->load->model('extension/d_opencart_patch/url');
-
-        if($this->d_admin_style){
-            $this->load->model('extension/d_admin_style/style');
-
-            $this->model_extension_d_admin_style_style->getAdminStyle('light');
-        }
-        
-        $url_params = array();
-        
-        if (isset($this->response->get['store_id'])) {
-            $url_params['store_id'] = $this->store_id;
-        }
-        
-        $url = ((!empty($url_params)) ? '&' : '') . http_build_query($url_params);
-        
-        // Breadcrumbs
-        $data['breadcrumbs'] = array();
-        $data['breadcrumbs'][] = array(
-            'text' => $this->language->get('text_home'),
-            'href' => $this->model_extension_d_opencart_patch_url->link('common/home')
-            );
-
-        $data['breadcrumbs'][] = array(
-            'text'      => $this->language->get('text_modules'),
-            'href'      => $this->model_extension_d_opencart_patch_url->link('marketplace/extension', 'type=module')
-        );
-
-        $data['breadcrumbs'][] = array(
-            'text' => $this->language->get('heading_title_main'),
-            'href' => $this->model_extension_d_opencart_patch_url->link('marketplace/extension', $url)
-        );
-        
-        // Notification
-        foreach ($this->error as $key => $error) {
-            $data['error'][$key] = $error;
-        }
-        
-        // Heading
-        $this->document->setTitle($this->language->get('heading_title_main'));
-        $data['heading_title'] = $this->language->get('heading_title_main');
-        $data['text_edit'] = $this->language->get('text_edit');
-
-        $data['version'] = $this->extension['version'];
-        
-        $data['text_welcome_title'] = $this->language->get('text_welcome_title');
-        $data['text_welcome_description'] = $this->language->get('text_welcome_description');
-
-        $data['button_setup'] = $this->language->get('button_setup');
-
-        $data['quick_setup'] = $this->model_extension_d_opencart_patch_url->ajax($this->route.'/setup');
-        
-        $data['header'] = $this->load->controller('common/header');
-        $data['column_left'] = $this->load->controller('common/column_left');
-        $data['footer'] = $this->load->controller('common/footer');
-
-        $this->response->setOutput($this->model_extension_d_opencart_patch_load->view('extension/'.$this->codename.'/welcome', $data));
-    }
-
-
     public function setup () {
-        $this->load->model('extension/d_opencart_patch/url');
-        $this->load->model('setting/setting');
-        $this->createSetting();
-        $json['redirect'] = $this->model_extension_d_opencart_patch_url->ajax($this->route);
-        $this->response->addHeader('Content-Type: application/json');
-        $this->response->setOutput(json_encode($json));
+        // Create setting if not exist
+        if ($this->model_extension_module_d_admin_menu->getLastSettingId() === false) {
+            $this->createSetting();
+        }
+        $this->save_and_stay();
+        $this->session->data['success'] = $this->language->get('success_setup');
+        $this->response->redirect($this->model_extension_d_opencart_patch_url->link($this->route));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////

@@ -7,7 +7,7 @@
     "author": {
         "name": "Dreamvention",
         "email": "info@dreamvention.com",
-        "url": "https://dreamvention.com/"
+        "url": "https://dreamvention.ee/"
     },
     "opencart_version": [
         "2.0.1.0",
@@ -46,7 +46,8 @@
         "d_event_manager": ">= 1.1.2",
         "d_simple_html_dom": ">= 1.0.4",
         "d_bootstrap_extra": ">= 1.0.1",
-        "d_bootstrap_switch": ">= 3.3.5"
+        "d_bootstrap_switch": ">= 3.3.5",
+        "d_admin_style": ">= 1.0.0"
     },
     "files": [
         "system/library/d_shopunity/extension/d_admin_menu.json",
@@ -55,7 +56,6 @@
         "admin/controller/extension/module/d_admin_menu.php",
         "admin/model/extension/module/d_admin_menu.php",
         "admin/language/en-gb/extension/module/d_admin_menu.php",
-        "admin/view/template/extension/d_admin_menu/welcome.twig",
 
         "system/config/d_admin_menu/d_admin_menu_201.php",
         "system/config/d_admin_menu/d_admin_menu_203.php",
@@ -66,6 +66,7 @@
     "dirs": [
         "admin/view/javascript/d_admin_menu",
         "admin/view/stylesheet/d_admin_menu",
+        "admin/view/image/d_admin_menu",
         "admin/view/template/extension/module/d_admin_menu"
     ],
     "changelog": [

@@ -17,6 +17,41 @@ class ModelExtensionModuleDAdminMenu extends Model
         }
     }
 
+
+    public function addMenuItem ($codename, $data) {
+        $new_setting = array(
+            "name"          => $codename,
+            "status"        => 1,
+            "work_mode"     => 1,
+            "main_menu"     => array(
+                "version"           => VERSION,
+                "menu_data"         => $this->fillMenuWithLanguage($this->fillMenuWithIds())
+            ),
+            "custom_menu"   => array(
+                array(
+            "id"                    => 1,
+            "icon"                  => $data['icon'],
+            "name"                  => $data['name'],
+            "custom_route"          => false,
+            "href"                  => 'index.php?route=' .$data['link']. '&',
+            "href_type"             => 'route',
+            "children"              => array(),
+            "sort_order"            => 0
+                ),
+            ),
+        );
+
+        $this->setSetting($codename, $new_setting, $this->store_id);
+    }
+
+    public function deleteMenuItem($codename){
+        $this->db->query("DELETE FROM `" . DB_PREFIX . "dam_setting` WHERE name = '" . $codename . "'");
+    }
+
+        
+    
+
+
     public function installDatabase()
     {
         // install oc_dam_setting ('dam' for 'Dreamvention Admin Menu')

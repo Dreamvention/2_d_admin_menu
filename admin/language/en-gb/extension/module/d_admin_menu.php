@@ -38,9 +38,10 @@ $_['help_work_mode']                    = "'Replace mode' will replace your curr
 $_['help_custom_route']                 = "You should type 'http://' or 'https://' if you would like to use a custom URL";
 
 //support
-$_['text_support']              = 'Support';
-$_['entry_support']             = 'Support<br/><small style="font-size: 70%;">Create a ticket. If you find a bug, even in a free version, please let us know.</small>';
-$_['button_support']            = 'Open ticket';
+$_['text_support']                      = 'Support';
+$_['entry_support']                     = 'Support<br/><small style="font-size: 70%;">Create a ticket. If you find a bug, even in a free version, please let us know.</small>';
+$_['button_support']                    = 'Open ticket';
+$_['text_powered_by']                   = 'Tested with <a href="https://shopunity.net/extension/admin_menu" target="_blank">Shopunity.net</a> <br> Find more amazing extensions at <a href="https://dreamvention.ee/" target="_blank">Dreamvention.ee</a>';
 
 // Success
 $_['success_twig_compatible']           = 'Twig support succesfully installed. You can enter Admin Menu now.';
@@ -50,10 +51,65 @@ $_['error_permission']                  = 'You don\'t have enought rights to mod
 
 // Instruction
 $_['text_instruction']                  = '<h3>Feel free to explore it by yourself ;)</h3>';
-//welcome
-$_['text_welcome_title']            = 'Admin Menu';
-$_['text_welcome_description']      = 'Manage your OpenCart admin menu to make it fit your needs!';
 
-$_['button_setup']                  = 'Setup';
-$_['checkbox_setup'] 				= 'Install Demo Data';
-$_['success_setup']                 = 'Success: You have now setup Module!';
+//welcome
+$_['success_setup']                     = 'Success: You have now setup Module!';
+$_['text_setup']                        = '
+<style>
+    a#button-menu{
+        -webkit-appearance: none!important;
+    }
+    .welcome {
+        background: url(\'view/image/d_admin_menu/bg.svg\');
+        background-position: bottom;
+        background-repeat: repeat-x;
+        background-size: 100%;
+        min-height: 1025px;
+        padding-top: 50px;
+        padding-bottom: 525px;
+    }
+
+    .welcome-into {
+        text-align: center;
+        max-width: 500px;
+        margin: auto;
+    }
+
+    .welcome-into-logo {
+        padding-bottom: 15px;
+    }
+
+    .welcome-into-heading {
+        font-size: 30px;
+        font-weight: bold;
+        padding-bottom: 15px;
+    }
+
+    .welcome-into-text {
+        font-size: 18px;
+        padding-bottom: 30px;
+    }
+
+    .welcome-into-start {
+        padding-bottom: 30px;
+    }
+
+    .panel .panel-body {
+        padding: 0px;
+    }
+
+</style>
+<div class="welcome">
+    <div class="welcome-into">
+        <div class="welcome-into-logo">
+            <img src="view/image/d_admin_menu/icon.svg" />
+        </div>
+        <div class="welcome-into-heading">Admin Menu</div>
+        <div class="welcome-into-text">Wouldn\'t it be amazing if you could organize your Opencart Admin menu as you wished. Move, add, hide and show every menu item. Now you can. With Admin manu you can do all that. Customize your admin to your needs and increase your productivity today!</div>
+
+        <div class="welcome-into-start">
+            <a class="btn btn-primary btn-lg setup">Setup</a>
+        </div>
+    </div>
+</div>
+';

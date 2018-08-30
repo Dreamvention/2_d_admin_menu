@@ -35,12 +35,26 @@
             <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
         {% endif %}
+        {% if d_shopunity %}
+            <div class="d_shopunity_update"></div>
+            <script src="view/javascript/d_shopunity/d_shopunity_widget.js" type="text/javascript"></script>
+            <script type="text/javascript">
+            var d_shopunity_update = jQuery.extend(true, {}, d_shopunity_widget);
+            d_shopunity_update.init({
+            class: '.d_shopunity_update',
+            token: '{{get_token}}',
+            extension_id: 'd_admin_menu',
+            action: 'loadUpdate'
+            });
+            </script>
+        {% endif %}
 
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
             </div>
             <div class="panel-body">
+              {% if setup %}
                 <form action="{{ save_and_stay }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
 
                   <ul  class="nav nav-tabs">
@@ -71,7 +85,7 @@
                                           <div class="form-group">
                                               <label class="col-sm-4 control-label" for="input_status"><span data-toggle="tooltip" title="{{ help_status }}">{{ entry_status }}</span></label>
                                               <div class="col-sm-8">
-                                                  <input type="checkbox" value="1" name="{{ id }}_status" id="input_status" data-on-color="success"  data-bs-status="true" {{ attribute(_context, id ~ '_status') == '1' ? 'checked="checked"' : '' }} class="form-control" />
+                                                  <input type="checkbox" value="1" name="{{ codename }}_status" id="input_status" data-on-color="success"  data-bs-status="true" {{ attribute(_context, codename ~ '_status') == '1' ? 'checked="checked"' : '' }} class="form-control" />
                                               </div>
                                           </div>
                                       </div>
@@ -81,7 +95,7 @@
                                           <div class="form-group">
                                               <label class="col-sm-4 control-label" for="input_work_mode"><span data-toggle="tooltip" title="{{ help_work_mode }}">{{ entry_work_mode }}</span></label>
                                               <div class="col-sm-8">
-                                                  <input type="checkbox" value="1" name="{{ id }}_work_mode" id="input_work_mode" data-on-color="primary" data-off-color="primary" data-on-text="{{ text_inherit }}" data-off-text="{{ text_replace }}" data-label-width="20" data-bs-status="true" {{ attribute(_context, id ~ '_work_mode') == '1' ? 'checked="checked"' : '' }} class="form-control" />
+                                                  <input type="checkbox" value="1" name="{{ codename }}_work_mode" id="input_work_mode" data-on-color="primary" data-off-color="primary" data-on-text="{{ text_inherit }}" data-off-text="{{ text_replace }}" data-label-width="20" data-bs-status="true" {{ attribute(_context, codename ~ '_work_mode') == '1' ? 'checked="checked"' : '' }} class="form-control" />
                                               </div>
                                           </div>
                                       </div>
@@ -120,12 +134,12 @@
                                     <div class="col-md-12">
                                       <hr>
                                       <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="button_support_email">{{ entry_support }}</label>
+                                        <label class="col-sm-2 control-label" style="line-height: 20px;" for="button_support_email">{{ entry_support }}</label>
                                         <div class="col-sm-10">
                                            <a href="{{ support_url }}" class="btn btn-success" target="_blank">{{ button_support }}</a>
                                         </div>
                                       </div>
-                                    </div>                                
+                                    </div>
                                 </div>
                               </div>
                             </div>
@@ -133,7 +147,11 @@
                       </div>
                   </div>
                 </form>
+                <div style="text-align: center; padding: 30px;">{{text_powered_by}}</div>
             </div>
+          {% else %}
+            {{text_setup}}
+          {% endif %}
         </div>
     </div>
 </div>
@@ -362,6 +380,9 @@
     });
   });
 
+    $(document).on('click', '.setup', function(){
+        window.location.replace("{{setup_link}}");
+    });
 
 
 </script>
