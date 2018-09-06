@@ -57,22 +57,27 @@
               {% if setup %}
                 <form action="{{ save_and_stay }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
 
-                  <ul  class="nav nav-tabs">
+                  <ul class="nav nav-tabs">
                     <li class="active">
                         <a href="#setting" data-toggle="tab">
                             <span class="fa fa-cog"></span>
                             {{ tab_setting }}
                         </a>
-                    </li>                    
+                    </li>
+                    <li>
+                        <a href="#instructions" data-toggle="tab">
+                            <span class="fa fa-graduation-cap fa-fw"></span>
+                            {{ tab_instruction }}
+                        </a>
+                    </li>
                   </ul>
 
                   <div class="tab-content">
 
                       <div class="tab-pane active" id="setting" >
                           <div class="tab-body">
-                            <div class="row">
-
-                              <div class="col-sm-12">
+                            <div>
+                              <div>
                                 <div class="tab-content">
 
 
@@ -83,7 +88,7 @@
 
                                       <div class="col-lg-6">
                                           <div class="form-group">
-                                              <label class="col-sm-4 control-label" for="input_status"><span data-toggle="tooltip" title="{{ help_status }}">{{ entry_status }}</span></label>
+                                              <label class="col-sm-4 control-label" for="input_status">{{ entry_status }}</label>
                                               <div class="col-sm-8">
                                                   <input type="checkbox" value="1" name="{{ codename }}_status" id="input_status" data-on-color="success"  data-bs-status="true" {{ attribute(_context, codename ~ '_status') == '1' ? 'checked="checked"' : '' }} class="form-control" />
                                               </div>
@@ -104,7 +109,7 @@
 
                                     <hr>
 
-                                    <div class="col-sm-12">
+                                    <div class="row">
 
                                       <!-- STANDART MENU -->
                                       <div class="panel-group col-sm-12 col-md-12 col-lg-5">
@@ -131,10 +136,10 @@
                                       </div>
                                     </div> 
                                     {# button support #}
-                                    <div class="col-md-12">
+                                    <div>
                                       <hr>
                                       <div class="form-group">
-                                        <label class="col-sm-2 control-label" style="line-height: 20px;" for="button_support_email">{{ entry_support }}</label>
+                                        <label class="col-sm-2 control-label" for="button_support_email">{{ entry_support }}</label>
                                         <div class="col-sm-10">
                                            <a href="{{ support_url }}" class="btn btn-success" target="_blank">{{ button_support }}</a>
                                         </div>
@@ -144,6 +149,9 @@
                               </div>
                             </div>
                           </div>
+                      </div>
+                      <div class="tab-pane" id="instructions">
+                        <div class="instruction" style="max-width:700px"></div>
                       </div>
                   </div>
                 </form>
@@ -384,6 +392,11 @@
         window.location.replace("{{setup_link}}");
     });
 
+    var url = 'https://dreamvention.ee/d-admin-menu-instruction';
+
+    $.getJSON(url + '?format=json&callback=?', function(data) {
+        $('.instruction').html(data['description']);
+    });
 
 </script>
 

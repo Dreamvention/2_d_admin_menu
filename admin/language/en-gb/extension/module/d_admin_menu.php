@@ -53,7 +53,7 @@ $_['error_permission']                  = 'You don\'t have enought rights to mod
 $_['text_instruction']                  = '<h3>Feel free to explore it by yourself ;)</h3>';
 
 //welcome
-$_['success_setup']                     = 'Success: You have now setup Module!';
+$_['success_setup']                     = 'Success: You have now setup Admin menu. You can see the new options on the left';
 $_['text_setup']                        = '
 <style>
     a#button-menu{
@@ -66,7 +66,7 @@ $_['text_setup']                        = '
         background-size: 100%;
         min-height: 1025px;
         padding-top: 50px;
-        padding-bottom: 525px;
+        padding-bottom: 325px;
     }
 
     .welcome-into {
