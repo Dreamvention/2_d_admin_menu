@@ -12,50 +12,68 @@ class ModelExtensionModuleDAdminMenu extends Model
         $this->load->language($this->route);
         $this->load->model('extension/d_opencart_patch/modification');
 
-        if(!defined('DIR_ROOT')){
+        if (!defined('DIR_ROOT')) {
             define('DIR_ROOT', substr_replace(DIR_SYSTEM, '/', -8));
         }
     }
 
-
-    public function addMenuItem ($codename, $data) {
-        $new_setting = array(
-            "name"          => $codename,
-            "status"        => 1,
-            "work_mode"     => 1,
-            "main_menu"     => array(
-                "version"           => VERSION,
-                "menu_data"         => $this->fillMenuWithLanguage($this->fillMenuWithIds())
-            ),
-            "custom_menu"   => array(
-                array(
-            "id"                    => 1,
-            "icon"                  => $data['icon'],
-            "name"                  => $data['name'],
-            "custom_route"          => false,
-            "href"                  => 'index.php?route=' .$data['link']. '&',
-            "href_type"             => 'route',
-            "children"              => array(),
-            "sort_order"            => 0
+    public function installCompatibility()
+    {
+        $this->load->model('extension/d_opencart_patch/extension');
+        $this->load->model('extension/d_opencart_patch/setting');
+        if(!$this->model_extension_d_opencart_patch_extension->isInstalled($this->codename)) {
+            $this->model_extension_d_opencart_patch_extension->install('module', $this->codename);
+            $this->load->controller('extension/module/'.$this->codename.'/install');
+        }
+        $setting = $this->getSettings(0);
+        if (empty($setting)){
+            $setting_name = "default-setting";
+            $new_setting = array(
+                "name"          => $setting_name,
+                "status"        => 1,
+                "work_mode"     => 1,
+                "main_menu"     => array(
+                    "version"           => VERSION,
+                    "menu_data"         => $this->model_extension_module_d_admin_menu->fillMenuWithLanguage($this->model_extension_module_d_admin_menu->fillMenuWithIds())
                 ),
-            ),
+                "custom_menu"   => array()
+            );
+            $setting_id = $this->model_extension_module_d_admin_menu->setSetting($setting_name, $new_setting, $this->store_id);
+            if (!$setting_id) {
+                throw new Exeption($this->language->get('error_setting_not_created'));
+            }
+            $this->load->controller($this->route.'/installEvents');
+        }
+    }
+
+    public function addMenuItem($codename, $data)
+    {
+        $setting_before = $this->getSetting();
+//        $last_custom_item_id = $setting_before['custom_menu'][count($setting_before['custom_menu'])]['id'];
+        $setting_before['custom_menu'][$codename] = array(
+            "id"           => $codename,
+            "icon"         => $data['icon'],
+            "name"         => $data['name'],
+            "custom_route" => false,
+            "href"         => 'index.php?route=' . $data['link'] . '&',
+            "href_type"    => 'route',
+            "children"     => $data['children'],
+            "sort_order"   => 0
         );
-
-        $this->setSetting($codename, $new_setting, $this->store_id);
+        $this->setSetting($setting_before['name'], $setting_before, $this->store_id);
     }
 
-    public function deleteMenuItem($codename){
-        $this->db->query("DELETE FROM `" . DB_PREFIX . "dam_setting` WHERE name = '" . $codename . "'");
+    public function deleteMenuItem($codename)
+    {
+        $setting_before = $this->getSetting();
+        $setting_before['custom_menu'][$codename];
+        $this->setSetting($setting_before['name'], $setting_before, $this->store_id);
     }
-
-        
-    
-
 
     public function installDatabase()
     {
         // install oc_dam_setting ('dam' for 'Dreamvention Admin Menu')
-        $query = $this->db->query("CREATE TABLE IF NOT EXISTS `".DB_PREFIX."dam_setting` (
+        $query = $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "dam_setting` (
         `setting_id` int(11) NOT NULL AUTO_INCREMENT,
         `store_id` int(11) NOT NULL,
         `name` varchar(32) NOT NULL,
@@ -66,7 +84,7 @@ class ModelExtensionModuleDAdminMenu extends Model
 
     public function uninstallDatabase()
     {
-        $query = $this->db->query("DROP TABLE IF EXISTS `".DB_PREFIX."dam_setting`");
+        $query = $this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "dam_setting`");
     }
 
     public function getCurrentSettingId($id, $store_id = 0)
@@ -74,18 +92,18 @@ class ModelExtensionModuleDAdminMenu extends Model
         $this->load->model('setting/setting');
         $setting = $this->model_setting_setting->getSetting($id, $store_id);
 
-        if(isset($this->request->get['setting_id'])){
+        if (isset($this->request->get['setting_id'])) {
             $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
                 WHERE store_id = '" . (int)$store_id . "'
-                AND setting_id = '" . (int)$this->request->get['setting_id'] . "'" );
-                if($query->row){
-                    return $query->row['setting_id'];
-                }
+                AND setting_id = '" . (int)$this->request->get['setting_id'] . "'");
+            if ($query->row) {
+                return $query->row['setting_id'];
+            }
         }
 
         $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
-            WHERE store_id = '" . (int)$store_id . "'" );
-        if($query->row){
+            WHERE store_id = '" . (int)$store_id . "'");
+        if ($query->row) {
             return $query->row['setting_id'];
         }
 
@@ -95,10 +113,10 @@ class ModelExtensionModuleDAdminMenu extends Model
     public function getSettingName($setting_id)
     {
         $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
-            WHERE setting_id = '" . (int)$setting_id . "'" );
-        if(isset($query->row['name'])){
+            WHERE setting_id = '" . (int)$setting_id . "'");
+        if (isset($query->row['name'])) {
             return $query->row['name'];
-        }else{
+        } else {
             return false;
         }
     }
@@ -110,10 +128,10 @@ class ModelExtensionModuleDAdminMenu extends Model
         }
 
         $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
-            WHERE setting_id = '" . (int)$setting_id . "'" );
+            WHERE setting_id = '" . (int)$setting_id . "'");
 
         $result = $query->row;
-        if(isset($result['value'])){
+        if (isset($result['value'])) {
             $result['value'] = json_decode($result['value'], true);
         }
 
@@ -123,7 +141,7 @@ class ModelExtensionModuleDAdminMenu extends Model
     public function getSettings($store_id)
     {
         $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
-            WHERE store_id = '" . (int)$store_id . "'"  );
+            WHERE store_id = '" . (int)$store_id . "'");
 
         $results = $query->rows;
 
@@ -140,7 +158,7 @@ class ModelExtensionModuleDAdminMenu extends Model
             ORDER BY setting_id DESC LIMIT 1");
 
         $result = $query->row;
-        if(isset($result['setting_id'])){
+        if (isset($result['setting_id'])) {
             return (int)$result['setting_id'];
         } else {
             return false;
@@ -178,8 +196,7 @@ class ModelExtensionModuleDAdminMenu extends Model
 
     public function some_sort(&$some_array)
     {
-        usort($some_array, function ($a, $b)
-        {
+        usort($some_array, function ($a, $b) {
             if ($a['sort_order'] == $b['sort_order']) {
                 return 0;
             }
@@ -205,7 +222,7 @@ class ModelExtensionModuleDAdminMenu extends Model
 
             $this->load->config('d_admin_menu/d_admin_menu_230');
 
-        } elseif (VERSION >='3.0.0.0') {
+        } elseif (VERSION >= '3.0.0.0') {
 
             $this->load->config('d_admin_menu/d_admin_menu_302');
         }
@@ -300,7 +317,7 @@ class ModelExtensionModuleDAdminMenu extends Model
         // before 230 fix
         $path_fix = (VERSION >= '2.3.0.0') ? 'extension/' : '';
 
-        $cat_files = glob(DIR_APPLICATION . 'controller/extension/'.$path_fix.'*.php', GLOB_BRACE);
+        $cat_files = glob(DIR_APPLICATION . 'controller/extension/' . $path_fix . '*.php', GLOB_BRACE);
 
         foreach ($cat_files as $c_file) {
             $extension = basename($c_file, '.php');
@@ -311,9 +328,9 @@ class ModelExtensionModuleDAdminMenu extends Model
                 $cat_files = glob(DIR_APPLICATION . 'controller/' . $path_fix . $extension . '/*.php', GLOB_BRACE);
 
                 $tmp_mdls_data[] = array(
-                    'code' => $extension,
-                    'text' => $this->language->get('heading_title'),
-                    'extra'=> $this->getExtensionList($extension)
+                    'code'  => $extension,
+                    'text'  => $this->language->get('heading_title'),
+                    'extra' => $this->getExtensionList($extension)
                 );
             }
 
@@ -332,7 +349,7 @@ class ModelExtensionModuleDAdminMenu extends Model
         // ,' . $category_shortname . '
 
         // Compatibility code for old extension folders
-        $files = glob(DIR_APPLICATION . 'controller/{'. $path_fix . $category_shortname . '}/*.php', GLOB_BRACE);
+        $files = glob(DIR_APPLICATION . 'controller/{' . $path_fix . $category_shortname . '}/*.php', GLOB_BRACE);
 
         if ($files) {
             foreach ($files as $file) {
@@ -341,9 +358,9 @@ class ModelExtensionModuleDAdminMenu extends Model
                 $this->load->language($path_fix . $category_shortname . '/' . $extension);
 
                 $extra_data[] = array(
-                    'name'          => $this->language->get('heading_title'),
-                    'shortname'     => $extension,
-                    'edit'          => $path_fix . $category_shortname .'/' . $extension
+                    'name'      => $this->language->get('heading_title'),
+                    'shortname' => $extension,
+                    'edit'      => $path_fix . $category_shortname . '/' . $extension
                 );
             }
         }

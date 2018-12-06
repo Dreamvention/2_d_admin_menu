@@ -478,7 +478,6 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                     $current_setting['work_mode'] = 0;
                 }
             }
-
             // SAVE SETTING
             $setting_id = $this->model_extension_module_d_admin_menu->editSetting($this->model_extension_module_d_admin_menu->getLastSettingId(), $current_setting);
             $this->session->data['success'] = $this->language->get('text_success');
