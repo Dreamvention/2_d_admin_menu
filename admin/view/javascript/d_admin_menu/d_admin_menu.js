@@ -18,45 +18,45 @@ $('#menu2 a[href=\'' + sessionStorage.getItem('menu') + '\']').parents('ul').add
 
 $('#menu2 a[href=\'' + sessionStorage.getItem('menu') + '\']').parents('li').addClass('active');
 //
-// if (localStorage.getItem('column-left') == 'active') {
-//     $('#button-menu i').replaceWith('<i class="fa fa-dedent fa-lg"></i>');
-//
-//     $('#column-left').addClass('active');
-//
-//     // Slide Down Menu
-//     $('#menu2 li.active').has('ul').children('ul').addClass('collapse in');
-//     $('#menu2 li').not('.active').has('ul').children('ul').addClass('collapse');
-// } else {
-//     $('#button-menu i').replaceWith('<i class="fa fa-indent fa-lg"></i>');
-//
-//     $('#menu2 li li.active').has('ul').children('ul').addClass('collapse in');
-//     $('#menu2 li li').not('.active').has('ul').children('ul').addClass('collapse');
-// }
-//
+if (localStorage.getItem('column-left') == 'active') {
+    $('#button-menu i').replaceWith('<i class="fa fa-dedent fa-lg"></i>');
 
-// $('#button-menu').on('click', function() {
-//     // Checks if the left column is active or not.
-//     if ($('#column-left').hasClass('active')) {
-//         // localStorage.setItem('column-left', '');
-//
-//         //   $('#button-menu i').replaceWith('<i class="fa fa-indent fa-lg"></i>');
-//
-//         //   $('#column-left').removeClass('active');
-//
-//         $('#menu2 > li > ul').removeClass('in collapse');
-//         $('#menu2 > li > ul').removeAttr('style');
-//     } else {
-//         //  localStorage.setItem('column-left', 'active');
-//
-//         //   $('#button-menu i').replaceWith('<i class="fa fa-dedent fa-lg"></i>');
-//
-//         //  $('#column-left').addClass('active');
-//
-//         // Add the slide down to open menu items
-//         $('#menu2 li.open').has('ul').children('ul').addClass('collapse in');
-//         $('#menu2 li').not('.open').has('ul').children('ul').addClass('collapse');
-//     }
-// });
+    $('#column-left').addClass('active');
+
+    // Slide Down Menu
+    $('#menu2 li.active').has('ul').children('ul').addClass('collapse in');
+    $('#menu2 li').not('.active').has('ul').children('ul').addClass('collapse');
+} else {
+    $('#button-menu i').replaceWith('<i class="fa fa-indent fa-lg"></i>');
+
+    $('#menu2 li li.active').has('ul').children('ul').addClass('collapse in');
+    $('#menu2 li li').not('.active').has('ul').children('ul').addClass('collapse');
+}
+
+
+$('#button-menu').on('click', function() {
+    // Checks if the left column is active or not.
+    if ($('#column-left').hasClass('active')) {
+        // localStorage.setItem('column-left', '');
+
+        //   $('#button-menu i').replaceWith('<i class="fa fa-indent fa-lg"></i>');
+
+        //   $('#column-left').removeClass('active');
+
+        $('#menu2 > li > ul').removeClass('in collapse');
+        $('#menu2 > li > ul').removeAttr('style');
+    } else {
+        //  localStorage.setItem('column-left', 'active');
+
+        //   $('#button-menu i').replaceWith('<i class="fa fa-dedent fa-lg"></i>');
+
+        //  $('#column-left').addClass('active');
+
+        // Add the slide down to open menu items
+        $('#menu2 li.open').has('ul').children('ul').addClass('collapse in');
+        $('#menu2 li').not('.open').has('ul').children('ul').addClass('collapse');
+    }
+});
 // Menu
 $('#menu2').find('li').has('ul').children('a').on('click', function() {
     if ($('#column-left').hasClass('active')) {
