@@ -66,7 +66,7 @@ class ModelExtensionModuleDAdminMenu extends Model
     public function deleteMenuItem($codename)
     {
         $setting_before = $this->getSetting();
-        $setting_before['custom_menu'][$codename];
+        unset($setting_before['custom_menu'][$codename]);
         $this->setSetting($setting_before['name'], $setting_before, $this->store_id);
     }
 

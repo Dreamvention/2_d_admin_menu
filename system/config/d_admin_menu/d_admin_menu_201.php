@@ -4,7 +4,6 @@ $_['menu_data'] = [
     'lang_path' => 'common/menu',
 
     'menu' => [
-
         0 => [
             'icon' => "fa-dashboard",
             'name' => "Dashboard",

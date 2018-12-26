@@ -72,7 +72,7 @@
     "changelog": [
         {
             "version": "1.0.9",
-            "change": "Add suppport for other module to add items in menu; fix issue with double menu opening;"
+            "change": "Add suppport for other module to add items in menu; fix issue with double menu opening; fix remove item "
         },
         {
             "version": "1.0.8",
