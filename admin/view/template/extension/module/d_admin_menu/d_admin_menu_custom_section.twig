@@ -106,7 +106,7 @@
                   <!-- ? -->
                   {% else %}
                   {% for ex_mfl in mfl['extra'] %}
-                  <option {{ ex_mfl['edit'] in cmd_second_item['href'] ? 'selected' : '' }} value="{{ ex_mfl['edit'] }}">{{ ex_mfl['name'] }}</option>
+                  <option {{ 'index.php?route='~ex_mfl['edit']~'&' == cmd_second_item['href'] ? 'selected' : '' }} value="{{ ex_mfl['edit'] }}">{{ ex_mfl['name'] }}</option>
                   {% endfor %}
                   {% endif %}
                   </optgroup>
@@ -159,7 +159,7 @@
                     <!-- ? -->
                     {% else %}
                     {% for ex_mfl in mfl['extra'] %}
-                    <option {{ ex_mfl['edit'] in cmd_third_item['href'] ? 'selected' : '' }} value="{{ ex_mfl['edit'] }}">{{ ex_mfl['name'] }}</option>
+                      <option {{ 'index.php?route='~ex_mfl['edit']~'&' == cmd_third_item['href'] ? 'selected' : '' }} value="{{ ex_mfl['edit'] }}">{{ ex_mfl['name'] }}</option>
                     {% endfor %}
                     {% endif %}
                     </optgroup>
