@@ -252,7 +252,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
             "icon"                  => "fa-flask",
             "name"                  => "Shopunity",
             "custom_route"          => False,
-            "link"                  => "extension/module/d_shopunity",
+            "link"                  => VERSION>='2.3.0.0'?"extension/module/d_shopunity":"module/d_shopunity",
             "children"              => array(),
             "sort_order"            => 0
         );
