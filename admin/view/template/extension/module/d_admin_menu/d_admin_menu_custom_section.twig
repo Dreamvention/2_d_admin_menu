@@ -44,7 +44,6 @@
               <input type="text" name="custom-menu[{{ cmd_first_item['id'] }}][item_link]" value="{{ cmd_first_item['custom_route'] }}" class="custom-item-link custom_route_input form-control" placeholder="{{ text_custom_route }}" title="{{ help_custom_route }}" data-toggle="tooltip" data-placement="bottom">
 
             {% else %}
-
               <select name="custom-menu[{{ cmd_first_item['id'] }}][item_link]" class="form-control custom-item-link">
                 {% for mfl in modules_for_links %}
                 <optgroup label="{{ mfl['text'] }}">
@@ -52,7 +51,7 @@
                 <!-- ? -->
                 {% else %}
                 {% for ex_mfl in mfl['extra'] %}
-                <option {{ ex_mfl['edit'] in cmd_first_item['href'] ? 'selected' : '' }} value="{{ ex_mfl['edit'] }}">{{ ex_mfl['name'] }}</option>
+                <option {{ 'index.php?route='~ex_mfl['edit']~'&' == cmd_first_item['href'] ? 'selected' : '' }} value="{{ ex_mfl['edit'] }}">{{ ex_mfl['name'] }}</option>
                 {% endfor %}
                 {% endif %}
                 </optgroup>

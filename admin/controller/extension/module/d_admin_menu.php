@@ -198,7 +198,6 @@ class ControllerExtensionModuleDAdminMenu extends Controller
             $data['standart_menu'] = $this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename . '_standart_section',
                 array("standart_menu_data" => $data['setting']['main_menu']['menu_data'])
             );
-
             $data['custom_menu'] = $this->model_extension_d_opencart_patch_load->view($this->route . '/' . $this->codename . '_custom_section',
                 array(
                     "custom_menu_data"   => $data['setting']['custom_menu'],
@@ -453,6 +452,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
                     "children"              => $cnd_first_children,
                     "sort_order"            => 0
                 );
+
                 $this->custom_menu_helper($new_custom_menu, $_data);
                 unset($fc_icon, $fc_name, $fc_link, $fc_cr);
             }
@@ -480,6 +480,7 @@ class ControllerExtensionModuleDAdminMenu extends Controller
             }
             // SAVE SETTING
             $setting_id = $this->model_extension_module_d_admin_menu->editSetting($this->model_extension_module_d_admin_menu->getLastSettingId(), $current_setting);
+
             $this->session->data['success'] = $this->language->get('text_success');
             $json['setting_id'] = $setting_id;
         }

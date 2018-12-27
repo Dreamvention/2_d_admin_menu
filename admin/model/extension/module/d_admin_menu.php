@@ -354,8 +354,8 @@ class ModelExtensionModuleDAdminMenu extends Model
         if ($files) {
             foreach ($files as $file) {
                 $extension = basename($file, '.php');
-
                 $this->load->language($path_fix . $category_shortname . '/' . $extension);
+
 
                 $extra_data[] = array(
                     'name'      => $this->language->get('heading_title'),
@@ -372,7 +372,6 @@ class ModelExtensionModuleDAdminMenu extends Model
         }
 
         array_multisort($sort_order, SORT_ASC, $extra_data);
-
         return $extra_data;
     }
 
