@@ -360,7 +360,8 @@ class ModelExtensionModuleDAdminMenu extends Model
         $extra_data = array();
 
         // before 230 fix
-        $path_fix = (VERSION >= '2.3.0.0') ? 'extension/' : '';
+        // about our modules?
+        $path_fix =  '';
 
         // ,' . $category_shortname . '
 
@@ -380,13 +381,29 @@ class ModelExtensionModuleDAdminMenu extends Model
                 );
             }
         }
+        $path_fix = 'extension/';
+        if ($category_shortname!='d_shopunity'){
+            $files = glob(DIR_APPLICATION . 'controller/{' . $path_fix . $category_shortname . '}/*.php', GLOB_BRACE);
+            if ($files) {
+                foreach ($files as $file) {
+                    $extension = basename($file, '.php');
+                    $this->load->language($path_fix . $category_shortname . '/' . $extension);
+
+
+                    $extra_data[] = array(
+                        'name'      => $this->language->get('heading_title'),
+                        'shortname' => $extension,
+                        'edit'      => $path_fix . $category_shortname . '/' . $extension
+                    );
+                }
+            }
+        }
 
         $sort_order = array();
 
         foreach ($extra_data as $key => $value) {
             $sort_order[$key] = $value['name'];
         }
-
         array_multisort($sort_order, SORT_ASC, $extra_data);
         return $extra_data;
     }
