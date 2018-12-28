@@ -45,7 +45,15 @@ class ModelExtensionModuleDAdminMenu extends Model
             $this->load->controller($this->route.'/installEvents');
         }
     }
-
+    public function checkMenuItem($codename){
+        $setting_before = $this->getSetting();
+        foreach ($setting_before['custom_menu'] as $custom_menu_id => $value){
+            if (isset($value['id'])&&$value['id']==$codename){
+                return true;
+            }
+        }
+        return false;
+    }
     public function addMenuItem($codename, $data)
     {
         $setting_before = $this->getSetting();
@@ -60,14 +68,24 @@ class ModelExtensionModuleDAdminMenu extends Model
             "children"     => $data['children'],
             "sort_order"   => 0
         );
-        $this->setSetting($setting_before['name'], $setting_before, $this->store_id);
+        if (!empty($setting_before)){
+            $this->editSetting($this->getCurrentSettingId(), $setting_before);
+        }
     }
 
     public function deleteMenuItem($codename)
     {
         $setting_before = $this->getSetting();
-        unset($setting_before['custom_menu'][$codename]);
-        $this->setSetting($setting_before['name'], $setting_before, $this->store_id);
+        if (empty($setting_before))return;
+
+        if (empty($setting_before['custom_menu']))return;
+
+        foreach ($setting_before['custom_menu'] as $custom_menu_id => $value){
+            if (isset($value['id'])&&$value['id']==$codename){
+                unset($setting_before['custom_menu'][$custom_menu_id]);
+            }
+        }
+        $this->editSetting($this->getCurrentSettingId(), $setting_before);
     }
 
     public function installDatabase()
@@ -87,7 +105,7 @@ class ModelExtensionModuleDAdminMenu extends Model
         $query = $this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "dam_setting`");
     }
 
-    public function getCurrentSettingId($id, $store_id = 0)
+    public function getCurrentSettingId($id = 'd_admin_menu', $store_id = 0)
     {
         $this->load->model('setting/setting');
         $setting = $this->model_setting_setting->getSetting($id, $store_id);
@@ -126,7 +144,6 @@ class ModelExtensionModuleDAdminMenu extends Model
         if (!$setting_id) {
             $setting_id = $this->getLastSettingId();
         }
-
         $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "dam_setting`
             WHERE setting_id = '" . (int)$setting_id . "'");
 
@@ -173,7 +190,6 @@ class ModelExtensionModuleDAdminMenu extends Model
                 `value` = '" . $this->db->escape(json_encode($setting_value)) . "'");
         return $this->db->getLastId();
     }
-
 
     public function editSetting($setting_id, $data)
     {
