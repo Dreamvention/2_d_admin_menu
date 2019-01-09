@@ -21,67 +21,108 @@ class ModelExtensionModuleDAdminMenu extends Model
     {
         $this->load->model('extension/d_opencart_patch/extension');
         $this->load->model('extension/d_opencart_patch/setting');
-        if(!$this->model_extension_d_opencart_patch_extension->isInstalled($this->codename)) {
+        if (!$this->model_extension_d_opencart_patch_extension->isInstalled($this->codename)) {
             $this->model_extension_d_opencart_patch_extension->install('module', $this->codename);
-            $this->load->controller('extension/module/'.$this->codename.'/install');
+            $this->load->controller('extension/module/' . $this->codename . '/install');
         }
         $setting = $this->getSettings(0);
-        if (empty($setting)){
+        if (empty($setting)) {
             $setting_name = "default-setting";
             $new_setting = array(
-                "name"          => $setting_name,
-                "status"        => 1,
-                "work_mode"     => 1,
-                "main_menu"     => array(
-                    "version"           => VERSION,
-                    "menu_data"         => $this->model_extension_module_d_admin_menu->fillMenuWithLanguage($this->model_extension_module_d_admin_menu->fillMenuWithIds())
+                "name"        => $setting_name,
+                "status"      => 1,
+                "work_mode"   => 1,
+                "main_menu"   => array(
+                    "version"   => VERSION,
+                    "menu_data" => $this->model_extension_module_d_admin_menu->fillMenuWithLanguage($this->model_extension_module_d_admin_menu->fillMenuWithIds())
                 ),
-                "custom_menu"   => array()
+                "custom_menu" => array()
             );
             $setting_id = $this->model_extension_module_d_admin_menu->setSetting($setting_name, $new_setting, $this->store_id);
             if (!$setting_id) {
                 throw new Exeption($this->language->get('error_setting_not_created'));
             }
-            $this->load->controller($this->route.'/installEvents');
+            $this->load->controller($this->route . '/installEvents');
         }
     }
-    public function checkMenuItem($codename){
+
+    public function checkMenuItem($codename)
+    {
         $setting_before = $this->getSetting();
-        foreach ($setting_before['custom_menu'] as $custom_menu_id => $value){
-            if (isset($value['id'])&&$value['id']==$codename){
+        foreach ($setting_before['custom_menu'] as $custom_menu_id => $value) {
+            if (isset($value['id']) && $value['id'] == $codename) {
                 return true;
             }
         }
         return false;
     }
+
     public function addMenuItem($codename, $data)
     {
+        $custom_route = (isset($data['custom_route']) && $data['custom_route'] != False) ? $data['link'] : False;
+        $href_type = $this->get_href_type($data['link']);
+        $href = ($href_type == 'direct_link') ? $data['link'] : ('index.php?route=' . $data['link'] . '&');
+        $children = (isset($data['children'])) ? $data['children'] : array();
+        if (!empty($children)) {
+            $children = $this->prepareMenuItemChildren($children);
+        }
+        $sort_order = (isset($data['sort_order'])) ? $data['sort_order'] : 0;
+
         $setting_before = $this->getSetting();
-//        $last_custom_item_id = $setting_before['custom_menu'][count($setting_before['custom_menu'])]['id'];
         $setting_before['custom_menu'][$codename] = array(
             "id"           => $codename,
             "icon"         => $data['icon'],
             "name"         => $data['name'],
-            "custom_route" => false,
-            "href"         => 'index.php?route=' . $data['link'] . '&',
-            "href_type"    => 'route',
-            "children"     => $data['children'],
-            "sort_order"   => 0
+            "custom_route" => $custom_route,
+            "href"         => $href,
+            "href_type"    => $href_type,
+            "children"     => $children,
+            "sort_order"   => $sort_order
         );
-        if (!empty($setting_before)){
+        if (!empty($setting_before)) {
             $this->editSetting($this->getCurrentSettingId(), $setting_before);
         }
+    }
+
+    public function prepareMenuItemChildren($menu_items = array())
+    {
+        $sub_items = array();
+        $setting_before = $this->model_extension_module_d_admin_menu->getSetting();
+        $last_custom_item_id = $setting_before['custom_menu'][count($setting_before['custom_menu'])]['id'];
+        foreach ($menu_items as $data) {
+            $custom_route = (isset($data['custom_route']) && $data['custom_route'] != False) ? $data['link'] : False;
+            $href_type = $this->get_href_type($data['link']);
+            $href = ($href_type == 'direct_link') ? $data['link'] : ('index.php?route=' . $data['link'] . '&');
+            $children = (isset($data['children'])) ? $data['children'] : array();
+            if (!empty($children)) {
+                $children = $this->prepareMenuItemChildren($children);
+            }
+            $sort_order = (isset($data['sort_order'])) ? $data['sort_order'] : 0;
+
+            $sub_items[] = array(
+                "id"           => ++$last_custom_item_id,
+                "icon"         => $data['icon'],
+                "name"         => $data['name'],
+                "custom_route" => $custom_route,
+                "href"         => $href,
+                "href_type"    => $href_type,
+                "children"     => $children,
+                "sort_order"   => $sort_order
+            );
+        }
+        return $sub_items;
+
     }
 
     public function deleteMenuItem($codename)
     {
         $setting_before = $this->getSetting();
-        if (empty($setting_before))return;
+        if (empty($setting_before)) return;
 
-        if (empty($setting_before['custom_menu']))return;
+        if (empty($setting_before['custom_menu'])) return;
 
-        foreach ($setting_before['custom_menu'] as $custom_menu_id => $value){
-            if (isset($value['id'])&&$value['id']==$codename){
+        foreach ($setting_before['custom_menu'] as $custom_menu_id => $value) {
+            if (isset($value['id']) && $value['id'] == $codename) {
                 unset($setting_before['custom_menu'][$custom_menu_id]);
             }
         }
@@ -345,13 +386,48 @@ class ModelExtensionModuleDAdminMenu extends Model
 
                 $tmp_mdls_data[] = array(
                     'code'  => $extension,
-                    'text'  => $this->language->get('heading_title'),
+                    'text'  => strip_tags($this->language->get('heading_title')),
                     'extra' => $this->getExtensionList($extension)
                 );
             }
 
         }
-
+        $dream_folders = glob(DIR_APPLICATION . 'controller/extension/d_*/', GLOB_BRACE);
+        foreach ($dream_folders as $c_file_key => $c_folder) {
+            $extension = str_replace(DIR_APPLICATION, '', $c_folder);
+            $extension = str_replace('controller/extension/', '', $extension);
+            $extension = str_replace('/', '', $extension);
+//          method_exists
+            if (file_exists(DIR_APPLICATION.'controller/extension/module/'.$extension.'.php')){
+                $this->load->language('extension/module/'.$extension);
+                $tmp_mdls_data[] = array(
+                    'code'  => $extension,
+                    'text'  => strip_tags($this->language->get('heading_title')),
+                    'extra' => $this->getExtensionList($extension)
+                );
+            }
+        }
+//        $dream_modules = glob(DIR_APPLICATION . 'controller/extension/d_*/*.php', GLOB_BRACE);
+//        foreach ($dream_modules as $c_file_key=>$c_file) {
+//            $extension = str_replace(DIR_APPLICATION,'',$c_file);
+//            $extension = str_replace('controller/','',$extension);
+//            $extension = str_replace('.php','',$extension);
+//            $basename = basename($c_file,'.php');
+//            if ($this->user->hasPermission('access', $extension)) {
+//
+//                $tmp_mdls_data[] = array(
+//                    'code'  => $extension,
+//                    'text'  => 'ss',
+//                    'extra' => $this->getExtensionList($extension)
+//                );
+//                $extra_data[] = array(
+//                    'name'      => $this->language->get('heading_title'),
+//                    'shortname' => $extension,
+//                    'edit'      => $path_fix . $category_shortname . '/' . $extension
+//                );
+//
+//            }
+//        }
         return $tmp_mdls_data;
     }
 
@@ -361,7 +437,7 @@ class ModelExtensionModuleDAdminMenu extends Model
 
         // before 230 fix
         // about our modules?
-        $path_fix =  '';
+        $path_fix = '';
 
         // ,' . $category_shortname . '
 
@@ -382,11 +458,12 @@ class ModelExtensionModuleDAdminMenu extends Model
             }
         }
         $path_fix = 'extension/';
-        if ($category_shortname!='d_shopunity'){
+        if ($category_shortname != 'd_shopunity') {
             $files = glob(DIR_APPLICATION . 'controller/{' . $path_fix . $category_shortname . '}/*.php', GLOB_BRACE);
             if ($files) {
                 foreach ($files as $file) {
                     $extension = basename($file, '.php');
+                    //if method exist
                     $this->load->language($path_fix . $category_shortname . '/' . $extension);
 
 
@@ -410,6 +487,7 @@ class ModelExtensionModuleDAdminMenu extends Model
 
     public function get_href_type($link)
     {
+
         preg_match("/(https?:\/\/).+/", $link, $matches);
 
         if ($matches) {
