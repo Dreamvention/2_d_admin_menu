@@ -1,6 +1,6 @@
 {
     "codename": "d_admin_menu",
-    "version": "1.0.9",
+    "version": "1.1.0",
     "name": "Admin Menu",
     "description": "Manage your Opencart admin menu to make it fit your needs",
     "index": "extension/module/d_admin_menu",
@@ -70,6 +70,10 @@
         "admin/view/template/extension/module/d_admin_menu"
     ],
     "changelog": [
+        {
+            "version": "1.1.0",
+            "change": "Better sub modules adding features; add support dream modules with d_*"
+        },
         {
             "version": "1.0.9",
             "change": "Add suppport for other module to add items in menu; fix issue with double menu opening; fix remove item "
