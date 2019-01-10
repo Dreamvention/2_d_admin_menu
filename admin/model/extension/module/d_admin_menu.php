@@ -93,6 +93,7 @@ class ModelExtensionModuleDAdminMenu extends Model
             $custom_route = (isset($data['custom_route']) && $data['custom_route'] != False) ? $data['link'] : False;
             $href_type = $this->get_href_type($data['link']);
             $href = ($href_type == 'direct_link') ? $data['link'] : ('index.php?route=' . $data['link'] . '&');
+            $icon = (isset($data['icon'])) ? $data['icon'] : '';
             $children = (isset($data['children'])) ? $data['children'] : array();
             if (!empty($children)) {
                 $children = $this->prepareMenuItemChildren($children);
@@ -101,7 +102,7 @@ class ModelExtensionModuleDAdminMenu extends Model
 
             $sub_items[] = array(
                 "id"           => ++$last_custom_item_id,
-                "icon"         => $data['icon'],
+                "icon"         => $icon,
                 "name"         => $data['name'],
                 "custom_route" => $custom_route,
                 "href"         => $href,
