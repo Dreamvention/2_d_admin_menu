@@ -60,9 +60,9 @@ class ModelExtensionModuleDAdminMenu extends Model
     public function addMenuItem($codename, $data)
     {
         $link = (isset($data['link'])) ? $data['link'] : '';
-        $custom_route = (isset($data['custom_route']) && $data['custom_route'] != False && $link) ? $data['link'] : False;
-        $href_type = $this->get_href_type($data['link']);
-        $href = ($href_type == 'direct_link') ? $data['link'] : ('index.php?route=' . $data['link'] . '&');
+        $custom_route = (isset($data['custom_route']) && $data['custom_route'] != False && $link) ? $link : False;
+        $href_type = $this->get_href_type($link);
+        $href = ($href_type == 'direct_link') ? $link : ('index.php?route=' . $link . '&');
         $children = (isset($data['children'])) ? $data['children'] : array();
         if (!empty($children)) {
             $children = $this->prepareMenuItemChildren($children);
