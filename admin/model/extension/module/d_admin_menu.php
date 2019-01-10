@@ -59,7 +59,8 @@ class ModelExtensionModuleDAdminMenu extends Model
 
     public function addMenuItem($codename, $data)
     {
-        $custom_route = (isset($data['custom_route']) && $data['custom_route'] != False) ? $data['link'] : False;
+        $link = (isset($data['link'])) ? $data['link'] : '';
+        $custom_route = (isset($data['custom_route']) && $data['custom_route'] != False && $link) ? $data['link'] : False;
         $href_type = $this->get_href_type($data['link']);
         $href = ($href_type == 'direct_link') ? $data['link'] : ('index.php?route=' . $data['link'] . '&');
         $children = (isset($data['children'])) ? $data['children'] : array();
@@ -87,7 +88,7 @@ class ModelExtensionModuleDAdminMenu extends Model
     public function prepareMenuItemChildren($menu_items = array())
     {
         $sub_items = array();
-        $setting_before = $this->model_extension_module_d_admin_menu->getSetting();
+        $setting_before = $this->getSetting();
         $last_custom_item_id = $setting_before['custom_menu'][count($setting_before['custom_menu'])]['id'];
         foreach ($menu_items as $data) {
             $custom_route = (isset($data['custom_route']) && $data['custom_route'] != False) ? $data['link'] : False;
