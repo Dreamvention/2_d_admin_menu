@@ -1,6 +1,6 @@
 {
     "codename": "d_admin_menu",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "name": "Admin Menu",
     "description": "Manage your Opencart admin menu to make it fit your needs",
     "index": "extension/module/d_admin_menu",
@@ -24,7 +24,8 @@
         "3.0.1.1",
         "3.0.1.2",
         "3.0.2.0",
-        "3.0.3.1"
+        "3.0.3.1",
+        "3.0.3.2"
     ],
     "type": "module",
     "license": {
@@ -71,6 +72,10 @@
         "admin/view/template/extension/module/d_admin_menu"
     ],
     "changelog": [
+        {
+            "version": "1.1.2",
+            "change": "Avoiding error with twig"
+        },
         {
             "version": "1.1.1",
             "change": "Added supported version oc v 3.0.3.1"
