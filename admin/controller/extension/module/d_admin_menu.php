@@ -623,29 +623,33 @@ class ControllerExtensionModuleDAdminMenu extends Controller
 
     public function view_column_left_after(&$route, &$data, &$output)
     {
-        $display_menu_setting = $this->model_extension_module_d_admin_menu->getSetting();
-        $admin_menu = $this->load->controller($this->route . '/display_menu', $display_menu_setting);
+        if(VERSION >= '3.0.0.0' || file_exists(DIR_SYSTEM.'storage/modification/system/library/template/twig.php')){
+            $display_menu_setting = $this->model_extension_module_d_admin_menu->getSetting();
+            $admin_menu = $this->load->controller($this->route . '/display_menu', $display_menu_setting);
 
-        if ($display_menu_setting['work_mode'] == 0) {
+            if ($display_menu_setting['work_mode'] == 0) {
 
-            $html_dom = new d_simple_html_dom();
-            $html_dom->load($output, $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
+                $html_dom = new d_simple_html_dom();
+                $html_dom->load($output, $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
 
-            if ($html_dom) {
-                $html_dom->find('#menu', 0)->outertext = $admin_menu;
+                if ($html_dom) {
+                    $html_dom->find('#menu', 0)->outertext = $admin_menu;
+                }
+
+                $output = (string)$html_dom;
             }
-
-            $output = (string)$html_dom;
         }
     }
 
     public function view_column_left_before(&$route, &$data, &$output)
     {
-        $display_menu_setting = $this->model_extension_module_d_admin_menu->getSetting();
-        $admin_menu = $this->load->controller($this->route . '/display_menu', $display_menu_setting);
+        if(VERSION >= '3.0.0.0' || file_exists(DIR_SYSTEM.'storage/modification/system/library/template/twig.php')){
+            $display_menu_setting = $this->model_extension_module_d_admin_menu->getSetting();
+            $admin_menu = $this->load->controller($this->route . '/display_menu', $display_menu_setting);
 
-        if ($display_menu_setting['work_mode'] == 1) {
-            $data['d_admin_menu'] = $admin_menu;
+            if ($display_menu_setting['work_mode'] == 1) {
+                $data['d_admin_menu'] = $admin_menu;
+            }
         }
     }
 
